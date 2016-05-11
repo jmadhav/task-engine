@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- <link rel="icon" href="../../favicon.ico">-->
+
+    <title><%- title %></title>
+
+    <!-- Bootstrap core CSS -->
+    
+    <!-- Bootstrap theme -->
+    <link href="../../css/slimplex.css" rel="stylesheet">
+    <link src="../../css/datepicker.css" rel="stylesheet">
+    <link href="../../css/style.css" rel="stylesheet">
+</head>
+  <body>
+    <div class="container">
+      <% if (typeof user !== 'undefined') { %>
+        <div class="navbar navbar-default navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <a href="/" class="navbar-brand">Google Ads</a>
+              <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+              </button>
+            </div>
+            <div class="navbar-collapse collapse" id="navbar-main">
+              <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a href="/users">Users</span></a>
+                </li>
+                <li>
+                  <a href="#">Tasks</a>
+                </li>
+                <li>
+                  <a href="/upload">Upload Tasks</a>
+                </li>
+              </ul>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="/profile" > Hi <%= user.name %></a></li>
+                <li><a href="/logout">Logout</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      <% } %>
+      <% if (typeof message !== 'undefined' && message.length > 0) { %>
+        <div class="alert alert-danger"><%= message %></div>
+      <% } %>
+      <%-body%>
+    </div>
+  </body>
+  <script src="../../components/jquery/dist/jquery.min.js"></script>
+  <script src="../../components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="../../components/underscore/underscore-min.js"></script>
+  <script src="../../js/bootstrap-datepicker.js"></script>
+  <script src="../../js/custom.js"></script>
+</html>

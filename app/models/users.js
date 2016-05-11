@@ -15,8 +15,9 @@ var UserSchema = new Schema({
   updated_at : { type: Date, default: Date.now },
   is_active: { type: Boolean, default: true },
   roles: { type: Array, default: [] },
-  manage_user_ids: { type: Array, default: [] },
-  manage_by_user_id: { type: ObjectId, index: true }
+  group_id:{ type: ObjectId, index: true }
+  // manage_user_ids: { type: Array, default: [] },
+  // manage_by_user_id: { type: ObjectId, index: true }
 });
 
 //UserSchema.virtual('date').get(function(){ return this._id.getTimestamp(); });

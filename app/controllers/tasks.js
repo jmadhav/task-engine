@@ -32,15 +32,15 @@ router.get('/upload', isLoggedIn, function(req, res) {
 });
 
 router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) {
-    console.log(req.file)
-    console.log(req.body)
-    var task_ids = []
     var excelTaskData = readExcelFile(req.file.path)
     _und.each(excelTaskData, function(excelTask) {
         var task = new Task();
         task.user_id = req.user._id;
-        task.task = JSON.stringify(excelTask); 
-        
+        task.task = JSON.stringify(excelTask);
+        if (req.body.date !== "undefined") {
+          task.created_at = new Date(req.body.date)
+          task.updated_at = new Date(req.body.date)    
+        }
         task.save(function(err) {
             if (err)
                 throw err;

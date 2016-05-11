@@ -1,9 +1,10 @@
 var express = require('express'),
     router = express.Router();
-    mongoose = require('mongoose');
-    User = mongoose.model('User');
-    passport = require('passport');
-    _und = require("underscore");
+mongoose = require('mongoose');
+User = mongoose.model('User');
+passport = require('passport');
+stringifyObject = require('stringify-object');
+_und = require("underscore"); 
 
 module.exports = function(app, passport) {
     app.use('/', router);
@@ -24,7 +25,7 @@ router.post('/login', passport.authenticate('local-login', {
     failureFlash: true // allow flash messages
 }));
 
-router.get('/new-users', isLoggedIn, function(req, res) {
+router.get('/new-users', isLoggedIn, isManager, function(req, res) {
     res.render('users/new_user', {
         user: req.user,
         title: 'Google Ads',
@@ -56,11 +57,11 @@ router.get('/profile/:id/edit', isLoggedIn, isManager, function(req, res) {
     });
 });
 
-router.post('/assign-moderator', isLoggedIn, isManager, function(req, res) {
+router.post('/assign-group', isLoggedIn, isManager, function(req, res) {
     params = req.body
     var update = {
         $set: {
-            manage_by_user_id: params.moderator_id
+            group_id: params.group_id
         }
     }
     User.findOneAndUpdate({
@@ -77,45 +78,50 @@ router.post('/assign-moderator', isLoggedIn, isManager, function(req, res) {
             }
 
         });
-    if (params.user_id !== "undefined") {
-        User.find({}).exec(function(err, users) {
-            if (err) return next(err);
-            _und.each(users, function(user) {
-                if (!(_und.isEmpty(user.manage_user_ids))) {
-                    var user_ids = _und.difference(user.manage_user_ids, [params.user_id]);
-                    user.manage_user_ids = user_ids
-                }
-                user.save(function(err) {
-                    if (err) return handleError(err);
+    res.send(JSON.stringify({
+        status: 'success'
+    }));
 
-                });
-            });
 
-        });
-        var update = {
-            $push: {
-                manage_user_ids: params.user_id
-            }
-        }
-        User.findOneAndUpdate({
-                _id: params.moderator_id
-            }, update, {
-                safe: true,
-                upsert: true
-            },
-            function(err, model) {
-                if (err) {
-                    res.send(JSON.stringify({
-                        status: "Error"
-                    }));
-                }
+    // if (params.user_id !== "undefined") {
+    //     User.find({}).exec(function(err, users) {
+    //         if (err) return next(err);
+    //         _und.each(users, function(user) {
+    //             if (!(_und.isEmpty(user.manage_user_ids))) {
+    //                 var user_ids = _und.difference(user.manage_user_ids, [params.user_id]);
+    //                 user.manage_user_ids = user_ids
+    //             }
+    //             user.save(function(err) {
+    //                 if (err) return handleError(err);
 
-                res.send(JSON.stringify({
-                    status: 'success'
-                }));
+    //             });
+    //         });
 
-            });
-    }
+    //     });
+    //     var update = {
+    //         $push: {
+    //             manage_user_ids: params.user_id
+    //         }
+    //     }
+    //     User.findOneAndUpdate({
+    //             _id: params.moderator_id
+    //         }, update, {
+    //             safe: true,
+    //             upsert: true
+    //         },
+    //         function(err, model) {
+    //             if (err) {
+    //                 res.send(JSON.stringify({
+    //                     status: "Error"
+    //                 }));
+    //             }
+
+    //             res.send(JSON.stringify({
+    //                 status: 'success'
+    //             }));
+
+    //         });
+    // }
 
 
 });
@@ -169,18 +175,28 @@ router.get('/users', isLoggedIn, isManager, function(req, res) {
 
     //     // at this point person is null.
     // });
-
+    
     User.find({}).sort({
         created_at: -1
     }).exec(function(err, users) {
         if (err) return next(err);
+        var groups = Group.find({});
+        console.log(groups);
         res.render('users/index', {
             user: req.user,
             title: 'Google Ads',
-            users: users
+            users: users,
+            groups: groups
         });
     });
 });
+
+router.get('/get-groups', isLoggedIn, isManager, function(req, res) {
+       Group.find({}).exec(function(err, groups) {
+        res.send({ groups: groups});
+    });
+});
+
 
 router.post('/role-update', isLoggedIn, isManager, function(req, res) {
     var params = req.body

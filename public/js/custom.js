@@ -42,7 +42,9 @@
         return lines;
     }
 
-    $("#datepicker").datepicker();
+    $("#datepicker").datepicker({
+        format: "yyyy-mm-dd"
+    });
 
     $("#datepicker").keydown(function() {
         return false;
@@ -119,32 +121,39 @@
 
     function addSelectBox() {
         if ($('#user_tables').length > 0) {
-            var sel = $('<select class="choose_moderator_select">')
-            _.each(moderators, function(element) {
-                sel.append($("<option>").attr('value', element._id).text(element.name));
+            $.ajax({
+                type: "GET",
+                url: "/get-groups",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(data) {
+                    var sel = $('<select class="choose_group_select">')
+                    _.each(data.groups, function(element) {
+                        sel.append($("<option>").attr('value', element._id).text(element.name));
+                    });
+                    $('.chooseGroup').append(sel);
+                    var choose_group_select = $('.choose_group_select');
+                    _.each(choose_group_select, function(element) {
+                        $(element).val($.trim($(element).parent().parent().data('group_id')));
+                    });
+                }
             });
-            $('.chooseModerator').append(sel);
-            var choose_moderator_select = $('.choose_moderator_select');
-            _.each(choose_moderator_select, function(element) {
-                $(element).val($.trim($(element).parent().parent().data('moderator_id')));
-            });
+
         }
     }
-    
+
     addSelectBox()
 
-    $('.choose_moderator_select').change(function() {
+    $('.chooseGroup').on('change', ".choose_group_select", function() {
+        console.log('hello')
         var data = {
             user_id: $(this).parent().parent().data('user_id'),
-            moderator_id: $(this).find(":selected").val()
+            group_id: $(this).find(":selected").val()
         }
         $.ajax({
             type: "POST",
-            url: "/assign-moderator",
+            url: "/assign-group",
             data: data,
-            success: function(data) {
-
-            },
             error: function(err) {
                 console.log(err);
             }
@@ -152,7 +161,7 @@
     });
 
     $('.datepicker > .day').click(function() {
-      $('body').click();   
+        $('body').click();
     });
 
 

@@ -39,3 +39,7 @@ th.prev, th.next, td.day {
     margin-left: 5px;
     color: red;
 }
+
+.new-group {
+    margin-top: 55px;
+}

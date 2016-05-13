@@ -32,15 +32,18 @@ router.get('/upload', isLoggedIn, function(req, res) {
 });
 
 router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) {
-    var excelTaskData = readExcelFile(req.file.path)
+     console.log(req.file)
+    
+   // console.log(d.toLocaleDateString());
+    var task_ids = []
+    var excelTaskData = readExcelFile(req.file.path);
+    console.log("Excel File ==== ",excelTaskData);
     _und.each(excelTaskData, function(excelTask) {
-        var task = new Task();
+        var task = new Task(excelTask);
         task.user_id = req.user._id;
-        task.task = JSON.stringify(excelTask);
-        if (req.body.date !== "undefined") {
-          task.created_at = new Date(req.body.date)
-          task.updated_at = new Date(req.body.date)    
-        }
+        task.user_name=req.user.name;
+        task.created_at= new Date(req.body.date).toLocaleDateString();
+      //  task.updated_at=new Date(req.body.date).toLocaleDateString();
         task.save(function(err) {
             if (err)
                 throw err;
@@ -62,6 +65,81 @@ function isLoggedIn(req, res, next) {
 
     res.redirect('/');
 }
+
+
+router.post('/update_data',isLoggedIn,function(req, res) {
+//console.log("supdate_data ",req.body.tabledata);
+var data=req.body.tabledata;
+
+for(var i in data){
+
+    var id=data[i]["_id"];
+    console.log(id);
+
+     Task.update({_id:id},data[i]).exec(function(err) {
+     console.log("err === "+err);
+     
+    });
+
+}
+
+ res.render('users/profile', { title: 'Google Ads' });
+  
+
+ 
+});
+
+
+router.post('/search_task', isLoggedIn, function(req, res) {
+//console.log("search_task from Date",req.body);
+//console.log("search_task from User",req.body.user_name);
+var ipData;
+var search_Data={};
+var fromDate= new Date(req.body.fromDate).toLocaleDateString();
+var toDate= new Date(req.body.toDate).toLocaleDateString();
+if(req.body.user_role=='Analyst')
+{
+    ipData=req.user._id;
+
+    search_Data={  
+         "$and": [{
+                     "user_id": ipData,
+                 },
+                  
+                  { "created_at": {
+                         $gte:fromDate,
+                         $lt:toDate
+                           }
+                   }
+
+
+               ]
+           }
+}else {
+
+     ipData=req.body.user_name;
+     search_Data={  
+         "$and": [{
+                     "verifier_id": ipData,
+                 },
+                  
+                  { "created_at": {
+                         $gte:fromDate,
+                         $lt:toDate
+                           }
+                   }
+
+
+               ]
+           }
+}
+
+Task.find(search_Data).exec(function(err, users) {
+   //  console.log("Task === "+users);
+      res.render('users/profile', { users : users,user:req.user,  title: 'Google Ads' });
+    });
+
+});
 
 function readExcelFile(filePath) {
     var workbook = XLSX.readFile(filePath);

@@ -1,4 +1,172 @@
 (function() {
+
+
+  $('#save_btn').on("click",function(){
+       var  headings=[];
+       var tableRowData=[]; 
+       var data=[];
+      $('#excelDataTable tr').eq(0).each(function(){
+      
+
+                 $.each(this.cells, function(){
+                   //console.log('hi'+$(this).html());
+                   //if(j>0)
+                   headings.push($(this).html());
+                  
+                });
+
+              });
+
+                 
+        $.each(headings , function(i, val) { 
+           
+            tableRowData[i]=[]; 
+        });
+
+        $('#excelDataTable tr').not(':first').each(function(){
+               var i=0;
+               var rowData = {};
+              $.each(this.cells, function(){
+                   
+                  var tdText;
+                  if(headings[i]== "_id"){
+                     var v= $(this).find("input[type=hidden]").val();
+                     if(typeof v !== 'undefined'){
+                        tdText=v;
+                     }
+                     
+                  }
+                  else if(headings[i]=="verifier_comments"){
+                    
+                   var v1= $(this).find("input[type=textarea]").val();
+                  
+                     if(typeof v1!== 'undefined'){
+                        tdText=v1;
+                     }
+
+                  }else if(headings[i]=="is_correct"){
+
+                     var corr_r= $(this).find("input[type=radio]")[0].checked;
+                    var incor_t=$(this).find("input[type=radio]")[1].checked;
+
+                // console.log("corr_r == "+(corr_r==true)+" incor_t== "+incor_t);
+                      if(corr_r==true){
+                        tdText="true";
+                      }
+                      else if(incor_t==true){
+                        tdText="false";
+                      }
+
+                  }else if(headings[i]== "verifier_name"){
+                    var name= $('#veryfier_name').val();
+                   
+                      if(typeof name !== 'undefined'){
+                        tdText=name;
+                     }
+                     
+                  }else if(headings[i]== "verifier_id"){
+                    var name= $('#veryfier_id').val();
+                   
+                      if(typeof name !== 'undefined'){
+                        tdText=name;
+                     }
+                     
+                  }
+                  else {
+
+                    tdText= $(this).html();
+                  }
+                  
+                  
+                  rowData[headings[i]]=tdText;
+                  
+                     i++;
+                });
+                 data.push(rowData);
+             });
+       //  console.log(headings);
+      console.log(data);
+
+     if(data !=null && data.length>0){
+        var d={}
+       
+     $.ajax({
+     
+        type: "POST",
+        url: "/update_data",
+        data:JSON.stringify({ "tabledata": data}),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(data) {
+        // getGroupMembersData(data);
+        
+
+        }
+   
+    });
+     }
+
+
+  });
+
+$('#sel_group').on("change",function(){
+     if($('#user_role').val()=='Manager'){
+        getGroupMembersData($(this).val());
+        }
+  });
+
+
+console.log($('#user_role').val());
+ if(( $('#user_role').val().indexOf('Moderator')!=-1) || ($('#user_role').val().indexOf('Lead')!=-1)){
+    console.log($('#user_group_id').val()); 
+    var id = $('#user_group_id').val()
+       getGroupMembersData(id);
+
+ }
+    
+ if($('#user_role').val()=='Manager'){
+ $.ajax({
+     
+        type: "GET",
+        url: "/get-groups",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(data) {
+        // getGroupMembersData(data);
+            var selectBox = document.getElementById('sel_group');
+          _.each(data.groups, function(element) {
+               selectBox.options.add( new Option(element.name, element._id))
+            });
+
+
+
+        }
+   
+    });
+}
+
+function getGroupMembersData(id) {
+    console.log(" calling getGroupMembersData");
+    var data={};
+    data["id"]=id;
+    $.ajax({
+                type: "GET",
+                url: "/get-groups-members",
+                data:data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(data) {
+               
+                 var selectBox = document.getElementById('sel_analyst');
+                $('#sel_analyst').empty();
+                  _.each(data.users_name, function(element) {
+                   selectBox.options.add( new Option(element.name, element._id))
+                   });
+                 selectBox.selectedIndex = -1;
+                }
+            });
+}
+
     $(window).scroll(function() {
         var top = $(document).scrollTop();
         $('.splash').css({

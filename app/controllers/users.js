@@ -191,6 +191,15 @@ router.get('/users', isLoggedIn, isManager, function(req, res) {
     });
 });
 
+
+router.get('/get-groups-members', isLoggedIn, function(req, res) {
+      User.find({"group_id":req.query.id}).exec(function(err, users) {
+        console.log(users);
+        res.send({ users_name: users});
+    });
+   
+});
+
 router.get('/get-groups', isLoggedIn, isManager, function(req, res) {
        Group.find({}).exec(function(err, groups) {
         res.send({ groups: groups});

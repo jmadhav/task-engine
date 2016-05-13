@@ -4,13 +4,25 @@ var mongoose = require('mongoose'),
 
 var TaskSchema = new Schema({
   user_id: { type: ObjectId, index: true },
-  task: { type: String, default: '' },
-  verifier_comments: { type: String, default: '' },													
+  user_name:{type: String, default: ''},
+ // task: { type: String, default: '' },
+  S_No:{type: String, default: '' },
+  query:{type: String, default: '' },
+  query_flag:{type: String, default: '' },
+  ad_creative:{type: String, default: '' },
+  ad_creative_flag:{type: String, default: '' },
+  ad_creative_rating:{type: String, default: '' },
+  landing_page:{type: String, default: '' },
+  landing_page_flag:{type: String, default: '' },
+  landing_page_rating:{type: String, default: '' },
+  user_comments:{type: String, default: '' },
+  verifier_comments: { type: String, default: '' },                         
   is_deleted: { type: Boolean, default: false },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
   is_correct: Boolean,
-  verifier_id: { type: ObjectId, index: true }
+  verifier_id: { type: ObjectId, index: true },
+   verifier_name:{type: String, default: ''},
 });
 
 var Task = module.exports = mongoose.model('Task', TaskSchema);

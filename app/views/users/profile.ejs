@@ -1,0 +1,146 @@
+  <form class="form-horizontal" action="/search_task" method="post">
+        <fieldset>
+          
+         <input type="hidden" id="user_role" name="user_role" value="<%=user.roles%>">
+         <input type="hidden" id="user_group_id" name="user_group_id" value="<%=user.group_id%>">
+         <input type="hidden" id="veryfier_id" name="veryfier_id" value="<%=user._id%>">
+         <input type="hidden" id="veryfier_name" name="veryfier_name" value="<%=user.name%>">
+          <div class="form-group">
+            <label for="fromDate" class="col-lg-2 control-label">From Date:</label>
+            <div class="col-lg-10">
+              <input type="text" class="form-control" id="datepicker" placeholder="mm/dd/yyyy" name="fromDate" value=""  required>
+            </div>
+          </div>
+           <div class="form-group">
+            <label for="toDate" class="col-lg-2 control-label">To Date:</label>
+            <div class="col-lg-10">
+              <input type="text" class="form-control" id="datepicker" placeholder="mm/dd/yyyy" name="toDate" value=""  required>
+            </div>
+          </div>
+           <% if (typeof user !== 'undefined') {
+                  if(user.roles=="Manager"){
+               %>
+
+                <div class="form-group">
+                  <label for="inputPassword" class="col-lg-2 control-label">Group List</label>
+                  <div class="col-lg-10">
+                    <select id="sel_group" name="user_group" > 
+                    <option selected disabled>Select Group</option>
+                  </select>
+                  </div>
+               </div>
+
+           <%  
+              }
+           }%>
+        <% if (typeof user !== 'undefined') {
+                  if(user.roles!="Analyst"){
+               %>
+          <div class="form-group">
+            <label for="sel_analyst" class="col-lg-2 control-label">List</label>
+            <div class="col-lg-10">
+              <select id="sel_analyst" name="user_name" > 
+              <option selected disabled>Select User</option>
+            </select>
+            </div>
+          </div>
+           <%  
+
+           }
+           }%>
+          <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+              <button type="submit" class="btn btn-success">Search Data</button>
+            </div>
+          </div>
+         </fieldset>
+      </form>
+ <% if (typeof user !== 'undefined') {
+                  if(user.roles!="Analyst"){
+               %>
+ <div class="col-lg-10 col-lg-offset-2">
+     <button type="button" id="save_btn" class="btn btn-success">Save Data</button>
+</div>
+ <%  
+  }
+   }%>
+       <div class="bs-component">
+        <table id="excelDataTable" class="table table-striped table-hover ">
+      <thead>
+        <tr>
+            <th data-field="S_No">S_No</th>
+            <th data-field="query">query</th>
+            <th data-field="query_flag">Query Flag</th>
+            <th data-field="ad_creative">Ad Creative</th>
+            <th data-field="ad_creative_flag">Ad Creative Flag</th>
+            <th data-field="ad_creative_rating">Ad Creative Rating</th>
+            <th data-field="landing_page">Landing Page</th>
+            <th data-field="landing_page_flag">Landing Page Flag</th>
+            <th data-field="landing_page_rating">Landing Page Rating</th>
+             <th style="width:200px" data-field="user_comments">User Comments</th>
+             <% if (typeof user !== 'undefined') {
+                  if(user.roles!="Analyst"){
+               %>
+             <th data-field="user_name">Analyst Name</th>
+            <th data-field="is_correct">is_correct</th>
+            <th data-field="verifier_comments">verifier_comments</th>
+
+             <th data-field="verifier_name">verifier_name</th>
+            <%  
+
+           }
+           }%>
+            <th style="display:none;" data-field="_id">_id</th>
+            <th style="display:none;" data-field="verifier_id">verifier_id</th>
+        </tr>
+    </thead>
+    <tbody id="users_list">
+    <% 
+    if( typeof users !== "undefined" ){
+     console.log("<users",users);
+    for(var i=0; i<users.length; i++) { 
+
+    %>
+         <tr>
+             <td class="col-md-2"><%= users[i]["S_No"] %></td>
+             <td class="col-md-2"><%= users[i].query%></td> 
+             <td class="col-md-2"><%= users[i]['query_flag']%></td> 
+             <td class="col-md-2"><%= users[i]['ad_creative']%></td> 
+             <td class="col-md-2"><%= users[i]['ad_creative_flag']%></td> 
+             <td class="col-md-2"><%= users[i]['ad_creative_rating']%></td> 
+             <td class="col-md-2"><%= users[i]['landing_page']%></td> 
+             <td class="col-md-2"><%= users[i]['landing_page_flag']%></td> 
+             <td class="col-md-2"><%= users[i]['landing_page_rating']%></td> 
+              <td class="col-md-2"><%= users[i]['user_comments']%></td>
+              <% if (typeof user !== 'undefined') {
+                  if(user.roles!="Analyst"){
+                 // console.log(" Conditoionnon ==== ",(users[i]["is_correct"]==true));
+               %>
+              <td class="col-md-2"><%= users[i]['user_name']%> </td>
+               <td class="col-md-4">
+                correct  <input type="radio" name="correct<%= i %>" id="correct<%= i %>" value="Correct" <%= (users[i]["is_correct"]==true) ? 'checked' : ""%> />
+                InCorrect <input type="radio" name="correct<%= i %>" id="incorrect<%= i %>" value="InCorrect"<%=(users[i]["is_correct"]==false) ? 'checked' : ""%> />
+             </td>
+            <td class="col-md-2"> <input type="textarea" name="text_comment<%= i %>" value="<%=users[i]['verifier_comments']%>"/></td>
+             <td class="col-md-2"><%= users[i]['verifier_name']%> </td>
+           <%  
+
+           }
+           }%>
+             <td><input type="hidden" id="user_role" name="user_role" value="<%=users[i]['_id']%>"> </td>
+             <td> </td>
+             <td> </td>
+             <td> </td>
+       </tr>
+        
+ <% } }%>
+    </tbody>
+  </table>
+
+
+
+
+
+
+
+</div>

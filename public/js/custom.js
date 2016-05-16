@@ -59,7 +59,7 @@
 
                   }else if(headings[i]== "verifier_name"){
                     var name= $('#veryfier_name').val();
-                   
+
                       if(typeof name !== 'undefined'){
                         tdText=name;
                      }
@@ -114,16 +114,32 @@ $('#sel_group').on("change",function(){
         getGroupMembersData($(this).val());
         }
   });
+var globaldata;
+$('#sel_analyst').on("change",function(){
+    
+       var id=$(this).val();
+      
+        _.each(globaldata.users_name, function(element) {
+                   // $('#selecte_user_role').val(element.roles);
+                     if(id==element._id)
+                     {
+                        
+                      $('#selecte_user_role').val(element.roles);
+                     }
+                  
+                   });
+     
+  });
 
 
-console.log($('#user_role').val());
+if(typeof $('#user_role').val() !='undefined'){
  if(( $('#user_role').val().indexOf('Moderator')!=-1) || ($('#user_role').val().indexOf('Lead')!=-1)){
-    console.log($('#user_group_id').val()); 
+ 
     var id = $('#user_group_id').val()
        getGroupMembersData(id);
 
  }
-    
+    }
  if($('#user_role').val()=='Manager'){
  $.ajax({
      
@@ -156,12 +172,15 @@ function getGroupMembersData(id) {
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function(data) {
-               
+                 globaldata=data;
+              
                  var selectBox = document.getElementById('sel_analyst');
                 $('#sel_analyst').empty();
                   _.each(data.users_name, function(element) {
-                   selectBox.options.add( new Option(element.name, element._id))
+                    
+                   selectBox.options.add( new Option(element.name, element._id,element.roles))
                    });
+                  if(selectBox !=null)
                  selectBox.selectedIndex = -1;
                 }
             });
@@ -313,7 +332,7 @@ function getGroupMembersData(id) {
     addSelectBox()
 
     $('.chooseGroup').on('change', ".choose_group_select", function() {
-        console.log('hello')
+      
         var data = {
             user_id: $(this).parent().parent().data('user_id'),
             group_id: $(this).find(":selected").val()

@@ -24,6 +24,37 @@ module.exports = function(app, passport) {
     app.use('/', router);
 };
 
+router.get('/view_task', isLoggedIn, function(req, res) {
+    res.render('tasks/view_task', {
+        user: req.user,
+        title: 'Google Ads'
+    });
+});
+router.post('/view_task', isLoggedIn, function(req, res) {
+        var fromDate= new Date(req.body.fromDate).toLocaleDateString();
+        var toDate= new Date(req.body.toDate).toLocaleDateString();
+         search_Data={  
+         "$and": [{
+                     "user_id": req.body.user_id,
+                 },
+                  
+                  { "created_at": {
+                         $gte:fromDate,
+                         $lt:toDate
+                           }
+                   }
+
+
+               ]
+           }
+
+
+           Task.find(search_Data).exec(function(err, tasks) {
+                  res.render('tasks/view_task', { tasks : tasks,user:req.user,  title: 'Google Ads' });
+                });
+
+         });
+
 router.get('/upload', isLoggedIn, function(req, res) {
     res.render('tasks/upload', {
         user: req.user,
@@ -32,17 +63,17 @@ router.get('/upload', isLoggedIn, function(req, res) {
 });
 
 router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) {
-     console.log(req.file)
-    
-   // console.log(d.toLocaleDateString());
+   //  console.log(req.file)
+   // var d = new Date(req.body.date).toLocaleDateString();
+   var d=req.body.date;
+  console.log(new Date(d).toLocaleDateString());
     var task_ids = []
     var excelTaskData = readExcelFile(req.file.path);
-    console.log("Excel File ==== ",excelTaskData);
     _und.each(excelTaskData, function(excelTask) {
         var task = new Task(excelTask);
         task.user_id = req.user._id;
         task.user_name=req.user.name;
-        task.created_at= new Date(req.body.date).toLocaleDateString();
+        task.created_at= new Date(d).toLocaleDateString();
       //  task.updated_at=new Date(req.body.date).toLocaleDateString();
         task.save(function(err) {
             if (err)
@@ -77,7 +108,8 @@ for(var i in data){
     console.log(id);
 
      Task.update({_id:id},data[i]).exec(function(err) {
-     console.log("err === "+err);
+     if (err)
+      throw err;
      
     });
 
@@ -92,51 +124,54 @@ for(var i in data){
 
 router.post('/search_task', isLoggedIn, function(req, res) {
 //console.log("search_task from Date",req.body);
-//console.log("search_task from User",req.body.user_name);
+console.log("search_task from User",req.body);
 var ipData;
 var search_Data={};
 var fromDate= new Date(req.body.fromDate).toLocaleDateString();
 var toDate= new Date(req.body.toDate).toLocaleDateString();
-if(req.body.user_role=='Analyst')
-{
-    ipData=req.user._id;
 
-    search_Data={  
-         "$and": [{
-                     "user_id": ipData,
-                 },
-                  
-                  { "created_at": {
-                         $gte:fromDate,
-                         $lt:toDate
+ if(req.body.selecte_user_role=='Analyst'){
+                ipData=req.body.user_name;
+                 search_Data={  
+                     "$and": [{
+                                 "user_id": ipData,
+                             },
+                              
+                              { "created_at": {
+                                     $gte:fromDate,
+                                     $lt:toDate
+                                       }
+                               }
+
+
+                           ]
+                       }
+        
+         }else{
+            console.log("both ar same22")  
+                     ipData=req.body.user_name;
+                     search_Data={  
+                         "$and": [{
+                                     "verifier_id": ipData,
+                                 },
+                                  
+                                  { "created_at": {
+                                         $gte:fromDate,
+                                         $lt:toDate
+                                           }
+                                   }
+
+
+                               ]
                            }
-                   }
+
+         }
+   
 
 
-               ]
-           }
-}else {
-
-     ipData=req.body.user_name;
-     search_Data={  
-         "$and": [{
-                     "verifier_id": ipData,
-                 },
-                  
-                  { "created_at": {
-                         $gte:fromDate,
-                         $lt:toDate
-                           }
-                   }
-
-
-               ]
-           }
-}
-
-Task.find(search_Data).exec(function(err, users) {
-   //  console.log("Task === "+users);
-      res.render('users/profile', { users : users,user:req.user,  title: 'Google Ads' });
+Task.find(search_Data).exec(function(err, tasks) {
+     console.log("Task === "+tasks);
+      res.render('users/profile', { tasks : tasks,user:req.user,  title: 'Google Ads' });
     });
 
 });

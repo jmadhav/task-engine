@@ -5,15 +5,16 @@
          <input type="hidden" id="user_group_id" name="user_group_id" value="<%=user.group_id%>">
          <input type="hidden" id="veryfier_id" name="veryfier_id" value="<%=user._id%>">
          <input type="hidden" id="veryfier_name" name="veryfier_name" value="<%=user.name%>">
+         <input type="hidden" id="selecte_user_role" name="selecte_user_role">
           <div class="form-group">
             <label for="fromDate" class="col-lg-2 control-label">From Date:</label>
-            <div class="col-lg-10">
+            <div class="col-lg-3">
               <input type="text" class="form-control" id="datepicker" placeholder="mm/dd/yyyy" name="fromDate" value=""  required>
             </div>
           </div>
            <div class="form-group">
             <label for="toDate" class="col-lg-2 control-label">To Date:</label>
-            <div class="col-lg-10">
+            <div class="col-lg-3">
               <input type="text" class="form-control" id="datepicker" placeholder="mm/dd/yyyy" name="toDate" value=""  required>
             </div>
           </div>
@@ -50,11 +51,20 @@
            }%>
           <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
-              <button type="submit" class="btn btn-success">Search Data</button>
+              <button type="submit" class="btn btn-success">Search Task</button>
             </div>
           </div>
          </fieldset>
       </form>
+      <% if (typeof user !== 'undefined') {
+                  if((user.roles=="Analyst") ||(user.roles.indexOf('Moderator')!=-1)){
+               %>
+                <div class="col-lg-10 col-lg-offset-2">
+                <a href="/view_task">View Task</a>
+                  </div>
+      <%  
+  }
+   }%>
  <% if (typeof user !== 'undefined') {
                   if(user.roles!="Analyst"){
                %>
@@ -97,7 +107,7 @@
     <tbody id="users_list">
     <% 
     if( typeof users !== "undefined" ){
-     console.log("<users",users);
+    // console.log("<users",users);
     for(var i=0; i<users.length; i++) { 
 
     %>

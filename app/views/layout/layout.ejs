@@ -40,9 +40,11 @@
                 <li>
                   <a href="/groups">Groups</a>
                 </li>
-                <li>
-                  <a href="/upload">Upload Tasks</a>
-                </li>
+                <% if ((_und.contains(user.roles, 'Moderator')) || (_und.contains(user.roles, 'Analyst'))) { %>
+                  <li>
+                    <a href="/upload">Upload Tasks</a>
+                  </li>
+                <% } %>
               </ul>
 
               <ul class="nav navbar-nav navbar-right">

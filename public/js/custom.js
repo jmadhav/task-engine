@@ -229,11 +229,11 @@ function getGroupMembersData(id) {
         return lines;
     }
 
-    $("#datepicker").datepicker({
+    $(".datepicker").datepicker({
         format: "yyyy-mm-dd"
     });
 
-    $("#datepicker").keydown(function() {
+    $(".datepicker").keydown(function() {
         return false;
     });
 
@@ -346,10 +346,5 @@ function getGroupMembersData(id) {
             }
         });
     });
-
-    $('.datepicker > .day').click(function() {
-        $('body').click();
-    });
-
 
 })();

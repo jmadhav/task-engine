@@ -85,7 +85,8 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
     });
     res.render('users/profile', {
         user: req.user,
-        title: 'Google Ads'
+        title: 'Google Ads',
+        message: "Your task has been uploaded"
     });
 });
 

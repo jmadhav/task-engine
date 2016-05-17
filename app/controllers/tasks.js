@@ -100,13 +100,14 @@ function isLoggedIn(req, res, next) {
 
 
 router.post('/update_data',isLoggedIn,function(req, res) {
-//console.log("supdate_data ",req.body.tabledata);
+//console.log("supdate_data >>>>>>>>>>>>>>>>>> ",req.body);
 var data=req.body.tabledata;
+//var user=req.body.user;
 
 for(var i in data){
 
     var id=data[i]["_id"];
-    console.log(id);
+   // console.log(id);
 
      Task.update({_id:id},data[i]).exec(function(err) {
      if (err)
@@ -116,7 +117,7 @@ for(var i in data){
 
 }
 
- res.render('users/profile', { title: 'Google Ads' });
+ res.send({ status: 'success' });
   
 
  

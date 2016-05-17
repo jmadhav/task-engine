@@ -85,7 +85,8 @@
                  data.push(rowData);
              });
        //  console.log(headings);
-      console.log(data);
+     // console.log(data);
+     
 
      if(data !=null && data.length>0){
         var d={}
@@ -99,7 +100,7 @@
         dataType: "json",
         success: function(data) {
         // getGroupMembersData(data);
-        
+        alert("Your task has been submitted successfully");
 
         }
    

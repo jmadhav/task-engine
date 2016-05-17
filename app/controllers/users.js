@@ -12,7 +12,7 @@ module.exports = function(app, passport) {
 
 router.get('/', function(req, res, next) {
     if (req.isAuthenticated())
-        res.redirect("/profile");
+        res.redirect("/view_task");
     res.render('users/login', {
         title: 'Google Ads',
         message: req.flash('loginMessage')

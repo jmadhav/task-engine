@@ -57,15 +57,6 @@
            }
            }%>
           
-      <% if (typeof user !== 'undefined') {
-                  if((user.roles=="Analyst") ||(user.roles.indexOf('Moderator')!=-1)){
-               %>
-                <div class="col-lg-10 col-lg-offset-2">
-                <a href="/view_task">View Task</a>
-                  </div>
-      <%  
-  }
-   }%>
  <% if (typeof user !== 'undefined') {
                   if(user.roles!="Analyst"){
                %>

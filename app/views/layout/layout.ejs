@@ -31,7 +31,7 @@
             </div>
             <div class="navbar-collapse collapse" id="navbar-main">
               <ul class="nav navbar-nav">
-                <% if ((_und.contains(user.roles, 'Manager')) { %>
+                <% if ((_und.contains(user.roles, 'Manager'))) { %>
                 <li class="dropdown">
                   <a href="/users">Users</span></a>
                 </li>
@@ -40,7 +40,7 @@
                 <li>
                   <a href="/view_task">Tasks</a>
                 </li>
-                <% if ((_und.contains(user.roles, 'Manager')) { %>
+                <% if ((_und.contains(user.roles, 'Manager'))) { %>
                   <li>
                   <a href="/groups">Groups</a>
                 </li>

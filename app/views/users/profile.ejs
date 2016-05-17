@@ -106,38 +106,38 @@
     </thead>
     <tbody id="users_list">
     <% 
-    if( typeof users !== "undefined" ){
+    if( typeof tasks !== "undefined" ){
     // console.log("<users",users);
-    for(var i=0; i<users.length; i++) { 
+    for(var i=0; i<tasks.length; i++) { 
 
     %>
          <tr>
-             <td class="col-md-2"><%= users[i]["S_No"] %></td>
-             <td class="col-md-2"><%= users[i].query%></td> 
-             <td class="col-md-2"><%= users[i]['query_flag']%></td> 
-             <td class="col-md-2"><%= users[i]['ad_creative']%></td> 
-             <td class="col-md-2"><%= users[i]['ad_creative_flag']%></td> 
-             <td class="col-md-2"><%= users[i]['ad_creative_rating']%></td> 
-             <td class="col-md-2"><%= users[i]['landing_page']%></td> 
-             <td class="col-md-2"><%= users[i]['landing_page_flag']%></td> 
-             <td class="col-md-2"><%= users[i]['landing_page_rating']%></td> 
-              <td class="col-md-2"><%= users[i]['user_comments']%></td>
+             <td class="col-md-2"><%= tasks[i]["S_No"] %></td>
+             <td class="col-md-2"><%= tasks[i].query%></td> 
+             <td class="col-md-2"><%= tasks[i]['query_flag']%></td> 
+             <td class="col-md-2"><%= tasks[i]['ad_creative']%></td> 
+             <td class="col-md-2"><%= tasks[i]['ad_creative_flag']%></td> 
+             <td class="col-md-2"><%= tasks[i]['ad_creative_rating']%></td> 
+             <td class="col-md-2"><%= tasks[i]['landing_page']%></td> 
+             <td class="col-md-2"><%= tasks[i]['landing_page_flag']%></td> 
+             <td class="col-md-2"><%= tasks[i]['landing_page_rating']%></td> 
+              <td class="col-md-2"><%= tasks[i]['user_comments']%></td>
               <% if (typeof user !== 'undefined') {
-                  if(user.roles!="Analyst"){
-                 // console.log(" Conditoionnon ==== ",(users[i]["is_correct"]==true));
+                  if(tasks.roles!="Analyst"){
+                 // console.log(" Conditoionnon ==== ",(tasks[i]["is_correct"]==true));
                %>
-              <td class="col-md-2"><%= users[i]['user_name']%> </td>
+              <td class="col-md-2"><%= tasks[i]['user_name']%> </td>
                <td class="col-md-4">
-                correct  <input type="radio" name="correct<%= i %>" id="correct<%= i %>" value="Correct" <%= (users[i]["is_correct"]==true) ? 'checked' : ""%> />
-                InCorrect <input type="radio" name="correct<%= i %>" id="incorrect<%= i %>" value="InCorrect"<%=(users[i]["is_correct"]==false) ? 'checked' : ""%> />
+                correct  <input type="radio" name="correct<%= i %>" id="correct<%= i %>" value="Correct" <%= (tasks[i]["is_correct"]==true) ? 'checked' : ""%> />
+                InCorrect <input type="radio" name="correct<%= i %>" id="incorrect<%= i %>" value="InCorrect"<%=(tasks[i]["is_correct"]==false) ? 'checked' : ""%> />
              </td>
-            <td class="col-md-2"> <input type="textarea" name="text_comment<%= i %>" value="<%=users[i]['verifier_comments']%>"/></td>
-             <td class="col-md-2"><%= users[i]['verifier_name']%> </td>
+            <td class="col-md-2"> <input type="textarea" name="text_comment<%= i %>" value="<%=tasks[i]['verifier_comments']%>"/></td>
+             <td class="col-md-2"><%= tasks[i]['verifier_name']%> </td>
            <%  
 
            }
            }%>
-             <td><input type="hidden" id="user_role" name="user_role" value="<%=users[i]['_id']%>"> </td>
+             <td><input type="hidden" id="user_role" name="user_role" value="<%=tasks[i]['_id']%>"> </td>
              <td> </td>
              <td> </td>
              <td> </td>

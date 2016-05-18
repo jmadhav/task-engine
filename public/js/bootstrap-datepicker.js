@@ -136,6 +136,7 @@
 			} else {
 				this.element.prop('value', formated);
 			}
+			this.picker.hide();
 		},
 		
 		setValue: function(newDate) {

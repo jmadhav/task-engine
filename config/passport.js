@@ -60,15 +60,19 @@ module.exports = function(passport) {
                 return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
             } else {
                 var user = req.body.user;
+                console.log(user)
                 // if there is no user with that email
                 // create the user
                 var newUser            = new User(); 
 
                 // set the user's local credentials
                 newUser.email    = email;
-                newUser.password = newUser.generateHash(password);
+                newUser.password = password;
                 newUser.is_active = true
                 newUser.is_deleted = false
+                if (typeof user.group_id !== "undefined" && typeof user.group_id != "") {
+                  newUser.group_id = user.group_id;    
+                }
                 newUser.name = user.name
                 if (typeof user.roles === "undefined") {
                     newUser.roles = ['Analyst'];

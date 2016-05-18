@@ -43,3 +43,32 @@ th.prev, th.next, td.day {
 .new-group {
     margin-top: 55px;
 }
+
+.alert-success {
+  display: none;
+}
+
+.chooseGroupUser {
+  margin-top: 7px;
+}
+
+.overlay {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background: #fcfcfc;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    z-index: 999;
+}
+.spinner {
+    width: 42px;
+    height: 42px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    
+}

@@ -3,7 +3,7 @@
     <div class="well bs-component">
       <form class="form-horizontal" id="edituser" action="/profile/<%= user.id %>/edit" method="post">
         <fieldset>
-          <legend>New User</legend>
+          <legend>Edit User</legend>
           <div class="form-group">
             <label for="inputEmail" class="col-lg-2 control-label">Name</label>
             <div class="col-lg-10">
@@ -19,14 +19,19 @@
           <div class="form-group">
             <label for="inputPassword" class="col-lg-2 control-label">Password</label>
             <div class="col-lg-10">
-              <input type="password" class="form-control" id="inputPassword" placeholder="Password" name="user[password]" value="">
+              <input type="password" class="form-control" id="inputPassword" placeholder="Password" name="user[password]" value="<%= user.password %>">
             </div>
           </div>
           <div class="form-group" id="ConfirmPassword">
             <label for="inputConfirmPassword" class="col-lg-2 control-label">Confirm Password</label>
             <div class="col-lg-10">
               <label class="control-label" id="ConfirmPasswordLabel">Passwords do not match.</label>
-              <input type="password" class="form-control" id="inputConfirmPassword" placeholder="Password" name="user[confirmpassword]" value="">
+              <input type="password" class="form-control" id="inputConfirmPassword" placeholder="Password" name="user[confirmpassword]" value="<%= user.password %>">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputRole" class="col-lg-2 control-label">Group</label>
+            <div class="col-lg-10 chooseGroupUser" data-group_id="<%= user.group_id %>">
             </div>
           </div>
           <div class="form-group">

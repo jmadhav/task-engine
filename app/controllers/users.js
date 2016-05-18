@@ -79,7 +79,7 @@ router.post('/assign-group', isLoggedIn, isManager, function(req, res) {
 
         });
     res.send(JSON.stringify({
-        status: 'success'
+        status: 'success', group_name: params.group_name
     }));
 
 
@@ -134,8 +134,11 @@ router.post('/profile/:id/edit', isLoggedIn, isManager, function(req, res) {
 
         user.name = user_params.name;
         //user.email = user_params.email;
-        if (user_params != "") {
-            user.password = user.generateHash(user_params.password);
+        if (user_params.password != "") {
+            user.password = user_params.password
+        }
+        if (typeof user_params.group_id !== "undefined" && typeof user_params.group_id != "") {
+          user.group_id = user_params.group_id;    
         }
         if (typeof user_params.roles === "undefined") {
             user.roles = ['Analyst'];
@@ -181,7 +184,6 @@ router.get('/users', isLoggedIn, isManager, function(req, res) {
     }).exec(function(err, users) {
         if (err) return next(err);
         var groups = Group.find({});
-        console.log(groups);
         res.render('users/index', {
             user: req.user,
             title: 'Task',
@@ -194,7 +196,6 @@ router.get('/users', isLoggedIn, isManager, function(req, res) {
 
 router.get('/get-groups-members', isLoggedIn, function(req, res) {
       User.find({"group_id":req.query.id}).exec(function(err, users) {
-        console.log(users);
         res.send({ users_name: users});
     });
    

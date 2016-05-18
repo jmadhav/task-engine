@@ -69,6 +69,7 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
   console.log(new Date(d).toLocaleDateString());
     var task_ids = []
     var excelTaskData = readExcelFile(req.file.path);
+    var tasks_count = excelTaskData.length;
     _und.each(excelTaskData, function(excelTask) {
         var task = new Task(excelTask);
         task.user_id = req.user._id;
@@ -80,9 +81,10 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
                 throw err;
         });
     });
-    findRemoveSync(process.cwd() + '/tmp/', {
-        extensions: ['.xlsx']
-    });
+    // findRemoveSync(process.cwd() + '/tmp/', {
+    //     extensions: ['.xlsx']
+    // });
+    res.send({ status: 'success', tasks_count: tasks_count });
    /* res.render('users/profile', {
         user: req.user,
         title: 'Task',

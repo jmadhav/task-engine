@@ -9,6 +9,7 @@ var config = {
       name: 'google-ads'
     },
     port: process.env.PORT || 3000,
+    host: 'localhost',
     db: 'mongodb://localhost/google-ads-development'
   },
 
@@ -18,6 +19,7 @@ var config = {
       name: 'google-ads'
     },
     port: process.env.PORT || 3000,
+    host: 'localhost',
     db: 'mongodb://localhost/google-ads-test'
   },
 
@@ -27,6 +29,7 @@ var config = {
       name: 'google-ads'
     },
     port: process.env.PORT || 3000,
+    host: 'localhost',
     db: 'mongodb://localhost/google-ads-production'
   }
 };

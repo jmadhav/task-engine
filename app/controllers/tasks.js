@@ -27,7 +27,7 @@ module.exports = function(app, passport) {
 router.get('/view_task', isLoggedIn, function(req, res) {
     res.render('tasks/view_task', {
         user: req.user,
-        title: 'Google Ads'
+        title: 'Task'
     });
 });
 router.post('/view_task', isLoggedIn, function(req, res) {
@@ -50,7 +50,7 @@ router.post('/view_task', isLoggedIn, function(req, res) {
 
 
            Task.find(search_Data).exec(function(err, tasks) {
-                  res.render('tasks/view_task', { tasks : tasks,user:req.user,  title: 'Google Ads' });
+                  res.render('tasks/view_task', { tasks : tasks,user:req.user,  title: 'Task' });
                 });
 
          });
@@ -58,7 +58,7 @@ router.post('/view_task', isLoggedIn, function(req, res) {
 router.get('/upload', isLoggedIn, function(req, res) {
     res.render('tasks/upload', {
         user: req.user,
-        title: 'Google Ads'
+        title: 'Task'
     });
 });
 
@@ -85,7 +85,7 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
     });
     res.render('users/profile', {
         user: req.user,
-        title: 'Google Ads',
+        title: 'Task',
         message: "Your task has been uploaded"
     });
 });
@@ -173,7 +173,7 @@ var toDate= new Date(req.body.toDate).toLocaleDateString();
 
 Task.find(search_Data).exec(function(err, tasks) {
      console.log("Task === "+tasks);
-      res.render('users/profile', { tasks : tasks,user:req.user,  title: 'Google Ads' });
+      res.render('users/profile', { tasks : tasks,user:req.user,  title: 'Task' });
     });
 
 });

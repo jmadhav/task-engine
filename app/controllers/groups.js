@@ -16,7 +16,7 @@ router.get('/groups', isLoggedIn, isManager, function(req, res) {
         if (err) return next(err);
         res.render('groups/index', {
             user: req.user,
-            title: 'Google Ads',
+            title: 'Task',
             groups: groups
         });
     });
@@ -25,7 +25,7 @@ router.get('/groups', isLoggedIn, isManager, function(req, res) {
 router.get('/new-groups', isLoggedIn, isManager, function(req, res) {
     res.render('groups/new_group', {
         user: req.user,
-        title: 'Google Ads'
+        title: 'Task'
     });
 });
 

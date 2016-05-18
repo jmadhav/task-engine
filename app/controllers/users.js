@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
     if (req.isAuthenticated())
         res.redirect("/view_task");
     res.render('users/login', {
-        title: 'Google Ads',
+        title: 'Task',
         message: req.flash('loginMessage')
     });
 });
@@ -28,7 +28,7 @@ router.post('/login', passport.authenticate('local-login', {
 router.get('/new-users', isLoggedIn, isManager, function(req, res) {
     res.render('users/new_user', {
         user: req.user,
-        title: 'Google Ads',
+        title: 'Task',
         message: req.flash('signupMessage')
     });
 });
@@ -42,7 +42,7 @@ router.post('/new-users', passport.authenticate('local-signup', {
 router.get('/profile', isLoggedIn, function(req, res) {
     res.render('users/profile', {
         user: req.user,
-        title: 'Google Ads'
+        title: 'Task'
     });
 });
 
@@ -52,7 +52,7 @@ router.get('/profile/:id/edit', isLoggedIn, isManager, function(req, res) {
         if (err) return next(err);
         res.render('users/edit_user', {
             user: user,
-            title: 'Google Ads'
+            title: 'Task'
         });
     });
 });
@@ -184,7 +184,7 @@ router.get('/users', isLoggedIn, isManager, function(req, res) {
         console.log(groups);
         res.render('users/index', {
             user: req.user,
-            title: 'Google Ads',
+            title: 'Task',
             users: users,
             groups: groups
         });

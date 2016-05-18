@@ -6,31 +6,31 @@ var config = {
   development: {
     root: rootPath,
     app: {
-      name: 'google-ads'
+      name: 'task-engine'
     },
     port: process.env.PORT || 3000,
     host: 'localhost',
-    db: 'mongodb://localhost/google-ads-development'
+    db: 'mongodb://localhost/task-engine-development'
   },
 
   test: {
     root: rootPath,
     app: {
-      name: 'google-ads'
+      name: 'task-engine'
     },
     port: process.env.PORT || 3000,
     host: 'localhost',
-    db: 'mongodb://localhost/google-ads-test'
+    db: 'mongodb://localhost/task-engine-test'
   },
 
   production: {
     root: rootPath,
     app: {
-      name: 'google-ads'
+      name: 'task-engine'
     },
     port: process.env.PORT || 3000,
     host: 'localhost',
-    db: 'mongodb://localhost/google-ads-production'
+    db: 'mongodb://localhost/task-engine-production'
   }
 };
 

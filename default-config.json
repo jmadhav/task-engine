@@ -1,14 +1,14 @@
 {
     "app-development": {
         "host": "localhost",
-        "db": "google-ads-development"
+        "db": "task-engine-development"
     },
     "app-testing": {
         "host": "localhost",
-        "db": "google-ads-testing"
+        "db": "task-engine-testing"
     },
     "app-production": {
         "host": "localhost",
-        "db": "google-ads-production"
+        "db": "task-engine-production"
     }
 }

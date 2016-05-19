@@ -4,10 +4,8 @@
 var LocalStrategy   = require('passport-local').Strategy;
 
 // load up the user model
-var User            = require('../app/models/users');
 var mongoose        = require('mongoose')
-
- console.log(User)
+var User            = mongoose.model('User');
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
@@ -60,7 +58,6 @@ module.exports = function(passport) {
                 return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
             } else {
                 var user = req.body.user;
-                console.log(user)
                 // if there is no user with that email
                 // create the user
                 var newUser            = new User(); 

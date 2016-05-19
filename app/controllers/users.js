@@ -3,7 +3,6 @@ var express = require('express'),
 mongoose = require('mongoose');
 User = mongoose.model('User');
 passport = require('passport');
-stringifyObject = require('stringify-object');
 _und = require("underscore"); 
 
 module.exports = function(app, passport) {

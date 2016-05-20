@@ -87,7 +87,7 @@ router.post('/view_task', isLoggedIn, function(req, res) {
 
                     }
 
-        } else if(req.body.user_role.indexOf('Lead')!=-1 ){
+        } else if(req.body.user_role.indexOf('Lead')!=-1 || req.body.user_role.indexOf('Manager')!=-1 ){
 
             if( typeof req.body.selected_user_id =='undefined' && typeof req.body.selected_viewer_id =='undefined' ){
 
@@ -115,7 +115,7 @@ router.post('/view_task', isLoggedIn, function(req, res) {
                                  }
 
             }
-  //  console.log("search_Data == ",search_Data)
+
                   /*  search_Data={
                            '$or': [
                                  { "user_id":req.body.selected_user_id},
@@ -133,6 +133,8 @@ router.post('/view_task', isLoggedIn, function(req, res) {
                          }*/
 
         }
+
+          // console.log("search_Data == ",search_Data)
 /* creating and modifying search_Data as per IP params */
 
 
@@ -168,6 +170,7 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
         var task = new Task(excelTask);
         task.user_id = req.user._id;
         task.user_name=req.user.name;
+        task.verifier_id=null;
         task.created_at= new Date(d).toLocaleDateString();
       //  task.updated_at=new Date(req.body.date).toLocaleDateString();
         task.save(function(err) {

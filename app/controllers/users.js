@@ -207,8 +207,8 @@ router.get('/get-moderator-lead-members', isLoggedIn, function(req, res) {
                      { "group_id":req.query.group_id },
                      { "is_active":true},
                      { '$or': [ 
-                               { "roles": ["Analyst","Moderator"]},
-                               { "roles": ["Moderator","Analyst"]
+                              // { "roles": ["Analyst"]},
+                               { "roles": ["Moderator"]
                               } 
                             ] 
                        }
@@ -226,8 +226,8 @@ router.get('/get-moderator-lead-members', isLoggedIn, function(req, res) {
                      { "group_id":req.query.group_id },
                       { "is_active":true},
                      { '$or': [ 
-                               { "roles": ["Analyst","Moderator"]},
-                               { "roles": ["Moderator","Analyst"]},
+                              // { "roles": ["Analyst"]},
+                               { "roles": ["Moderator"]},
                                { "roles": ["Lead"]} 
                             ] 
                        }
@@ -257,10 +257,9 @@ router.get('/get-analyst-moderator-members', isLoggedIn, function(req, res) {
                      { "group_id":req.query.group_id },
                       { "is_active":true},
                      { '$or': [ 
-                               { "roles": ["Analyst","Moderator"]},
-                               { "roles": ["Moderator","Analyst"]},
-                               { "roles": ["Analyst"]
-                              } 
+                               { "roles": ["Analyst"]},
+                               { "roles": ["Moderator"]}
+                               //{ "roles": ["Analyst"] } 
                             ] 
                        }
 

@@ -130,7 +130,10 @@
         });
 
     });
-
+ $('#sel_reviewer').on("change", function() {
+   // alert($(this).val())
+// $('#selected_viewer_id').val($(this).val());
+     });
 
     if (typeof $('#user_role').val() != 'undefined') {
         if (($('#user_role').val().indexOf('Moderator') != -1) || ($('#user_role').val().indexOf('Lead') != -1)) {

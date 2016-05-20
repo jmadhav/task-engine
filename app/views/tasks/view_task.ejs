@@ -6,6 +6,7 @@
          <input type="hidden" id="user_id" name="user_id" value="<%=user._id%>">
          <input type="hidden" id="user_name" name="user_name" value="<%=user.name%>">
          <input type="hidden" id="selecte_user_role" name="selecte_user_role">
+         
         
           <div class="form-group">
             <label for="fromDate" class="col-lg-2 control-label">From Date:</label>
@@ -53,7 +54,7 @@
         %> <div class="form-group">
             <label for="sel_reviewer" class="col-lg-2 control-label">Reviewd By</label>
             <div class="col-lg-10">
-              <select id="sel_reviewer" name="viewer_name" > 
+              <select id="sel_reviewer" name="selected_viewer_id" > 
               <option selected disabled>Select User</option>
             </select>
             </div>

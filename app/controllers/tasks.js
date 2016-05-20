@@ -33,8 +33,8 @@ router.get('/view_task', isLoggedIn, function(req, res) {
 
 
 router.post('/view_task', isLoggedIn, function(req, res) {
+ //console.log("view_task req == ",req.body);
  
- console.log("View Task  =====",req.body);
         var  search_Data=null;
 
         /* creating and modifying date as per IP*/
@@ -52,7 +52,7 @@ router.post('/view_task', isLoggedIn, function(req, res) {
                            }
                    }
         }
-   console.log("IS IT ???? ",req.body.user_role.indexOf('Moderator'));
+ 
      if(req.body.user_role=='Analyst'){
        
          search_Data={  
@@ -87,10 +87,37 @@ router.post('/view_task', isLoggedIn, function(req, res) {
 
                     }
 
-        } else if(req.body.user_role.indexOf('Lead')!=-1 || req.body.user_role.indexOf('Manager')!=-1 ){
+        } else if(req.body.user_role.indexOf('Lead')!=-1 ){
+
+            if( typeof req.body.selected_user_id =='undefined' && typeof req.body.selected_viewer_id =='undefined' ){
 
                     search_Data={
-                           '$and': [
+                           '$and': [ { "verifier_id":req.body.user_id},date ]
+
+                         }
+            } else  if(typeof req.body.selected_user_id !='undefined'){
+
+
+                search_Data={
+                           '$and': [ { "user_id":req.body.selected_user_id },date ]
+
+                         }
+            } else if(typeof req.body.selected_viewer_id !='undefined')
+            {
+                  search_Data={
+                           '$and': [ { "verifier_id":req.body.selected_viewer_id },date ]
+
+                         }
+            } else if(typeof req.body.selected_user_id !='undefined' && typeof req.body.selected_viewer_id !='undefined')
+            {
+                    search_Data={
+                           '$and': [{ "user_id":req.body.selected_user_id},{"verifier_id":req.body.selected_viewer_id},date]
+                                 }
+
+            }
+  //  console.log("search_Data == ",search_Data)
+                  /*  search_Data={
+                           '$or': [
                                  { "user_id":req.body.selected_user_id},
                                  
                                  { '$or': [ 
@@ -103,13 +130,13 @@ router.post('/view_task', isLoggedIn, function(req, res) {
 
                            ]
 
-                         }
+                         }*/
 
         }
 /* creating and modifying search_Data as per IP params */
 
 
-console.log("search_Data  ==",search_Data);
+
 
          
            Task.find(search_Data).exec(function(err, tasks) {

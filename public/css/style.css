@@ -34,7 +34,6 @@ th.prev, th.next, td.day {
     margin-left: 5px;
     color: green;
 }
-
 .red {
     margin-left: 5px;
     color: red;
@@ -71,4 +70,8 @@ th.prev, th.next, td.day {
     top: 50%;
     left: 50%;
     
+}
+.active {
+  color: #d9230f;
+  text-decoration: none;
 }

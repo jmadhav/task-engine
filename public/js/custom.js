@@ -475,3 +475,79 @@
 
 
 })();
+
+$(document).ready(function(){
+
+    if($("#task-data").length != 0) {
+        var jsonData = JSON.parse($("#task-data").val());
+
+        var correct = 0;
+        var notCorrect = 0;
+
+        var moderatorData = new Object();
+
+        $.each(jsonData, function(k, data){
+            if(data["is_correct"] == true) {
+                correct++;
+            } else {
+                notCorrect++;
+            }
+        });
+
+        jQuery.jqplot('chart2',
+                [
+                    [
+                        ['Correct', correct],
+                        ['Not Correct', notCorrect]
+                    ]
+                ],
+                {
+                    title: ' ',
+                    seriesDefaults: {
+                        shadow: false, 
+                        renderer: jQuery.jqplot.PieRenderer, 
+                        rendererOptions: {
+                            startAngle: 180,
+                            sliceMargin: 4,
+                            showDataLabels: true
+                        }
+                    },
+                    legend: {
+                        show:true,
+                        location: 'w'
+                    }
+                });
+    }
+
+
+
+
+
+    if($("#task-count").length != 0) {
+        var jsonData = JSON.parse($("#task-count").val());
+
+        jQuery.jqplot('chart3',
+                [
+                    [
+                        ['Reviewed', jsonData["checked"]],
+                        ['Not Reviewed', jsonData["unchecked"]]
+                    ]
+                ],
+                {
+                    title: ' ',
+                    seriesDefaults: {
+                        shadow: false, 
+                        renderer: jQuery.jqplot.PieRenderer, 
+                        rendererOptions: {
+                            startAngle: 180,
+                            sliceMargin: 4,
+                            showDataLabels: true
+                        }
+                    },
+                    legend: {
+                        show:true,
+                        location: 'w'
+                    }
+                });
+    }
+});

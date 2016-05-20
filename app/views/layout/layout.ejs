@@ -18,7 +18,10 @@
     <link href="../../css/slimplex.css" rel="stylesheet">
     <link href="../../css/datepicker.css" rel="stylesheet">
     <link href="../../css/style.css" rel="stylesheet">
+
     <link href="../../css/jquery-ui.css" rel="stylesheet">
+
+    <link href="../../css/jquery.jqplot.min.css" rel="stylesheet">
 </head>
   <body>
     <div class="container">
@@ -35,6 +38,9 @@
                 <% if ((_und.contains(user.roles, 'Manager'))) { %>
                 <li class="dropdown">
                   <a href="/users">Users</span></a>
+                </li>
+                <li class="dropdown">
+                  <a href="/stats">Stats</span></a>
                 </li>
                 <% } %>
                 <li>
@@ -83,6 +89,10 @@
   <script src="../../components/underscore/underscore-min.js"></script>
   
   <script src="../../js/bootstrap-datepicker.js"></script>
+
   <script src="../../js/jquery-ui.js"></script>
-   <script src="../../js/custom.js"></script>
+
+  <script src="../../js/jquery.jqplot.min.js"></script>
+  <script src="../../js/jqplot.pieRenderer.js"></script>
+  <script src="../../js/custom.js"></script>
 </html>

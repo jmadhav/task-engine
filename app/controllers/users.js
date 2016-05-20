@@ -193,8 +193,6 @@ router.get('/users', isLoggedIn, isManager, function(req, res) {
 });
 
 
-
-
 router.get('/get-moderator-lead-members', isLoggedIn, function(req, res) {
    // console.log(" req.query === >>>>>>>>>> ",req.query);
     var curren_role=req.query.user_role;
@@ -272,7 +270,71 @@ router.get('/get-analyst-moderator-members', isLoggedIn, function(req, res) {
 
    }
 
-       User.find(role).exec(function(err, users) {
+});
+
+router.get('/stats', isLoggedIn, isManager, function(req, res) {
+
+    if(req.query.id != undefined) {
+
+        Group.find({}).exec(function(err, groups) {
+
+
+            User.find({group_id : {$eq : req.query.id}}).exec(function(err, users) {
+                
+                var user_ids = new Array();
+                users.forEach(function(y) {
+                    user_ids.push(y["_id"]);
+                });
+
+                Task.find({ user_id: { $in: user_ids }}).exec(function(err, tasks) {
+
+                    var task_data = new Array();
+                    var taskCount = new Object();
+
+                    taskCount["checked"] = 0;
+                    taskCount["unchecked"] = 0;
+
+                    tasks.forEach(function(t) {
+                        if(t.is_correct != undefined) {
+                            taskCount["checked"]++;
+                            var temp = new Object();
+                            temp["is_correct"] = t.is_correct;
+                            temp["verifier_name"] = t.verifier_name;
+                            temp["user_name"] = t.user_name;
+                            task_data.push(temp);
+                        } else {
+                            taskCount["unchecked"]++;
+                        }
+                    });
+
+                    res.render('users/stats', {
+                        user: req.user,
+                        title: 'Statstics',
+                        groups: groups,
+                        tasks: task_data,
+                        task_count: taskCount
+                    });
+                });
+            });
+        });
+
+    } else {
+        Group.find({}).sort({}).exec(function(err, groups) {
+            res.render('users/stats', {
+                user: req.user,
+                title: 'Statstics',
+                groups: groups
+            });
+        });    
+    }
+
+    
+});
+
+
+
+router.get('/get-groups-members', isLoggedIn, function(req, res) {
+      User.find({"group_id":req.query.id}).exec(function(err, users) {
         res.send({ users_name: users});
     });
    

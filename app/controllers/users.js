@@ -194,8 +194,86 @@ router.get('/users', isLoggedIn, isManager, function(req, res) {
 });
 
 
-router.get('/get-groups-members', isLoggedIn, function(req, res) {
-      User.find({"group_id":req.query.id}).exec(function(err, users) {
+
+
+router.get('/get-moderator-lead-members', isLoggedIn, function(req, res) {
+    console.log(" req.query === >>>>>>>>>> ",req.query);
+    var curren_role=req.query.user_role;
+   var role={};
+  
+   if(curren_role.indexOf("Lead")!=-1){
+   
+        role={
+               '$and': [
+                     { "group_id":req.query.group_id },
+                     { "is_active":true},
+                     { '$or': [ 
+                               { "roles": ["Analyst","Moderator"]},
+                               { "roles": ["Moderator","Analyst"]
+                              } 
+                            ] 
+                       }
+
+
+               ]
+
+             }
+         }
+
+         if(curren_role.indexOf("Manager")!=-1){
+   
+        role={
+               '$and': [
+                     { "group_id":req.query.group_id },
+                      { "is_active":true},
+                     { '$or': [ 
+                               { "roles": ["Analyst","Moderator"]},
+                               { "roles": ["Moderator","Analyst"]},
+                               { "roles": ["Lead"]} 
+                            ] 
+                       }
+
+
+               ]
+
+             }
+         }
+       User.find(role).exec(function(err, users) {
+        console.log("get-moderator-lead-members ",users);
+        res.send({ users_name: users});
+    });
+   
+});
+
+
+router.get('/get-analyst-moderator-members', isLoggedIn, function(req, res) {
+    console.log(" req.query === >>>>>>>>>> ",req.query);
+    var curren_role=req.query.user_role;
+   var role={};
+  
+   if(curren_role.indexOf("Moderator")!=-1 || curren_role.indexOf("Lead")!=-1 || curren_role.indexOf("Manager")!=-1){
+   
+         role={
+               '$and': [
+                     { "group_id":req.query.group_id },
+                      { "is_active":true},
+                     { '$or': [ 
+                               { "roles": ["Analyst","Moderator"]},
+                               { "roles": ["Moderator","Analyst"]},
+                               { "roles": ["Analyst"]
+                              } 
+                            ] 
+                       }
+
+
+               ]
+
+            
+             }
+
+   }
+
+       User.find(role).exec(function(err, users) {
         res.send({ users_name: users});
     });
    

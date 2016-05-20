@@ -1,15 +1,15 @@
-  <form class="form-horizontal" action="/view_task" method="post">
+  <form class="form-horizontal" action="/search_task" method="post">
         <fieldset>
           
          <input type="hidden" id="user_role" name="user_role" value="<%=user.roles%>">
-         <input type="hidden" id="user_id" name="user_id" value="<%=user._id%>">
+         <input type="hidden" id="user_group_id" name="user_group_id" value="<%=user.group_id%>">
          <input type="hidden" id="veryfier_id" name="veryfier_id" value="<%=user._id%>">
          <input type="hidden" id="veryfier_name" name="veryfier_name" value="<%=user.name%>">
          <input type="hidden" id="selecte_user_role" name="selecte_user_role">
           <div class="form-group">
             <label for="fromDate" class="col-lg-2 control-label">From Date:</label>
             <div class="col-lg-3">
-              <input type="text" class="form-control datepicker"  placeholder="yyyy-mm-dd" name="fromDate" value=""  required>
+              <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="fromDate" value=""  required>
             </div>
           </div>
            <div class="form-group">
@@ -18,16 +18,67 @@
               <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="toDate" value=""  required>
             </div>
           </div>
-          
+           <% if (typeof user !== 'undefined') {
+                  if(user.roles=="Manager"){
+               %>
+
+                <div class="form-group">
+                  <label for="inputPassword" class="col-lg-2 control-label">Group List</label>
+                  <div class="col-lg-10">
+                    <select id="sel_group" name="user_group" > 
+                    <option selected disabled>Select Group</option>
+                  </select>
+                  </div>
+               </div>
+
+           <%  
+              }
+           }%>
+        <% if (typeof user !== 'undefined') {
+                  if(user.roles!="Analyst"){
+               %>
+        <div style='float:left ,display: in-line,width: 123px;'>
           <div class="form-group">
-            <div class="col-lg-10 col-lg-offset-2">
-              <button type="submit" class="btn btn-success">View Task</button>
+            <label for="sel_analyst" class="col-lg-2 control-label">Uploaded By :</label>
+            <div class="col-lg-10">
+              <select id="sel_analyst" name="user_name" > 
+              <option selected disabled>Select User</option>
+            </select>
             </div>
           </div>
+        <% 
+        }if(user.roles.indexOf("Lead")!=-1 || user.roles.indexOf("Manager")!=-1){ 
+        %> <div class="form-group">
+            <label for="sel_reviewer" class="col-lg-2 control-label">Reviewd By</label>
+            <div class="col-lg-10">
+              <select id="sel_reviewer" name="viwer_name" > 
+              <option selected disabled>Select User</option>
+            </select>
+            </div>
+          </div>
+          <% } if(user.roles!="Analyst"){%>
+          <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+              <button type="submit" class="btn btn-success">Search Task</button>
+            </div>
+          </div>
+           </div>
          </fieldset>
       </form>
-      
+           <%  
 
+           }
+           }%>
+          
+ <% if (typeof user !== 'undefined') {
+                  if(user.roles!="Analyst"){
+               %>
+ <div class="col-lg-10 col-lg-offset-2">
+     <button type="button" id="save_btn" class="btn btn-success">Save Data</button>
+</div>
+ <%  
+  }
+   }%>
        <div class="bs-component">
         <table id="excelDataTable" class="table table-striped table-hover ">
       <thead>
@@ -42,9 +93,20 @@
             <th data-field="landing_page_flag">Landing Page Flag</th>
             <th data-field="landing_page_rating">Landing Page Rating</th>
              <th style="width:200px" data-field="user_comments">User Comments</th>
-            
-             <th data-field="user_name">User Name</th>
-          
+             <% if (typeof user !== 'undefined') {
+                  if(user.roles!="Analyst"){
+               %>
+             <th data-field="user_name">Analyst Name</th>
+            <th data-field="is_correct">is_correct</th>
+            <th data-field="verifier_comments">verifier_comments</th>
+
+             <th data-field="verifier_name">verifier_name</th>
+            <%  
+
+           }
+           }%>
+            <th style="display:none;" data-field="_id">_id</th>
+            <th style="display:none;" data-field="verifier_id">verifier_id</th>
         </tr>
     </thead>
     <tbody id="users_list">
@@ -55,19 +117,35 @@
 
     %>
          <tr>
-             <td class="col-md-2"><%= tasks[i]["S_No"] %></td>
+             <td class="col-md-2"><%= i + 1 %></td>
              <td class="col-md-2"><%= tasks[i].query%></td> 
              <td class="col-md-2"><%= tasks[i]['query_flag']%></td> 
              <td class="col-md-2"><%= tasks[i]['ad_creative']%></td> 
              <td class="col-md-2"><%= tasks[i]['ad_creative_flag']%></td> 
              <td class="col-md-2"><%= tasks[i]['ad_creative_rating']%></td> 
-             <td class="col-md-2"><%= tasks[i]['landing_page']%></td> 
+             <td class="col-md-1 landing_url_wrap"><%= tasks[i]['landing_page']%></td> 
              <td class="col-md-2"><%= tasks[i]['landing_page_flag']%></td> 
              <td class="col-md-2"><%= tasks[i]['landing_page_rating']%></td> 
               <td class="col-md-2"><%= tasks[i]['user_comments']%></td>
-             
+              <% if (typeof user !== 'undefined') {
+                  if(tasks.roles!="Analyst"){
+                 // console.log(" Conditoionnon ==== ",(tasks[i]["is_correct"]==true));
+               %>
               <td class="col-md-2"><%= tasks[i]['user_name']%> </td>
-              
+               <td class="col-md-4">
+                correct  <input type="radio" name="correct<%= i %>" id="correct<%= i %>" value="Correct" <%= (tasks[i]["is_correct"]==true) ? 'checked' : ""%> />
+                InCorrect <input type="radio" name="correct<%= i %>" id="incorrect<%= i %>" value="InCorrect"<%=(tasks[i]["is_correct"]==false) ? 'checked' : ""%> />
+             </td>
+            <td class="col-md-2"> <input type="textarea" name="text_comment<%= i %>" value="<%=tasks[i]['verifier_comments']%>"/></td>
+             <td class="col-md-2"><%= tasks[i]['verifier_name']%> </td>
+           <%  
+
+           }
+           }%>
+             <td><input type="hidden" id="user_role" name="user_role" value="<%=tasks[i]['_id']%>"> </td>
+             <td> </td>
+             <td> </td>
+             <td> </td>
        </tr>
         
  <% } }%>

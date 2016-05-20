@@ -367,7 +367,7 @@
         $.ajax({
             type: "GET",
             url: "/get-groups",
-            async: false, 
+            async: false,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function(data) {
@@ -414,6 +414,7 @@
     addSelectBoxToUsers();
     addSelectBoxNewUser();
     addSelectBoxEditUser();
+    setSelectedMenuItem();
 
     $('.chooseGroup').on('change', ".choose_group_select", function() {
 
@@ -422,14 +423,14 @@
             group_id: $(this).find(":selected").val()
         }
         if (data.group_id != "") {
-          $.ajax({
-            type: "POST",
-            url: "/assign-group",
-            data: data,
-            error: function(err) {
-                console.log(err);
-            }
-          });  
+            $.ajax({
+                type: "POST",
+                url: "/assign-group",
+                data: data,
+                error: function(err) {
+                    console.log(err);
+                }
+            });
         }
 
     });
@@ -448,8 +449,8 @@
                 $(".overlay").hide();
             },
             error: function(err) {
-              $(".overlay").hide();
-              console.log(err);
+                $(".overlay").hide();
+                console.log(err);
             },
             cache: false,
             contentType: false,
@@ -458,6 +459,19 @@
 
         e.preventDefault();
     });
+
+    function setSelectedMenuItem() {
+        var path = window.location.pathname;
+        path = path.replace(/\/$/, "");
+        path = decodeURIComponent(path);
+
+        $(".nav a").each(function() {
+            var href = $(this).attr('href');
+            if (path.substring(0, href.length) === href) {
+                $(this).closest('li').addClass('active');
+            }
+        });
+    }
 
 
 })();

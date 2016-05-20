@@ -1,24 +1,26 @@
-  <form class="form-horizontal" action="/search_task" method="post">
+  <form class="form-horizontal" action="/view_task" method="post">
         <fieldset>
           
          <input type="hidden" id="user_role" name="user_role" value="<%=user.roles%>">
          <input type="hidden" id="user_group_id" name="user_group_id" value="<%=user.group_id%>">
-         <input type="hidden" id="veryfier_id" name="veryfier_id" value="<%=user._id%>">
-         <input type="hidden" id="veryfier_name" name="veryfier_name" value="<%=user.name%>">
+         <input type="hidden" id="user_id" name="user_id" value="<%=user._id%>">
+         <input type="hidden" id="user_name" name="user_name" value="<%=user.name%>">
          <input type="hidden" id="selecte_user_role" name="selecte_user_role">
+        
           <div class="form-group">
             <label for="fromDate" class="col-lg-2 control-label">From Date:</label>
             <div class="col-lg-3">
-              <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="fromDate" value=""  required>
+              <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="fromDate" value="" >
             </div>
           </div>
            <div class="form-group">
             <label for="toDate" class="col-lg-2 control-label">To Date:</label>
             <div class="col-lg-3">
-              <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="toDate" value=""  required>
+              <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="toDate" value="" >
             </div>
           </div>
            <% if (typeof user !== 'undefined') {
+
                   if(user.roles=="Manager"){
                %>
 
@@ -41,7 +43,7 @@
           <div class="form-group">
             <label for="sel_analyst" class="col-lg-2 control-label">Uploaded By :</label>
             <div class="col-lg-10">
-              <select id="sel_analyst" name="user_name" > 
+              <select id="sel_analyst" name="selected_user_id" > 
               <option selected disabled>Select User</option>
             </select>
             </div>
@@ -51,25 +53,21 @@
         %> <div class="form-group">
             <label for="sel_reviewer" class="col-lg-2 control-label">Reviewd By</label>
             <div class="col-lg-10">
-              <select id="sel_reviewer" name="viwer_name" > 
+              <select id="sel_reviewer" name="viewer_name" > 
               <option selected disabled>Select User</option>
             </select>
             </div>
           </div>
-          <% } if(user.roles!="Analyst"){%>
-          <div class="form-group">
+          <%  }
+           }%>
+           <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
-              <button type="submit" class="btn btn-success">Search Task</button>
+              <button type="submit" class="btn btn-success">View Task</button>
             </div>
           </div>
            </div>
          </fieldset>
       </form>
-           <%  
-
-           }
-           }%>
-          
  <% if (typeof user !== 'undefined') {
                   if(user.roles!="Analyst"){
                %>
@@ -94,6 +92,7 @@
             <th data-field="landing_page_rating">Landing Page Rating</th>
              <th style="width:200px" data-field="user_comments">User Comments</th>
              <% if (typeof user !== 'undefined') {
+            
                   if(user.roles!="Analyst"){
                %>
              <th data-field="user_name">Analyst Name</th>
@@ -128,7 +127,7 @@
              <td class="col-md-2"><%= tasks[i]['landing_page_rating']%></td> 
               <td class="col-md-2"><%= tasks[i]['user_comments']%></td>
               <% if (typeof user !== 'undefined') {
-                  if(tasks.roles!="Analyst"){
+                  if(user.roles!="Analyst"){
                  // console.log(" Conditoionnon ==== ",(tasks[i]["is_correct"]==true));
                %>
               <td class="col-md-2"><%= tasks[i]['user_name']%> </td>

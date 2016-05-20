@@ -56,14 +56,14 @@
                     }
 
                 } else if (headings[i] == "verifier_name") {
-                    var name = $('#veryfier_name').val();
+                    var name = $('#user_name').val();
 
                     if (typeof name !== 'undefined') {
                         tdText = name;
                     }
 
                 } else if (headings[i] == "verifier_id") {
-                    var name = $('#veryfier_id').val();
+                    var name = $('#user_id').val();
 
                     if (typeof name !== 'undefined') {
                         tdText = name;
@@ -183,7 +183,7 @@
                 var selectBox = document.getElementById('sel_reviewer');
                 $('#sel_reviewer').empty();
                 _.each(data.users_name, function(element) {
-                     if($("#veryfier_id").val()!=element._id &&(element.roles!="Manager") )
+                     if($("#user_id").val()!=element._id &&(element.roles!="Manager") )
                     selectBox.options.add(new Option(element.name, element._id, element.roles))
                 });
                 if (selectBox != null){
@@ -213,7 +213,7 @@
                 var selectBox = document.getElementById('sel_analyst');
                 $('#sel_analyst').empty();
                 _.each(data.users_name, function(element) {
-                     if($("#veryfier_id").val()!=element._id &&(element.roles!="Manager") )
+                     if($("#user_id").val()!=element._id &&(element.roles!="Manager") )
                     selectBox.options.add(new Option(element.name, element._id, element.roles))
                 });
                 if (selectBox != null){

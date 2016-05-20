@@ -30,30 +30,97 @@ router.get('/view_task', isLoggedIn, function(req, res) {
         title: 'Task Engine'
     });
 });
+
+
 router.post('/view_task', isLoggedIn, function(req, res) {
-        var fromDate= new Date(req.body.fromDate).toLocaleDateString();
-        var toDate= new Date(req.body.toDate).toLocaleDateString();
-         search_Data={  
-         "$and": [{
-                     "user_id": req.body.user_id,
-                 },
-                  
-                  { "created_at": {
+ 
+ console.log("View Task  =====",req.body);
+        var  search_Data=null;
+
+        /* creating and modifying date as per IP*/
+        var date ={}
+        if( (req.body.fromDate.length <=0) || (req.body.toDate.length <=0))
+        {
+           
+            date={"created_at":new Date().toLocaleDateString()}
+        }else {
+             var fromDate= new Date(req.body.fromDate).toLocaleDateString();
+             var toDate= new Date(req.body.toDate).toLocaleDateString();
+             date={ "created_at": {
                          $gte:fromDate,
                          $lt:toDate
                            }
                    }
+        }
+   console.log("IS IT ???? ",req.body.user_role.indexOf('Moderator'));
+     if(req.body.user_role=='Analyst'){
+       
+         search_Data={  
+                 "$and": [{"user_id": req.body.user_id},date]
+                 }  
+
+        }else if(req.body.user_role.indexOf('Moderator')!=-1){
+
+                 
+                 if(req.body.selecte_user_role.length<=0){ //No Aanalyst selected from list ..Then search for moderator task only
+                  
+                    search_Data={  
+                    "$and": [{"user_id": req.body.user_id},date]
+                    }  
+                   }else {
+                      
+                    search_Data={
+                           '$and': [
+                                 { "user_id":req.body.selected_user_id},
+                                 
+                                 { '$or': [ 
+                                           { "verifier_id":req.body.user_id},
+                                           { "verifier_id":null}
+                                          
+                                        ] 
+                                   },date
 
 
-               ]
-           }
+                           ]
+
+                         }
+
+                    }
+
+        } else if(req.body.user_role.indexOf('Lead')!=-1 || req.body.user_role.indexOf('Manager')!=-1 ){
+
+                    search_Data={
+                           '$and': [
+                                 { "user_id":req.body.selected_user_id},
+                                 
+                                 { '$or': [ 
+                                           { "verifier_id":req.body.selected_viewer_id},
+                                           { "verifier_id":req.body.user_id}
+                                          
+                                        ] 
+                                   },date
 
 
+                           ]
+
+                         }
+
+        }
+/* creating and modifying search_Data as per IP params */
+
+
+console.log("search_Data  ==",search_Data);
+
+         
            Task.find(search_Data).exec(function(err, tasks) {
                   res.render('tasks/view_task', { tasks : tasks,user:req.user,  title: 'Task Engine' });
                 });
+        
+   });
 
-         });
+
+
+
 
 router.get('/upload', isLoggedIn, function(req, res) {
     res.render('tasks/upload', {
@@ -124,6 +191,7 @@ for(var i in data){
 
  
 });
+
 
 
 router.post('/search_task', isLoggedIn, function(req, res) {

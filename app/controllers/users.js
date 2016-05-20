@@ -196,7 +196,7 @@ router.get('/users', isLoggedIn, isManager, function(req, res) {
 
 
 router.get('/get-moderator-lead-members', isLoggedIn, function(req, res) {
-    console.log(" req.query === >>>>>>>>>> ",req.query);
+   // console.log(" req.query === >>>>>>>>>> ",req.query);
     var curren_role=req.query.user_role;
    var role={};
   
@@ -238,7 +238,7 @@ router.get('/get-moderator-lead-members', isLoggedIn, function(req, res) {
              }
          }
        User.find(role).exec(function(err, users) {
-        console.log("get-moderator-lead-members ",users);
+    //    console.log("get-moderator-lead-members ",users);
         res.send({ users_name: users});
     });
    
@@ -246,7 +246,7 @@ router.get('/get-moderator-lead-members', isLoggedIn, function(req, res) {
 
 
 router.get('/get-analyst-moderator-members', isLoggedIn, function(req, res) {
-    console.log(" req.query === >>>>>>>>>> ",req.query);
+   // console.log(" req.query === >>>>>>>>>> ",req.query);
     var curren_role=req.query.user_role;
    var role={};
   

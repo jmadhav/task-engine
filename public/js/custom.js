@@ -56,14 +56,14 @@
                     }
 
                 } else if (headings[i] == "verifier_name") {
-                    var name = $('#veryfier_name').val();
+                    var name = $('#user_name').val();
 
                     if (typeof name !== 'undefined') {
                         tdText = name;
                     }
 
                 } else if (headings[i] == "verifier_id") {
-                    var name = $('#veryfier_id').val();
+                    var name = $('#user_id').val();
 
                     if (typeof name !== 'undefined') {
                         tdText = name;
@@ -111,7 +111,8 @@
 
     $('#sel_group').on("change", function() {
         if ($('#user_role').val() == 'Manager') {
-            getGroupMembersData($(this).val());
+            getAnalystModeratorData($(this).val());
+            getLeadModeratorData($(this).val());
         }
     });
     var globaldata;
@@ -135,7 +136,13 @@
         if (($('#user_role').val().indexOf('Moderator') != -1) || ($('#user_role').val().indexOf('Lead') != -1)) {
 
             var id = $('#user_group_id').val()
-            getGroupMembersData(id);
+            getAnalystModeratorData(id);
+
+        }
+         if ($('#user_role').val().indexOf('Lead') != -1) {
+
+            var id = $('#user_group_id').val()
+            getLeadModeratorData(id);
 
         }
     }
@@ -160,13 +167,43 @@
         });
     }
 
-    function getGroupMembersData(id) {
-        console.log(" calling getGroupMembersData");
-        var data = {};
-        data["id"] = id;
+     function getLeadModeratorData(id) {
+        var data1 = {};
+        data1["group_id"] = id;
+        data1["user_role"]= $('#user_role').val();
         $.ajax({
             type: "GET",
-            url: "/get-groups-members",
+            url: "/get-moderator-lead-members",
+            data: data1,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data) {
+                //globaldata = data;
+
+                var selectBox = document.getElementById('sel_reviewer');
+                $('#sel_reviewer').empty();
+                _.each(data.users_name, function(element) {
+                     if($("#user_id").val()!=element._id &&(element.roles!="Manager") )
+                    selectBox.options.add(new Option(element.name, element._id, element.roles))
+                });
+                if (selectBox != null){
+                    selectBox.selectedIndex = -1;
+                     $('#sel_reviewer').autocomplete({
+                          source: data
+                        });
+                }
+            }
+        });
+     }
+
+    function getAnalystModeratorData(id) {
+      
+        var data = {};
+        data["group_id"] = id;
+        data["user_role"]= $('#user_role').val();
+        $.ajax({
+            type: "GET",
+            url: "/get-analyst-moderator-members",
             data: data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -176,11 +213,15 @@
                 var selectBox = document.getElementById('sel_analyst');
                 $('#sel_analyst').empty();
                 _.each(data.users_name, function(element) {
-
+                     if($("#user_id").val()!=element._id &&(element.roles!="Manager") )
                     selectBox.options.add(new Option(element.name, element._id, element.roles))
                 });
-                if (selectBox != null)
+                if (selectBox != null){
                     selectBox.selectedIndex = -1;
+                     $('#sel_analyst').autocomplete({
+                          source: data
+                        });
+                }
             }
         });
     }

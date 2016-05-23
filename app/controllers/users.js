@@ -386,14 +386,8 @@ router.post('/role-update', isLoggedIn, isManager, function(req, res) {
 
         if (params.status == "checked") {
             var update = {
-                $push: {
-                    roles: params.role
-                }
-            }
-        } else {
-            var update = {
-                $pull: {
-                    roles: params.role
+                $set: {
+                    roles: [params.role]
                 }
             }
         }

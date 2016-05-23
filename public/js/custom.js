@@ -480,7 +480,7 @@
             'viewer_name'      : $('input[name=viewer_name]').val()
         };
         $.ajax({
-            url: '/view_task',
+            url: '/audit_task',
             type: 'POST',
             data: formData,
             success: function(data) {
@@ -495,6 +495,37 @@
 
         e.preventDefault();
     });
+
+
+
+$("#viewOnlyTask").submit(function(e) {
+        $(".overlay").show();
+       var formData = {
+           
+            'user_id'        : $('input[name=user_id]').val(),
+            'fromDate'        : $('input[name=fromDate]').val(),
+            'toDate'      : $('input[name=toDate]').val()
+           
+        };
+        $.ajax({
+            url: '/view_only_task',
+            type: 'POST',
+            data: formData,
+            success: function(data) {
+                $("#users_list").html(data);
+                $(".overlay").hide();
+            },
+            error: function(err) {
+              $(".overlay").hide();
+              console.log(err);   
+            }
+        });
+
+        e.preventDefault();
+    });
+
+
+
 
     function setSelectedMenuItem() {
         var path = window.location.pathname;

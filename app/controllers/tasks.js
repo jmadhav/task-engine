@@ -32,8 +32,52 @@ router.get('/view_task', isLoggedIn, function(req, res) {
     });
 });
 
+router.get('/audit_task', isLoggedIn, function(req, res) {
+    res.render('tasks/audit_task', {
+        user: req.user,
+        title: 'Task Engine'
+    });
+});
 
-router.post('/view_task', isLoggedIn, function(req, res) {
+
+router.post('/view_only_task', isLoggedIn, function(req, res) {
+    console.log("view_only_task === ",req.body);
+    var date = {};
+     var view_Data = null;
+    if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
+
+        date = {
+            "created_at": new Date().toLocaleDateString()
+        }
+    } else {
+        var fromDate = new Date(req.body.fromDate).toLocaleDateString();
+        var toDate = new Date(req.body.toDate).toLocaleDateString();
+        date = {
+            "created_at": {
+                $gte: fromDate,
+                $lt: toDate
+            }
+        }
+    }
+
+       view_Data = {
+            "$and": [{
+                "user_id": req.body.user_id
+            }, date]
+        }
+
+    Task.find(view_Data).exec(function(err, tasks) {
+        res.render('tasks/search_task', {
+            tasks: tasks,
+            user: req.user,
+            layout: false
+        });
+    });
+
+    });
+
+
+router.post('/audit_task', isLoggedIn, function(req, res) {
     console.log("view_task req == ",req.body);
 
     var search_Data = null;
@@ -253,60 +297,6 @@ router.post('/update_data', isLoggedIn, function(req, res) {
 });
 
 
-
-// router.post('/search_task', isLoggedIn, function(req, res) {
-// //console.log("search_task from Date",req.body);
-// console.log("search_task from User",req.body);
-// var ipData;
-// var search_Data={};
-// var fromDate= new Date(req.body.fromDate).toLocaleDateString();
-// var toDate= new Date(req.body.toDate).toLocaleDateString();
-
-//  if(req.body.selecte_user_role=='Analyst'){
-//                 ipData=req.body.user_name;
-//                  search_Data={  
-//                      "$and": [{
-//                                  "user_id": ipData,
-//                              },
-
-//                               { "created_at": {
-//                                      $gte:fromDate,
-//                                      $lt:toDate
-//                                        }
-//                                }
-
-
-//                            ]
-//                        }
-
-//          }else{
-
-//                      ipData=req.body.user_name;
-//                      search_Data={  
-//                          "$and": [{
-//                                      "verifier_id": ipData,
-//                                  },
-
-//                                   { "created_at": {
-//                                          $gte:fromDate,
-//                                          $lt:toDate
-//                                            }
-//                                    }
-
-
-//                                ]
-//                            }
-
-//          }
-
-
-
-// Task.find(search_Data).exec(function(err, tasks) {
-
-//       res.render('users/profile', { tasks : tasks,user:req.user,  title: 'Task Engine' });
-//     });
-
-// });
 
 function readExcelFile(filePath) {
     var workbook = XLSX.readFile(filePath);

@@ -466,7 +466,7 @@
 
     $("#searchTask").submit(function(e) {
         $(".overlay").show();
-        
+      
         var formData = {
             'user_role'      : $('input[name=user_role]').val(),
             'user_group_id'  : $('input[name=user_group_id]').val(),
@@ -476,7 +476,7 @@
             'fromDate'        : $('input[name=fromDate]').val(),
             'toDate'      : $('input[name=toDate]').val(),
             'user_group'  : $('input[name=user_group]').val(),
-            'selected_user_id'        : $('input[name=selected_user_id]').val(),
+            'selected_user_id'        : $('#sel_analyst').val(),
             'viewer_name'      : $('input[name=viewer_name]').val()
         };
         $.ajax({

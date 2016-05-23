@@ -33,7 +33,7 @@ router.get('/view_task', isLoggedIn, function(req, res) {
 
 
 router.post('/view_task', isLoggedIn, function(req, res) {
-    //console.log("view_task req == ",req.body);
+    console.log("view_task req == ",req.body);
 
     var search_Data = null;
 
@@ -153,13 +153,13 @@ router.post('/view_task', isLoggedIn, function(req, res) {
 
     }
 
-    // console.log("search_Data == ",search_Data)
+    console.log("search_Data == ",search_Data)
     /* creating and modifying search_Data as per IP params */
 
 
 
 
-    Task.find({}).exec(function(err, tasks) {
+    Task.find(search_Data).exec(function(err, tasks) {
         res.render('tasks/search_task', {
             tasks: tasks,
             user: req.user,

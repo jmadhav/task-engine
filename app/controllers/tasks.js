@@ -159,7 +159,7 @@ router.post('/view_task', isLoggedIn, function(req, res) {
 
 
 
-    Task.find({}).exec(function(err, tasks) {
+    Task.find(search_Data).exec(function(err, tasks) {
         res.render('tasks/search_task', {
             tasks: tasks,
             user: req.user,

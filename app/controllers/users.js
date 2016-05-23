@@ -267,6 +267,11 @@ router.get('/get-analyst-moderator-members', isLoggedIn, function(req, res) {
             
              }
 
+                User.find(role).exec(function(err, users) {
+    //    console.log("get-moderator-lead-members ",users);
+        res.send({ users_name: users});
+    });
+
    }
 
 });

@@ -130,7 +130,10 @@
         });
 
     });
-
+ $('#sel_reviewer').on("change", function() {
+   // alert($(this).val())
+// $('#selected_viewer_id').val($(this).val());
+     });
 
     if (typeof $('#user_role').val() != 'undefined') {
         if (($('#user_role').val().indexOf('Moderator') != -1) || ($('#user_role').val().indexOf('Lead') != -1)) {
@@ -338,7 +341,7 @@
             data: data,
             success: function(data) {
                 $("#users_list").html(data);
-                addSelectBox()
+                addSelectBoxToUsers()
             },
             error: function(err) {
                 console.log(err);
@@ -383,7 +386,6 @@
     function addSelectBoxNewUser() {
         if ($('#loginForm').length > 0) {
             var data = getGroup();
-            console.log(data);
             var sel = $('<select name="user[group_id]">')
             sel.append($("<option>").attr('value', "").text(""));
             _.each(data.groups, function(element) {
@@ -396,7 +398,6 @@
     function addSelectBoxEditUser() {
         if ($('#edituser').length > 0) {
             var data = getGroup();
-            console.log(data);
             var sel = $('<select name="user[group_id]" class="choose_group_select_edit_user">')
             sel.append($("<option>").attr('value', "").text(""));
             _.each(data.groups, function(element) {
@@ -433,7 +434,7 @@
             });
         }
 
-    });
+    }); 
 
     $("#taskUpload").submit(function(e) {
         $(".overlay").show();
@@ -455,6 +456,38 @@
             cache: false,
             contentType: false,
             processData: false
+        });
+
+        e.preventDefault();
+    });
+
+    $("#searchTask").submit(function(e) {
+        $(".overlay").show();
+        
+        var formData = {
+            'user_role'      : $('input[name=user_role]').val(),
+            'user_group_id'  : $('input[name=user_group_id]').val(),
+            'user_id'        : $('input[name=user_id]').val(),
+            'user_name'      : $('input[name=user_name]').val(),
+            'selecte_user_role'  : $('input[name=selecte_user_role]').val(),
+            'fromDate'        : $('input[name=fromDate]').val(),
+            'toDate'      : $('input[name=toDate]').val(),
+            'user_group'  : $('input[name=user_group]').val(),
+            'selected_user_id'        : $('input[name=selected_user_id]').val(),
+            'viewer_name'      : $('input[name=viewer_name]').val()
+        };
+        $.ajax({
+            url: '/view_task',
+            type: 'POST',
+            data: formData,
+            success: function(data) {
+                $("#users_list").html(data);
+                $(".overlay").hide();
+            },
+            error: function(err) {
+              $(".overlay").hide();
+              console.log(err);   
+            }
         });
 
         e.preventDefault();

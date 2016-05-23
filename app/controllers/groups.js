@@ -4,6 +4,7 @@ mongoose = require('mongoose');
 User = mongoose.model('User');
 Group = mongoose.model('Group');
 _und = require("underscore");
+moment = require('moment-timezone');
 
 module.exports = function(app, passport) {
     app.use('/', router);
@@ -35,6 +36,8 @@ router.post('/new-groups', isLoggedIn, isManager, function(req, res) {
     var group = new Group();
     if (group_params.name !== 'undefined') {
         group.name = group_params.name
+        group.created_at = moment.tz(new Date().toLocaleDateString(), "Asia/Kolkata");
+        group.updated_at = moment.tz(new Date().toLocaleDateString(), "Asia/Kolkata");
         group.save(function(err) {
             if (err)
                 throw err;

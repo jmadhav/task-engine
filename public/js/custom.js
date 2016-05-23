@@ -159,11 +159,12 @@
             success: function(data) {
                 // getGroupMembersData(data);
                 var selectBox = document.getElementById('sel_group');
+                if(selectBox != null){
                 _.each(data.groups, function(element) {
                     selectBox.options.add(new Option(element.name, element._id))
                 });
 
-
+                }
 
             }
 
@@ -185,11 +186,12 @@
 
                 var selectBox = document.getElementById('sel_reviewer');
                 $('#sel_reviewer').empty();
-                _.each(data.users_name, function(element) {
-                     if($("#user_id").val()!=element._id &&(element.roles!="Manager") )
-                    selectBox.options.add(new Option(element.name, element._id, element.roles))
-                });
                 if (selectBox != null){
+                    _.each(data.users_name, function(element) {
+                         if($("#user_id").val()!=element._id &&(element.roles!="Manager") )
+                        selectBox.options.add(new Option(element.name, element._id, element.roles))
+                    });
+                
                     selectBox.selectedIndex = -1;
                      $('#sel_reviewer').autocomplete({
                           source: data
@@ -215,11 +217,12 @@
 
                 var selectBox = document.getElementById('sel_analyst');
                 $('#sel_analyst').empty();
-                _.each(data.users_name, function(element) {
-                     if($("#user_id").val()!=element._id &&(element.roles!="Manager") )
-                    selectBox.options.add(new Option(element.name, element._id, element.roles))
-                });
                 if (selectBox != null){
+                    _.each(data.users_name, function(element) {
+                         if($("#user_id").val()!=element._id &&(element.roles!="Manager") )
+                        selectBox.options.add(new Option(element.name, element._id, element.roles))
+                    });
+                
                     selectBox.selectedIndex = -1;
                      $('#sel_analyst').autocomplete({
                           source: data
@@ -505,7 +508,8 @@
             }
         });
     }
-
+ $("#excelDataTable").parent().css({"width":parseInt(screen.width) - 250, "overflow":"auto"});
+    $("#excelDataTable").find("tr[data-field='landing_page']").css("width","200px");
 
 })();
 

@@ -35,9 +35,9 @@
                    <tr data-user_id="<%= users[i].id %>" data-group_id="<%= users[i].group_id %>">
                      <td class="col-md-2"><%= users[i].name %></td>
                      <td class="col-md-3"><%= users[i].email %></td>
-                     <td class="col-md-2"><input type="checkbox" class="user_role_updated" data-user_id="<%= users[i].id %>" data-role_name="Lead" <%= _und.contains(users[i].roles, 'Lead') ? 'checked' : ""  %>></td>
-                     <td class="col-md-2" ><input type="checkbox" class="user_role_updated" data-user_id="<%= users[i].id %>" data-role_name="Moderator" <%= _und.contains(users[i].roles, 'Moderator') ? 'checked' : "" %>></td>
-                     <td class="col-md-2" ><input type="checkbox" class="user_role_updated" data-user_id="<%= users[i].id %>" data-role_name="Analyst" <%= _und.contains(users[i].roles, 'Analyst') ? 'checked' : ""%>></td>
+                     <td class="col-md-2"><input type="radio" name="<%= users[i].id %>_role" class="user_role_updated" data-user_id="<%= users[i].id %>" data-role_name="Lead" <%= _und.contains(users[i].roles, 'Lead') ? 'checked' : ""  %>></td>
+                     <td class="col-md-2" ><input type="radio"  name="<%= users[i].id %>_role" class="user_role_updated" data-user_id="<%= users[i].id %>" data-role_name="Moderator" <%= _und.contains(users[i].roles, 'Moderator') ? 'checked' : "" %>></td>
+                     <td class="col-md-2" ><input type="radio" name="<%= users[i].id %>_role" class="user_role_updated" data-user_id="<%= users[i].id %>" data-role_name="Analyst" <%= _und.contains(users[i].roles, 'Analyst') ? 'checked' : ""%>></td>
                      <td class="col-md-4 chooseGroup"> </td>
                      <td class="col-md-2" ><input type="checkbox" class="user_role_updated" data-user_id="<%= users[i].id %>" data-role_name="Active" <%= users[i].is_active ? 'checked' : "" %>></td>
                      <td class="col-md-1"><a href="/profile/<%= users[i]._id%>/edit" class="btn btn-success">Edit</a></td>

@@ -18,7 +18,10 @@
     <link href="../../css/slimplex.css" rel="stylesheet">
     <link href="../../css/datepicker.css" rel="stylesheet">
     <link href="../../css/style.css" rel="stylesheet">
+
     <link href="../../css/jquery-ui.css" rel="stylesheet">
+
+    <link href="../../css/jquery.jqplot.min.css" rel="stylesheet">
 </head>
   <body>
     <div class="container">
@@ -35,6 +38,9 @@
                 <% if ((_und.contains(user.roles, 'Manager'))) { %>
                 <li class="dropdown">
                   <a href="/users">Users</span></a>
+                </li>
+                <li class="dropdown">
+                  <a href="/stats">Stats</span></a>
                 </li>
                 <% } %>
                 <li>
@@ -53,7 +59,7 @@
               </ul>
 
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="/profile" > Hi <%= user.name %></a></li>
+                <li><a href="#" > Hi <%= user.name %></a></li>
                 <li><a href="/logout">Logout</a></li>
               </ul>
             </div>
@@ -64,12 +70,12 @@
          <div class="col-lg-5 col-sm-offset-3">
            <div class="alert alert-dismissible alert-success">
              <button type="button" class="close" data-dismiss="alert">&times;</button>
-             <strong id="task-upload-count"></strong> tasks has been uploaded successfully. To view your task <a href="/view_task" class="alert-link">Click Here</a>
+             <strong id="task-upload-count"></strong> tasks has been uploaded successfully.
            </div>
          </div>
        </div>
        <div class="overlay">
-         <img src="img/ajax-loader.gif" alt="Smiley face" height="42" width="42" class="spinner">
+         <img src="/img/ajax-loader.gif" alt="Smiley face" height="42" width="42" class="spinner">
        </div>
        
       <% if (typeof message !== 'undefined' && message.length > 0) { %>
@@ -83,6 +89,10 @@
   <script src="../../components/underscore/underscore-min.js"></script>
   
   <script src="../../js/bootstrap-datepicker.js"></script>
+
   <script src="../../js/jquery-ui.js"></script>
-   <script src="../../js/custom.js"></script>
+
+  <script src="../../js/jquery.jqplot.min.js"></script>
+  <script src="../../js/jqplot.pieRenderer.js"></script>
+  <script src="../../js/custom.js"></script>
 </html>

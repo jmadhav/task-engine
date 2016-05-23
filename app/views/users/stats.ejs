@@ -1,0 +1,29 @@
+<div class="stats">
+	<%= title %>
+</div>
+
+<div class="">
+	<% for(var i=0; i<groups.length; i++) { %>
+		<a href="/stats?id=<%= groups[i]["_id"] %>"><%= groups[i].name %></a>
+	<% } %>
+</div>
+
+<%
+
+	if (locals.tasks) {
+		%>
+			<h3>Tasks approved and rejected by Moderator</h3>
+			<input type="hidden" value="<%= JSON.stringify(tasks) %>" id="task-data">
+			<div id="chart2" style="margin-top:20px; margin-left:20px; width:460px; height:300px;"></div>
+		<%
+	}
+
+	if (locals.task_count) {
+		%>
+			<h3>Tasks reviewed and to be reviewed by Moderator</h3>
+			<input type="hidden" value="<%= JSON.stringify(task_count) %>" id="task-count">
+			<div id="chart3" style="margin-top:20px; margin-left:20px; width:460px; height:300px;"></div>
+		<%
+	}
+
+%>

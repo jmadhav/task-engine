@@ -38,13 +38,13 @@
             <label for="inputRole" class="col-lg-2 control-label">Roles</label>
             <div class="col-lg-10">
               <div class="checkbox">
-                <input type="checkbox" class="role_checkbox" name="user[roles][]" data-role="Lead" <%= _und.contains(user.roles, 'Lead') ? 'checked' : ""  %> value="Lead"> Lead
+                <input type="radio" class="role_checkbox" name="user[roles][]" data-role="Lead" <%= _und.contains(user.roles, 'Lead') ? 'checked' : ""  %> value="Lead"> Lead
               </div>
               <div class="checkbox">
-                <input type="checkbox" class="role_checkbox" name="user[roles][]" data-role="Analyst" <%= _und.contains(user.roles, 'Analyst') ? 'checked' : ""  %> value="Analyst"> Analyst
+                <input type="radio" class="role_checkbox" name="user[roles][]" data-role="Analyst" <%= _und.contains(user.roles, 'Analyst') ? 'checked' : ""  %> value="Analyst"> Analyst
               </div>
               <div class="checkbox">
-                <input type="checkbox" class="role_checkbox" name="user[roles][]" data-role="Moderator" <%= _und.contains(user.roles, 'Moderator') ? 'checked' : ""  %> value="Moderator"> Moderator
+                <input type="radio" class="role_checkbox" name="user[roles][]" data-role="Moderator" <%= _und.contains(user.roles, 'Moderator') ? 'checked' : ""  %> value="Moderator"> Moderator
               </div>
             </div>
           </div>

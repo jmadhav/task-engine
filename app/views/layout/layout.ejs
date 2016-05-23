@@ -43,12 +43,12 @@
                   <a href="/stats">Stats</span></a>
                 </li>
                 <% } %>
-                <% if ((_und.contains(user.roles, 'Moderator')) || (_und.contains(user.roles, 'Analyst'))) { %>
+                <% if ((_und.contains(user.roles, 'Moderator')) || (_und.contains(user.roles, 'Analyst')) || (_und.contains(user.roles, 'Lead'))) { %>
                   <li>
                   <a href="/view_task">Tasks</a>
                 </li>
                   <li>
-                  <a href="/audit_task">Tasks</a>
+                  <a href="/audit_task">Audit Tasks</a>
                 </li>
                 <% } %>
                 <% if ((_und.contains(user.roles, 'Manager'))) { %>
@@ -56,7 +56,7 @@
                   <a href="/groups">Groups</a>
                 </li>
                 <% } %>
-                <% if ((_und.contains(user.roles, 'Moderator')) || (_und.contains(user.roles, 'Analyst'))) { %>
+                <% if ((_und.contains(user.roles, 'Moderator')) || (_und.contains(user.roles, 'Analyst')) ||  (_und.contains(user.roles, 'Lead'))) { %>
                   <li>
                     <a href="/upload">Upload Tasks</a>
                   </li>

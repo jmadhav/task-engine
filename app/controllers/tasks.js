@@ -1,11 +1,11 @@
 var express = require('express'),
     router = express.Router();
-    mongoose = require('mongoose');
-    Task = mongoose.model('Task');
-    _und = require("underscore");
-    multer = require('multer');
-    findRemoveSync = require('find-remove');
-    XLSX = require('xlsx');
+mongoose = require('mongoose');
+Task = mongoose.model('Task');
+_und = require("underscore");
+multer = require('multer');
+findRemoveSync = require('find-remove');
+XLSX = require('xlsx');
 
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -33,120 +33,141 @@ router.get('/view_task', isLoggedIn, function(req, res) {
 
 
 router.post('/view_task', isLoggedIn, function(req, res) {
- //console.log("view_task req == ",req.body);
- 
-        var  search_Data=null;
+    //console.log("view_task req == ",req.body);
 
-        /* creating and modifying date as per IP*/
-        var date ={}
-        if( (req.body.fromDate.length <=0) || (req.body.toDate.length <=0))
-        {
-           
-            date={"created_at":new Date().toLocaleDateString()}
-        }else {
-             var fromDate= new Date(req.body.fromDate).toLocaleDateString();
-             var toDate= new Date(req.body.toDate).toLocaleDateString();
-             date={ "created_at": {
-                         $gte:fromDate,
-                         $lt:toDate
-                           }
-                   }
+    var search_Data = null;
+
+    /* creating and modifying date as per IP*/
+    var date = {}
+    if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
+
+        date = {
+            "created_at": new Date().toLocaleDateString()
         }
- 
-     if(req.body.user_role=='Analyst'){
-       
-         search_Data={  
-                 "$and": [{"user_id": req.body.user_id},date]
-                 }  
+    } else {
+        var fromDate = new Date(req.body.fromDate).toLocaleDateString();
+        var toDate = new Date(req.body.toDate).toLocaleDateString();
+        date = {
+            "created_at": {
+                $gte: fromDate,
+                $lt: toDate
+            }
+        }
+    }
 
-        }else if(req.body.user_role.indexOf('Moderator')!=-1){
+    if (req.body.user_role == 'Analyst') {
 
-                 
-                 if(req.body.selecte_user_role.length<=0){ //No Aanalyst selected from list ..Then search for moderator task only
-                  
-                    search_Data={  
-                    "$and": [{"user_id": req.body.user_id},date]
-                    }  
-                   }else {
-                      
-                    search_Data={
-                           '$and': [
-                                 { "user_id":req.body.selected_user_id},
-                                 
-                                 { '$or': [ 
-                                           { "verifier_id":req.body.user_id},
-                                           { "verifier_id":null}
-                                          
-                                        ] 
-                                   },date
+        search_Data = {
+            "$and": [{
+                "user_id": req.body.user_id
+            }, date]
+        }
+
+    } else if (req.body.user_role.indexOf('Moderator') != -1) {
 
 
-                           ]
+        if (req.body.selecte_user_role.length <= 0) { //No Aanalyst selected from list ..Then search for moderator task only
 
-                         }
+            search_Data = {
+                "$and": [{
+                    "user_id": req.body.user_id
+                }, date]
+            }
+        } else {
 
-                    }
+            search_Data = {
+                '$and': [{
+                        "user_id": req.body.selected_user_id
+                    },
 
-        } else if(req.body.user_role.indexOf('Lead')!=-1 || req.body.user_role.indexOf('Manager')!=-1 ){
+                    {
+                        '$or': [{
+                                "verifier_id": req.body.user_id
+                            }, {
+                                "verifier_id": null
+                            }
 
-            if( typeof req.body.selected_user_id =='undefined' && typeof req.body.selected_viewer_id =='undefined' ){
-
-                    search_Data={
-                           '$and': [ { "verifier_id":req.body.user_id},date ]
-
-                         }
-            } else  if(typeof req.body.selected_user_id !='undefined'){
+                        ]
+                    },
+                    date
 
 
-                search_Data={
-                           '$and': [ { "user_id":req.body.selected_user_id },date ]
-
-                         }
-            } else if(typeof req.body.selected_viewer_id !='undefined')
-            {
-                  search_Data={
-                           '$and': [ { "verifier_id":req.body.selected_viewer_id },date ]
-
-                         }
-            } else if(typeof req.body.selected_user_id !='undefined' && typeof req.body.selected_viewer_id !='undefined')
-            {
-                    search_Data={
-                           '$and': [{ "user_id":req.body.selected_user_id},{"verifier_id":req.body.selected_viewer_id},date]
-                                 }
+                ]
 
             }
 
-                  /*  search_Data={
-                           '$or': [
-                                 { "user_id":req.body.selected_user_id},
-                                 
-                                 { '$or': [ 
-                                           { "verifier_id":req.body.selected_viewer_id},
-                                           { "verifier_id":req.body.user_id}
-                                          
-                                        ] 
-                                   },date
+        }
+
+    } else if (req.body.user_role.indexOf('Lead') != -1 || req.body.user_role.indexOf('Manager') != -1) {
+
+        if (typeof req.body.selected_user_id == 'undefined' && typeof req.body.selected_viewer_id == 'undefined') {
+
+            search_Data = {
+                '$and': [{
+                    "verifier_id": req.body.user_id
+                }, date]
+
+            }
+        } else if (typeof req.body.selected_user_id != 'undefined') {
 
 
-                           ]
+            search_Data = {
+                '$and': [{
+                    "user_id": req.body.selected_user_id
+                }, date]
 
-                         }*/
+            }
+        } else if (typeof req.body.selected_viewer_id != 'undefined') {
+            search_Data = {
+                '$and': [{
+                    "verifier_id": req.body.selected_viewer_id
+                }, date]
+
+            }
+        } else if (typeof req.body.selected_user_id != 'undefined' && typeof req.body.selected_viewer_id != 'undefined') {
+            search_Data = {
+                '$and': [{
+                    "user_id": req.body.selected_user_id
+                }, {
+                    "verifier_id": req.body.selected_viewer_id
+                }, date]
+            }
 
         }
 
-          // console.log("search_Data == ",search_Data)
-/* creating and modifying search_Data as per IP params */
+        /*  search_Data={
+                 '$or': [
+                       { "user_id":req.body.selected_user_id},
+                       
+                       { '$or': [ 
+                                 { "verifier_id":req.body.selected_viewer_id},
+                                 { "verifier_id":req.body.user_id}
+                                
+                              ] 
+                         },date
+
+
+                 ]
+
+               }*/
+
+    }
+
+    // console.log("search_Data == ",search_Data)
+    /* creating and modifying search_Data as per IP params */
 
 
 
 
-         
-           Task.find(search_Data).exec(function(err, tasks) {
-                  res.render('tasks/view_task', { tasks : tasks,user:req.user,  title: 'Task Engine' });
-                });
-        
-   });
+    Task.find({}).exec(function(err, tasks) {
+        res.render('tasks/search_task', {
+            tasks: tasks,
+            user: req.user,
+            layout: false
+        });
+    });
 
+});
 
 
 
@@ -159,20 +180,20 @@ router.get('/upload', isLoggedIn, function(req, res) {
 });
 
 router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) {
-   //  console.log(req.file)
-   // var d = new Date(req.body.date).toLocaleDateString();
-   var d=req.body.date;
-  console.log(new Date(d).toLocaleDateString());
+    //  console.log(req.file)
+    // var d = new Date(req.body.date).toLocaleDateString();
+    var d = req.body.date;
+    console.log(new Date(d).toLocaleDateString());
     var task_ids = []
     var excelTaskData = readExcelFile(req.file.path);
     var tasks_count = excelTaskData.length;
     _und.each(excelTaskData, function(excelTask) {
         var task = new Task(excelTask);
         task.user_id = req.user._id;
-        task.user_name=req.user.name;
-        task.verifier_id=null;
-        task.created_at= new Date(d).toLocaleDateString();
-      //  task.updated_at=new Date(req.body.date).toLocaleDateString();
+        task.user_name = req.user.name;
+        task.verifier_id = null;
+        task.created_at = new Date(d).toLocaleDateString();
+        //  task.updated_at=new Date(req.body.date).toLocaleDateString();
         task.save(function(err) {
             if (err)
                 throw err;
@@ -181,12 +202,15 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
     // findRemoveSync(process.cwd() + '/tmp/', {
     //     extensions: ['.xlsx']
     // });
-    res.send({ status: 'success', tasks_count: tasks_count });
-   /* res.render('users/profile', {
-        user: req.user,
-        title: 'Task',
-        message: "Your task has been uploaded"
-    });*/
+    res.send({
+        status: 'success',
+        tasks_count: tasks_count
+    });
+    /* res.render('users/profile', {
+         user: req.user,
+         title: 'Task',
+         message: "Your task has been uploaded"
+     });*/
 });
 
 
@@ -198,85 +222,89 @@ function isLoggedIn(req, res, next) {
 }
 
 
-router.post('/update_data',isLoggedIn,function(req, res) {
-//console.log("supdate_data >>>>>>>>>>>>>>>>>> ",req.body);
-var data=req.body.tabledata;
-//var user=req.body.user;
+router.post('/update_data', isLoggedIn, function(req, res) {
+    //console.log("supdate_data >>>>>>>>>>>>>>>>>> ",req.body);
+    var data = req.body.tabledata;
+    //var user=req.body.user;
 
-for(var i in data){
+    for (var i in data) {
 
-    var id=data[i]["_id"];
-   // console.log(id);
+        var id = data[i]["_id"];
+        // console.log(id);
 
-     Task.update({_id:id},data[i]).exec(function(err) {
-     if (err)
-      throw err;
-     
+        Task.update({
+            _id: id
+        }, data[i]).exec(function(err) {
+            if (err)
+                throw err;
+
+        });
+
+    }
+
+    res.send({
+        status: 'success'
     });
 
-}
 
- res.send({ status: 'success' });
-  
 
- 
 });
 
 
 
-router.post('/search_task', isLoggedIn, function(req, res) {
-//console.log("search_task from Date",req.body);
-console.log("search_task from User",req.body);
-var ipData;
-var search_Data={};
-var fromDate= new Date(req.body.fromDate).toLocaleDateString();
-var toDate= new Date(req.body.toDate).toLocaleDateString();
+// router.post('/search_task', isLoggedIn, function(req, res) {
+// //console.log("search_task from Date",req.body);
+// console.log("search_task from User",req.body);
+// var ipData;
+// var search_Data={};
+// var fromDate= new Date(req.body.fromDate).toLocaleDateString();
+// var toDate= new Date(req.body.toDate).toLocaleDateString();
 
- if(req.body.selecte_user_role=='Analyst'){
-                ipData=req.body.user_name;
-                 search_Data={  
-                     "$and": [{
-                                 "user_id": ipData,
-                             },
-                              
-                              { "created_at": {
-                                     $gte:fromDate,
-                                     $lt:toDate
-                                       }
-                               }
+//  if(req.body.selecte_user_role=='Analyst'){
+//                 ipData=req.body.user_name;
+//                  search_Data={  
+//                      "$and": [{
+//                                  "user_id": ipData,
+//                              },
 
-
-                           ]
-                       }
-        
-         }else{
-            
-                     ipData=req.body.user_name;
-                     search_Data={  
-                         "$and": [{
-                                     "verifier_id": ipData,
-                                 },
-                                  
-                                  { "created_at": {
-                                         $gte:fromDate,
-                                         $lt:toDate
-                                           }
-                                   }
+//                               { "created_at": {
+//                                      $gte:fromDate,
+//                                      $lt:toDate
+//                                        }
+//                                }
 
 
-                               ]
-                           }
+//                            ]
+//                        }
 
-         }
-   
+//          }else{
+
+//                      ipData=req.body.user_name;
+//                      search_Data={  
+//                          "$and": [{
+//                                      "verifier_id": ipData,
+//                                  },
+
+//                                   { "created_at": {
+//                                          $gte:fromDate,
+//                                          $lt:toDate
+//                                            }
+//                                    }
 
 
-Task.find(search_Data).exec(function(err, tasks) {
-    
-      res.render('users/profile', { tasks : tasks,user:req.user,  title: 'Task Engine' });
-    });
+//                                ]
+//                            }
 
-});
+//          }
+
+
+
+// Task.find(search_Data).exec(function(err, tasks) {
+
+//       res.render('users/profile', { tasks : tasks,user:req.user,  title: 'Task Engine' });
+//     });
+
+// });
 
 function readExcelFile(filePath) {
     var workbook = XLSX.readFile(filePath);

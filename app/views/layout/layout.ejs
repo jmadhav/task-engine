@@ -43,9 +43,11 @@
                   <a href="/stats">Stats</span></a>
                 </li>
                 <% } %>
-                <li>
+                <% if ((_und.contains(user.roles, 'Moderator')) || (_und.contains(user.roles, 'Analyst'))) { %>
+                  <li>
                   <a href="/view_task">Tasks</a>
                 </li>
+                <% } %>
                 <% if ((_und.contains(user.roles, 'Manager'))) { %>
                   <li>
                   <a href="/groups">Groups</a>

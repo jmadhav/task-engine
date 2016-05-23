@@ -75,3 +75,6 @@ th.prev, th.next, td.day {
   color: #d9230f;
   text-decoration: none;
 }
+thead{
+ background-color: #c1c0c0;
+}

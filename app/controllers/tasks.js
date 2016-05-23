@@ -46,8 +46,8 @@ router.post('/view_task', isLoggedIn, function(req, res) {
             "created_at": new Date().toLocaleDateString()
         }
     } else {
-        var fromDate = new Date(req.body.fromDate).toLocaleDateString();
-        var toDate = new Date(req.body.toDate).toLocaleDateString();
+        var fromDate = new Date(req.body.fromDate).setHours(0,0,0,0);
+        var toDate = new Date(req.body.toDate).setHours(23,59,59,999);
         date = {
             "created_at": {
                 $gte: fromDate,

@@ -6,6 +6,7 @@ _und = require("underscore");
 multer = require('multer');
 findRemoveSync = require('find-remove');
 XLSX = require('xlsx');
+var moment = require('moment-timezone');
 
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -89,8 +90,8 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
             "created_at": new Date().toLocaleDateString()
         }
     } else {
-        var fromDate = new Date(req.body.fromDate).toLocaleDateString();
-        var toDate = new Date(req.body.toDate).toLocaleDateString();
+        var fromDate = new Date(req.body.fromDate).setHours(0,0,0,0);
+        var toDate = new Date(req.body.toDate).setHours(23,59,59,999);
         date = {
             "created_at": {
                 $gte: fromDate,
@@ -236,16 +237,17 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
         task.user_id = req.user._id;
         task.user_name = req.user.name;
         task.verifier_id = null;
-        task.created_at = new Date(d).toLocaleDateString();
+        task.created_at = moment.tz(d, "Asia/Kolkata");
+        task.updated_at = moment.tz(d, "Asia/Kolkata");
         //  task.updated_at=new Date(req.body.date).toLocaleDateString();
         task.save(function(err) {
             if (err)
                 throw err;
         });
     });
-    // findRemoveSync(process.cwd() + '/tmp/', {
-    //     extensions: ['.xlsx']
-    // });
+    findRemoveSync(process.cwd() + '/tmp/', {
+        extensions: ['.xlsx']
+    });
     res.send({
         status: 'success',
         tasks_count: tasks_count

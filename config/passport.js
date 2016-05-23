@@ -6,6 +6,7 @@ var LocalStrategy   = require('passport-local').Strategy;
 // load up the user model
 var mongoose        = require('mongoose')
 var User            = mongoose.model('User');
+var moment          = require('moment-timezone');
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
@@ -65,8 +66,10 @@ module.exports = function(passport) {
                 // set the user's local credentials
                 newUser.email    = email;
                 newUser.password = password;
-                newUser.is_active = true
-                newUser.is_deleted = false
+                newUser.is_active = true;
+                newUser.is_deleted = false;
+                newUser.created_at = moment.tz(new Date().toLocaleDateString(), "Asia/Kolkata");
+                newUser.updated_at = moment.tz(new Date().toLocaleDateString(), "Asia/Kolkata");
                 if (typeof user.group_id !== "undefined" && typeof user.group_id != "") {
                   newUser.group_id = user.group_id;    
                 }

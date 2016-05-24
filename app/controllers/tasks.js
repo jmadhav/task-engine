@@ -50,8 +50,8 @@ router.post('/view_only_task', isLoggedIn, function(req, res) {
             "created_at": new Date().toLocaleDateString()
         }
     } else {
-        var fromDate = new Date(req.body.fromDate).toLocaleDateString();
-        var toDate = new Date(req.body.toDate).toLocaleDateString();
+        var fromDate = new Date(req.body.fromDate).setHours(0,0,0,0);
+        var toDate = new Date(req.body.toDate).setHours(23,59,59,999);
         date = {
             "created_at": {
                 $gte: fromDate,
@@ -253,6 +253,7 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
         task.verifier_id = null;
         task.created_at = moment.tz(d, "Asia/Kolkata");
         task.updated_at = moment.tz(d, "Asia/Kolkata");
+        console.log( 'created_at' + created_at)
         //  task.updated_at=new Date(req.body.date).toLocaleDateString();
         task.save(function(err) {
             if (err)

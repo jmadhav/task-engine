@@ -41,7 +41,7 @@ router.get('/audit_task', isLoggedIn, function(req, res) {
 
 
 router.post('/view_only_task', isLoggedIn, function(req, res) {
-    console.log("view_only_task === ",req.body);
+  //  console.log("view_only_task === ",req.body);
     var date = {};
      var view_Data = null;
     if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
@@ -318,7 +318,7 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
       
     }
 
-   console.log("search_Data == ",search_Data)
+   //console.log("search_Data == ",search_Data)
     /* creating and modifying search_Data as per IP params */
 
 
@@ -390,7 +390,7 @@ function isLoggedIn(req, res, next) {
 
 
 router.post('/update_data', isLoggedIn, function(req, res) {
-  console.log("supdate_data >>>>>>>>>>>>>>>>>> ",req.body.tabledata);
+  //console.log("supdate_data >>>>>>>>>>>>>>>>>> ",req.body.tabledata);
     var data = req.body.tabledata;
     //var user=req.body.user;
 

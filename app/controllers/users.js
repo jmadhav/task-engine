@@ -309,43 +309,102 @@ router.get('/stats', isLoggedIn, isManager, function(req, res) {
 
         Group.find({}).exec(function(err, groups) {
 
+            var fromDate = null;
+            var toDate = null;
+            var user_id = null;
 
-            User.find({group_id : {$eq : req.query.id}}).exec(function(err, users) {
-                
+            if(req.query.fromDate != undefined) {
+                fromDate = new Date(req.query.fromDate).toLocaleDateString();
+                toDate = new Date(req.query.toDate).toLocaleDateString();
+                user_id = req.query.user_id;
+            }
+
+            var where = new Object({group_id : {$eq : req.query.id}});
+
+            if(req.query.user_id != undefined) {
+                where = new Object(
+                        {
+                            group_id : {$eq : req.query.id},
+                            _id : {$eq : req.query.user_id}
+                        }
+                    );
+            }
+
+            User.find(where).exec(function(err, users) {
+
                 var user_ids = new Array();
+                var user_data = new Array();
+
                 users.forEach(function(y) {
                     user_ids.push(y["_id"]);
                 });
 
-                Task.find({ user_id: { $in: user_ids }}).exec(function(err, tasks) {
 
-                    var task_data = new Array();
-                    var taskCount = new Object();
+                User.find({ group_id : {$eq : req.query.id},
+                             '$or': [
+                                    {
+                                        "roles": ["Analyst"]
+                                    },
+                                    {
+                                        "roles": ["Moderator"]
+                                    }]
+                            }).exec(function(err, users1) {
 
-                    taskCount["checked"] = 0;
-                    taskCount["unchecked"] = 0;
+                                var user_data = new Array();
 
-                    tasks.forEach(function(t) {
-                        if(t.is_correct != undefined) {
-                            taskCount["checked"]++;
-                            var temp = new Object();
-                            temp["is_correct"] = t.is_correct;
-                            temp["verifier_name"] = t.verifier_name;
-                            temp["user_name"] = t.user_name;
-                            task_data.push(temp);
-                        } else {
-                            taskCount["unchecked"]++;
-                        }
-                    });
+                                users1.forEach(function(y) {
+                                    user_data.push({id : y["_id"] , name : y["name"]});
+                                });
 
-                    res.render('users/stats', {
-                        user: req.user,
-                        title: 'Statstics',
-                        groups: groups,
-                        tasks: task_data,
-                        task_count: taskCount
-                    });
-                });
+                                var where1 = new Object({ user_id: { $in: user_ids }});
+
+                                if(req.query.fromDate != undefined) {
+                                    
+                                    where1 = new Object({
+                                        user_id: { $in: user_ids },
+                                        created_at : {
+                                            $gte: fromDate,
+                                            $lt: toDate
+                                        }
+                                    });
+
+                                }
+
+                                Task.find(where1).exec(function(err, tasks) {
+
+                                    var task_data = new Array();
+                                    var taskCount = new Object();
+
+                                    taskCount["checked"] = 0;
+                                    taskCount["unchecked"] = 0;
+
+                                    tasks.forEach(function(t) {
+                                        if(t.is_correct != undefined) {
+                                            taskCount["checked"]++;
+                                            var temp = new Object();
+                                            temp["is_correct"] = t.is_correct;
+                                            temp["verifier_name"] = t.verifier_name;
+                                            temp["user_name"] = t.user_name;
+                                            task_data.push(temp);
+                                        } else {
+                                            taskCount["unchecked"]++;
+                                        }
+                                    });
+
+                                    res.render('users/stats', {
+                                        user: req.user,
+                                        title: 'Statstics',
+                                        groups: groups,
+                                        group_id: req.query.id,
+                                        tasks: task_data,
+                                        task_count: taskCount,
+                                        users: user_data,
+                                        get_user_id: user_id,
+                                        get_from_date: fromDate,
+                                        get_to_date: toDate
+                                    });
+                                }); 
+                            });
             });
         });
 

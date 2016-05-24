@@ -78,7 +78,7 @@ router.post('/view_only_task', isLoggedIn, function(req, res) {
 
 
 router.post('/audit_task', isLoggedIn, function(req, res) {
-    console.log("view_task req == ",req.body);
+    console.log("audit_task req == ",req.body);
    var isPending=req.body.isPending;
     var search_Data = null;
 
@@ -112,21 +112,30 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
 
 
         if (req.body.selecte_user_role.length <= 0) { //No Aanalyst selected from list ..Then search for moderator task only
-             if(isPending){
+             if(isPending=="true"){
 
                        search_Data = {
-                "$and": [{
-                    "user_id": req.body.user_id
-                }, 
-                 {"verifier_comments": ""},date]
-            }
+                                        "$and": [{
+                                            "user_id": req.body.user_id
+                                        }, 
+                                         {'$or': [{
+                                                        "verifier_id": null
+                                                    }, {
+                                                        "verifier_comments": null
+                                                    },{
+
+                                                         "is_correct": null
+                                                    }
+
+                                                ]}, date]
+                                     }
 
              }else {
-                   search_Data = {
-                    "$and": [{
-                        "user_id": req.body.user_id
-                    }, date]
-                  }
+                       search_Data = {
+                        "$and": [{
+                            "user_id": req.body.user_id
+                        }, date]
+                      }
 
              }
 
@@ -134,48 +143,111 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
          
         } else {
 
-            search_Data = {
-                '$and': [{
-                        "user_id": req.body.selected_user_id
-                    },
+                if(isPending=="true"){
 
-                    {
-                        '$or': [{
-                                "verifier_id": req.body.user_id
-                            }, {
-                                "verifier_id": null
-                            }
+                             search_Data = {
+                                    '$and': [{
+                                            "user_id": req.body.selected_user_id
+                                        },
 
-                        ]
-                    },
-                    date
+                                        {
+                                            '$or': [{"verifier_id": null }, {"verifier_comments": ""},{"is_correct": null}
+
+                                            ]
+                                        },
+                                        date
+                                         ]
+
+                                }
 
 
-                ]
+                 }else {
 
-            }
+                            search_Data = {
+                                            '$and': [{
+                                                    "user_id": req.body.selected_user_id
+                                                },
+
+                                                {
+                                                    '$or': [{
+                                                            "verifier_id": req.body.user_id
+                                                        }, {
+                                                            "verifier_id": null
+                                                        }
+
+                                                    ]
+                                                },
+                                                date
+                                                  ]
+
+                                          }
+
+                        }
+
 
         }
 
     } else if (req.body.user_role.indexOf('Lead') != -1 || req.body.user_role.indexOf('Manager') != -1) {
 
         if (typeof req.body.selected_user_id == 'undefined' && typeof req.body.selected_viewer_id == 'undefined') {
+                 if(isPending=="true"){
 
-            search_Data = {
-                '$and': [{
-                    "verifier_id": req.body.user_id
-                }, date]
+                     search_Data = {
+                                        "$and": [{
+                                            "user_id": req.body.user_id
+                                        }, 
+                                         {'$or': [{
+                                                        "verifier_id": null
+                                                    }, {
+                                                        "verifier_comments": null
+                                                    },{
 
-            }
+                                                         "is_correct": null
+                                                    }
+
+                                                ]}, date]
+                                     }
+                 }else {
+                          search_Data = {
+                                            '$and': [{
+                                                "user_id": req.body.user_id
+                                            }, date]
+
+                                        }
+
+                 }
+
+          
         } else if (typeof req.body.selected_user_id != 'undefined') {
+                 if(isPending=="true"){
+                             search_Data = {
+                                        "$and": [{
+                                            "user_id": req.body.selected_user_id
+                                        }, 
+                                         {'$or': [{
+                                                        "verifier_id": null
+                                                    }, {
+                                                        "verifier_comments": null
+                                                    },{
 
+                                                         "is_correct": null
+                                                    }
 
-            search_Data = {
-                '$and': [{
-                    "user_id": req.body.selected_user_id
-                }, date]
+                                                ]}, date]
+                                     }
 
-            }
+                 }else{
+
+                                search_Data = {
+                                                    '$and': [{
+                                                        "user_id": req.body.selected_user_id
+                                                    }, date]
+
+                                                }
+
+                 }
+
+        
         } else if (typeof req.body.selected_viewer_id != 'undefined') {
             search_Data = {
                 '$and': [{
@@ -184,13 +256,38 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
 
             }
         } else if (typeof req.body.selected_user_id != 'undefined' && typeof req.body.selected_viewer_id != 'undefined') {
-            search_Data = {
-                '$and': [{
-                    "user_id": req.body.selected_user_id
-                }, {
-                    "verifier_id": req.body.selected_viewer_id
-                }, date]
-            }
+            
+                if(isPending=="true"){
+
+                                   search_Data = {
+                                        "$and": [{
+                                            "user_id": req.body.selected_user_id
+                                        }, 
+                                         {'$or': [{
+                                                        "verifier_id": null
+                                                    }, {
+                                                        "verifier_comments": null
+                                                    },{
+
+                                                         "is_correct": null
+                                                    }
+
+                                                ]}, date]
+                                     }
+
+
+                }else{
+
+                                     search_Data = {
+                                                '$and': [{
+                                                    "user_id": req.body.selected_user_id
+                                                }, {
+                                                    "verifier_id": req.body.selected_viewer_id
+                                                }, date]
+                                        }
+
+
+                        }
 
         }
 
@@ -212,7 +309,7 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
 
     }
 
-    console.log("search_Data == ",search_Data)
+   // console.log("search_Data == ",search_Data)
     /* creating and modifying search_Data as per IP params */
 
 

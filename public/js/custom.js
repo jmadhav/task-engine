@@ -466,7 +466,7 @@
 
     $("#searchTask").submit(function(e) {
         $(".overlay").show();
-      alert(" hiii"+$('#pending_task').is(":checked"));
+    
         var formData = {
             'user_role'      : $('input[name=user_role]').val(),
             'user_group_id'  : $('input[name=user_group_id]').val(),

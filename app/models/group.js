@@ -3,7 +3,10 @@ var mongoose = require('mongoose'),
   ObjectId = Schema.ObjectId;
 
 var GroupSchema = new Schema({
-  name: { type: String, index: true }
+  name: { type: String, index: true },
+  created_at : { type: Date },
+  updated_at : { type: Date },
+  is_deleted: { type: Boolean, default: false }
 });
 
 var Group = module.exports = mongoose.model('Group', GroupSchema);

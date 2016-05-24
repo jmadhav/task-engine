@@ -10,19 +10,46 @@ module.exports = function(app, passport) {
 };
 
 router.get('/', function(req, res, next) {
-    if (req.isAuthenticated())
-        res.redirect("/view_task");
+    if (req.isAuthenticated()){
+      
+        if(req.user.roles.indexOf('Manager') != -1 || req.user.roles.indexOf('Lead')!=-1){
+
+            res.redirect("/audit_task");
+        } else if(req.user.roles.indexOf('Analyst') != -1 || req.user.roles.indexOf('Moderator')!=-1){
+
+            res.redirect("/view_task");
+        }
+        
+
+    }else{
     res.render('users/login', {
         title: 'Task',
         message: req.flash('loginMessage')
     });
+
+}
 });
 
-router.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/view_task', // redirect to the secure profile section
-    failureRedirect: '/', // redirect back to the signup page if there is an error
-    failureFlash: true // allow flash messages
-}));
+router.post('/login', function(req, res, next) {
+  passport.authenticate('local-login', function(err, user, info) {
+    if (err) { return next(err); }
+    if (!user) { 
+      return res.redirect('/login'); 
+    }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); 
+      }
+         if(req.user.roles.indexOf('Manager') != -1 || req.user.roles.indexOf('Lead')!=-1){
+            return res.redirect('/audit_task');
+            
+        } else if(req.user.roles.indexOf('Analyst') != -1 || req.user.roles.indexOf('Moderator')!=-1){
+
+           return res.redirect("/view_task");
+        }
+      
+    });
+  })(req, res, next);
+});
 
 router.get('/new-users', isLoggedIn, isManager, function(req, res) {
     res.render('users/new_user', {
@@ -267,6 +294,11 @@ router.get('/get-analyst-moderator-members', isLoggedIn, function(req, res) {
             
              }
 
+                User.find(role).exec(function(err, users) {
+    //    console.log("get-moderator-lead-members ",users);
+        res.send({ users_name: users});
+    });
+
    }
 
 });
@@ -445,14 +477,8 @@ router.post('/role-update', isLoggedIn, isManager, function(req, res) {
 
         if (params.status == "checked") {
             var update = {
-                $push: {
-                    roles: params.role
-                }
-            }
-        } else {
-            var update = {
-                $pull: {
-                    roles: params.role
+                $set: {
+                    roles: [params.role]
                 }
             }
         }

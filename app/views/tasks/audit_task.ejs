@@ -1,4 +1,4 @@
-  <form class="form-horizontal" id="viewOnlyTask">
+  <form class="form-horizontal" id="searchTask" action="/audit_task" method="post">
         <fieldset>
           
          <input type="hidden" id="user_role" name="user_role" value="<%=user.roles%>">
@@ -20,8 +20,53 @@
               <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="toDate" value="" autocomplete="off">
             </div>
           </div>
-          
-        
+           <% if (typeof user !== 'undefined') {
+
+                  if(user.roles=="Manager"){
+               %>
+
+                <div class="form-group">
+                  <label for="inputPassword" class="col-lg-2 control-label">Group List</label>
+                  <div class="col-lg-10">
+                    <select id="sel_group" name="user_group" > 
+                    <option selected disabled>Select Group</option>
+                  </select>
+                  </div>
+               </div>
+
+           <%  
+              }
+           }%>
+        <% if (typeof user !== 'undefined') {
+                  if(user.roles!="Analyst"){
+               %>
+        <div style='float:left ,display: in-line,width: 123px;'>
+          <div class="form-group">
+            <label for="sel_analyst" class="col-lg-2 control-label">Uploaded By :</label>
+            <div class="col-lg-10">
+              <select id="sel_analyst" name="selected_user_id" > 
+              <option selected disabled>Select User</option>
+            </select>
+            </div>
+          </div>
+        <% 
+        }if(user.roles.indexOf("Lead")!=-1 || user.roles.indexOf("Manager")!=-1){ 
+        %> <div class="form-group">
+            <label for="sel_reviewer" class="col-lg-2 control-label">Reviewd By</label>
+            <div class="col-lg-10">
+              <select id="sel_reviewer" name="selected_viewer_id" > 
+              <option selected disabled>Select User</option>
+            </select>
+            </div>
+          </div>
+          <%  }
+           }%>
+           <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+             <label for="pending_task" class="control-label">Pending Task</label>
+              <input type="checkbox" id="pending_task" name="pending_task" value="PendingTask">
+            </div>
+          </div>
            <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
               <button type="submit" class="btn btn-success">View Task</button>
@@ -30,7 +75,15 @@
            </div>
          </fieldset>
       </form>
- 
+ <% if (typeof user !== 'undefined') {
+                  if(user.roles!="Analyst"){
+               %>
+ <div class="col-lg-10 col-lg-offset-2">
+     <button type="button" id="save_btn" class="btn btn-success">Save Data</button>
+</div>
+ <%  
+  }
+   }%>
        <div class="bs-component">
         <table id="excelDataTable" class="table table-striped table-hover ">
       <thead>

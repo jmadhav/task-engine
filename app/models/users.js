@@ -11,8 +11,8 @@ var UserSchema = new Schema({
   email: { type: String, index: true },
   password: String,
   is_deleted: { type: Boolean, default: false },
-  created_at : { type: Date, default: Date.now },
-  updated_at : { type: Date, default: Date.now },
+  created_at : { type: Date },
+  updated_at : { type: Date },
   is_active: { type: Boolean, default: true },
   roles: { type: Array, default: [] },
   group_id:{ type: ObjectId, index: true }

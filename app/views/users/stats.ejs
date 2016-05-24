@@ -1,29 +1,79 @@
 <div class="stats">
-	<%= title %>
+	<h1><%= title %></h1>
 </div>
 
+<h2>Select Group</h2>
 <div class="">
 	<% for(var i=0; i<groups.length; i++) { %>
-		<a href="/stats?id=<%= groups[i]["_id"] %>"><%= groups[i].name %></a>
+		<a href="/stats?id=<%= groups[i]["_id"] %>"  <% if( locals.group_id && group_id == groups[i]["_id"]) { %> style="background: #eaeaea" <% } %>><%= groups[i].name %></a>
 	<% } %>
 </div>
-
 <%
-
-	if (locals.tasks) {
+	if (locals.group_id) {
 		%>
-			<h3>Tasks approved and rejected by Moderator</h3>
-			<input type="hidden" value="<%= JSON.stringify(tasks) %>" id="task-data">
-			<div id="chart2" style="margin-top:20px; margin-left:20px; width:460px; height:300px;"></div>
+
+		<h2>Select Other Options</h2>
+		<form action="/stats" method="get" class="col-lg-5">
+			<input type="hidden" name="id" value="<%= group_id %>">
+			
+			<div class="form-group">
+				<label for="fromDate" class="col-lg-5 control-label">From Date:</label>
+				<div class="col-lg-7">
+					<input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="fromDate" value="<% if (locals.get_from_date) { %><%=get_from_date%><% } %>" autocomplete="off">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="toDate" class="col-lg-5 control-label">To Date:</label>
+				<div class="col-lg-7">
+					<input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="toDate" value="<% if (locals.get_to_date) { %><%=get_to_date%><% } %>" autocomplete="off">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="users" class="col-lg-5 control-label">User:</label>
+				<div class="col-lg-7">
+					<select class="form-control" id="users" name="user_id">
+						<option value="">Select User</option>
+						<% for(var i=0; i<users.length; i++) { %>
+							<option value="<%= users[i].id %>" <% if( locals.get_user_id && users[i].id == get_user_id) { %> selected <% } %>><%= users[i].name %></option>
+						<% } %>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-lg-7">
+					<input type="submit" value="Get Stats">
+				</div>
+			</div>
+		</form>
 		<%
 	}
-
-	if (locals.task_count) {
-		%>
-			<h3>Tasks reviewed and to be reviewed by Moderator</h3>
-			<input type="hidden" value="<%= JSON.stringify(task_count) %>" id="task-count">
-			<div id="chart3" style="margin-top:20px; margin-left:20px; width:460px; height:300px;"></div>
-		<%
-	}
-
 %>
+
+<div class="col-lg-12">
+<%
+	if (locals.tasks && locals.tasks.length == 0) {
+		%>
+			<h3>No review found for this candidate.</h3>
+		<%
+	} else {
+		if (locals.tasks) {
+			%>
+				<h3>Tasks approved and rejected by Moderator</h3>
+				<input type="hidden" value="<%= JSON.stringify(tasks) %>" id="task-data">
+				<div id="chart2" style="margin-top:20px; margin-left:20px; width:460px; height:300px;"></div>
+			<%
+		}
+
+		if (locals.task_count) {
+			%>
+				<h3>Tasks reviewed and to be reviewed by Moderator</h3>
+				<input type="hidden" value="<%= JSON.stringify(task_count) %>" id="task-count">
+				<div id="chart3" style="margin-top:20px; margin-left:20px; width:460px; height:300px;"></div>
+			<%
+		}
+	}
+%>
+</div>

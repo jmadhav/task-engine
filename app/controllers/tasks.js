@@ -79,7 +79,7 @@ router.post('/view_only_task', isLoggedIn, function(req, res) {
 
 router.post('/audit_task', isLoggedIn, function(req, res) {
     console.log("view_task req == ",req.body);
-
+   var isPending=req.body.isPending;
     var search_Data = null;
 
     /* creating and modifying date as per IP*/
@@ -101,7 +101,7 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
     }
 
     if (req.body.user_role == 'Analyst') {
-
+       
         search_Data = {
             "$and": [{
                 "user_id": req.body.user_id
@@ -112,12 +112,26 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
 
 
         if (req.body.selecte_user_role.length <= 0) { //No Aanalyst selected from list ..Then search for moderator task only
+             if(isPending){
 
-            search_Data = {
+                       search_Data = {
                 "$and": [{
                     "user_id": req.body.user_id
-                }, date]
+                }, 
+                 {"verifier_comments": ""},date]
             }
+
+             }else {
+                   search_Data = {
+                    "$and": [{
+                        "user_id": req.body.user_id
+                    }, date]
+                  }
+
+             }
+
+
+         
         } else {
 
             search_Data = {

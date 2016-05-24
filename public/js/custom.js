@@ -466,7 +466,7 @@
 
     $("#searchTask").submit(function(e) {
         $(".overlay").show();
-      
+      alert(" hiii"+$('#pending_task').is(":checked"));
         var formData = {
             'user_role'      : $('input[name=user_role]').val(),
             'user_group_id'  : $('input[name=user_group_id]').val(),
@@ -477,7 +477,8 @@
             'toDate'      : $('input[name=toDate]').val(),
             'user_group'  : $('input[name=user_group]').val(),
             'selected_user_id'        : $('#sel_analyst').val(),
-            'viewer_name'      : $('input[name=viewer_name]').val()
+            'viewer_name'      : $('input[name=viewer_name]').val(),
+            'isPending':$('#pending_task').is(":checked")
         };
         $.ajax({
             url: '/audit_task',

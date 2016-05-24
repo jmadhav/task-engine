@@ -478,6 +478,7 @@
             'user_group'  : $('input[name=user_group]').val(),
             'selected_user_id'        : $('#sel_analyst').val(),
             'viewer_name'      : $('input[name=viewer_name]').val(),
+            'selected_viewer_id': $('#sel_reviewer').val(),
             'isPending':$('#pending_task').is(":checked")
         };
         $.ajax({

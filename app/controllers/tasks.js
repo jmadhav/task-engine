@@ -78,7 +78,7 @@ router.post('/view_only_task', isLoggedIn, function(req, res) {
 
 
 router.post('/audit_task', isLoggedIn, function(req, res) {
-    console.log("audit_task req == ",req.body);
+
    var isPending=req.body.isPending;
     var search_Data = null;
 
@@ -189,7 +189,7 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
 
     } else if (req.body.user_role.indexOf('Lead') != -1 || req.body.user_role.indexOf('Manager') != -1) {
 
-        if (typeof req.body.selected_user_id == 'undefined' && typeof req.body.selected_viewer_id == 'undefined') {
+        if ((typeof req.body.selected_user_id != 'undefined' &&  req.body.selected_user_id.length<=0) && (typeof req.body.selected_viewer_id != 'undefined' &&  req.body.selected_viewer_id.length<=0)) {
                  if(isPending=="true"){
 
                      search_Data = {
@@ -218,7 +218,7 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
                  }
 
           
-        } else if (typeof req.body.selected_user_id != 'undefined') {
+        } else if ((typeof req.body.selected_user_id != 'undefined' &&  req.body.selected_user_id.length>0) && (typeof req.body.selected_viewer_id != 'undefined' &&  req.body.selected_viewer_id.length <=0)) {
                  if(isPending=="true"){
                              search_Data = {
                                         "$and": [{
@@ -248,68 +248,77 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
                  }
 
         
-        } else if (typeof req.body.selected_viewer_id != 'undefined') {
-            search_Data = {
-                '$and': [{
-                    "verifier_id": req.body.selected_viewer_id
-                }, date]
+        } else if ((typeof req.body.selected_viewer_id != 'undefined' &&  req.body.selected_viewer_id.length>0) && (typeof req.body.selected_user_id != 'undefined' &&  req.body.selected_user_id.length <= 0) ) {
+           
+        if(isPending=="true"){
 
-            }
-        } else if (typeof req.body.selected_user_id != 'undefined' && typeof req.body.selected_viewer_id != 'undefined') {
-            
-                if(isPending=="true"){
+                                search_Data = {
+                                                    '$and': [{
+                                                        "verifier_id": req.body.selected_viewer_id
+                                                    } ,{'$or': [{
+                                                                    "verifier_id": null
+                                                                }, {
+                                                                    "verifier_comments": null
+                                                                },{
 
-                                   search_Data = {
-                                        "$and": [{
-                                            "user_id": req.body.selected_user_id
-                                        }, 
-                                         {'$or': [{
-                                                        "verifier_id": null
+                                                                     "is_correct": null
+                                                                }
+
+                                                            ]}, date]
+
+                                         }
+
+
+                }else {
+                                search_Data = {
+                                    '$and': [{
+                                        "verifier_id": req.body.selected_viewer_id
+                                    }, date]
+
+                         }
+          }
+        } else if ((typeof req.body.selected_viewer_id != 'undefined' &&  req.body.selected_viewer_id.length > 0) && (typeof req.body.selected_user_id != 'undefined' &&  req.body.selected_user_id.length > 0)) {
+          
+                            if(isPending=="true"){
+
+                                               search_Data = {
+                                                    "$and": [{
+                                                        "user_id": req.body.selected_user_id
                                                     }, {
-                                                        "verifier_comments": null
-                                                    },{
+                                                            "verifier_id": req.body.selected_viewer_id
+                                                         },
+                                                     {'$or': [  {
+                                                                    "verifier_comments": " "
+                                                                },{
+                                                                    "verifier_comments": null
+                                                                },{
 
-                                                         "is_correct": null
+                                                                     "is_correct": null
+                                                                }
+
+                                                            ]}, date]
+                                                 }
+
+
+                            }else{
+
+                                                 search_Data = {
+                                                            '$and': [{
+                                                                "user_id": req.body.selected_user_id
+                                                            }, {
+                                                                "verifier_id": req.body.selected_viewer_id
+                                                            }, date]
                                                     }
 
-                                                ]}, date]
-                                     }
 
+                                    }
 
-                }else{
+                 }
 
-                                     search_Data = {
-                                                '$and': [{
-                                                    "user_id": req.body.selected_user_id
-                                                }, {
-                                                    "verifier_id": req.body.selected_viewer_id
-                                                }, date]
-                                        }
-
-
-                        }
-
-        }
-
-        /*  search_Data={
-                 '$or': [
-                       { "user_id":req.body.selected_user_id},
-                       
-                       { '$or': [ 
-                                 { "verifier_id":req.body.selected_viewer_id},
-                                 { "verifier_id":req.body.user_id}
-                                
-                              ] 
-                         },date
-
-
-                 ]
-
-               }*/
-
+      
     }
 
-   // console.log("search_Data == ",search_Data)
+   console.log("search_Data == ",search_Data)
     /* creating and modifying search_Data as per IP params */
 
 
@@ -381,7 +390,7 @@ function isLoggedIn(req, res, next) {
 
 
 router.post('/update_data', isLoggedIn, function(req, res) {
-  //  console.log("supdate_data >>>>>>>>>>>>>>>>>> ",req.body.tabledata);
+  console.log("supdate_data >>>>>>>>>>>>>>>>>> ",req.body.tabledata);
     var data = req.body.tabledata;
     //var user=req.body.user;
 

@@ -381,7 +381,7 @@ function isLoggedIn(req, res, next) {
 
 
 router.post('/update_data', isLoggedIn, function(req, res) {
-    //console.log("supdate_data >>>>>>>>>>>>>>>>>> ",req.body);
+  //  console.log("supdate_data >>>>>>>>>>>>>>>>>> ",req.body.tabledata);
     var data = req.body.tabledata;
     //var user=req.body.user;
 

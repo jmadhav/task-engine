@@ -314,7 +314,7 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
 
 
     Task.find(search_Data).exec(function(err, tasks) {
-        res.render('tasks/search_task', {
+        res.render('tasks/audit_search_task', {
             tasks: tasks,
             user: req.user,
             layout: false

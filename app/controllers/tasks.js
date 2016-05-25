@@ -44,10 +44,11 @@ router.post('/view_only_task', isLoggedIn, function(req, res) {
   //  console.log("view_only_task === ",req.body);
     var date = {};
      var view_Data = null;
-    if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
 
+
+    if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
         date = {
-            "created_at": new Date().toLocaleDateString()
+            "created_at": {"$gte": new Date()}
         }
     } else {
         var fromDate = new Date(req.body.fromDate).setHours(0,0,0,0);
@@ -66,6 +67,7 @@ router.post('/view_only_task', isLoggedIn, function(req, res) {
             }, date]
         }
 
+console.log("view_Data === ",date);
     Task.find(view_Data).exec(function(err, tasks) {
         res.render('tasks/search_task', {
             tasks: tasks,
@@ -86,8 +88,8 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
     var date = {}
     if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
 
-        date = {
-            "created_at": new Date().toLocaleDateString()
+         date = {
+            "created_at": {"$gte": new Date()}
         }
     } else {
         var fromDate = new Date(req.body.fromDate).setHours(0,0,0,0);

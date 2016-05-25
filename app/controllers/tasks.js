@@ -144,7 +144,7 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
         } else {
 
                 if(isPending=="true"){
-
+                   console.log("Penidn mnagaerre");
                              search_Data = {
                                     '$and': [{
                                             "user_id": req.body.selected_user_id
@@ -310,9 +310,6 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
     }
 
    // console.log("search_Data == ",search_Data)
-    /* creating and modifying search_Data as per IP params */
-
-
 
 
     Task.find(search_Data).exec(function(err, tasks) {

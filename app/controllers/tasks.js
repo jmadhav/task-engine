@@ -41,14 +41,14 @@ router.get('/audit_task', isLoggedIn, function(req, res) {
 
 
 router.post('/view_only_task', isLoggedIn, function(req, res) {
-  //  console.log("view_only_task === ",req.body);
+    console.log("view_only_task === ",req.body);
     var date = {};
      var view_Data = null;
-
-
     if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
+
         date = {
-            "created_at": {"$gte": new Date()}
+           "created_at": {"$gte": new Date()}
+
         }
     } else {
         var fromDate = new Date(req.body.fromDate).setHours(0,0,0,0);
@@ -67,7 +67,6 @@ router.post('/view_only_task', isLoggedIn, function(req, res) {
             }, date]
         }
 
-console.log("view_Data === ",date);
     Task.find(view_Data).exec(function(err, tasks) {
         res.render('tasks/search_task', {
             tasks: tasks,
@@ -359,10 +358,9 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
         task.user_id = req.user._id;
         task.user_name = req.user.name;
         task.verifier_id = null;
-        var date = new Date();
-        date.setDate(date.getDate() + 1);
-        task.created_at = moment.tz(date.toISOString(), "Asia/Kolkata");
-        task.updated_at = moment.tz(date.toISOString(), "Asia/Kolkata");
+        task.created_at = moment.tz(d, "Asia/Kolkata");
+        task.updated_at = moment.tz(d, "Asia/Kolkata");
+        console.log( 'created_at' + created_at)
         //  task.updated_at=new Date(req.body.date).toLocaleDateString();
         task.save(function(err) {
             if (err)
@@ -393,7 +391,7 @@ function isLoggedIn(req, res, next) {
 
 
 router.post('/update_data', isLoggedIn, function(req, res) {
-  //console.log("supdate_data >>>>>>>>>>>>>>>>>> ",req.body.tabledata);
+    //console.log("supdate_data >>>>>>>>>>>>>>>>>> ",req.body);
     var data = req.body.tabledata;
     //var user=req.body.user;
 

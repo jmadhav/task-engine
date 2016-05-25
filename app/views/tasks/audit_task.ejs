@@ -61,9 +61,9 @@
           </div>
           <%  }
            }%>
-           <div class="form-group">
-            <div class="col-lg-3 col-lg-offset-2">
-             <label for="pending_task" class="control-label">Pending Task</label>
+          <div class="form-group">
+            <label for="toDate" class="col-lg-2 control-label">Pending Task:</label>
+            <div class="col-lg-3">
               <input type="checkbox" id="pending_task" name="pending_task" value="PendingTask">
             </div>
           </div>
@@ -111,8 +111,13 @@
     
     </tbody>
   </table>
+</div>
 
-   <% if (typeof user !== 'undefined') {
+<div class="pagination">
+
+</div>
+
+<% if (typeof user !== 'undefined') {
                   if(user.roles!="Analyst"){
                %>
  <div class="col-lg-10 col-lg-offset-2">
@@ -121,11 +126,3 @@
  <%  
   }
    }%>
-
-
-
-
-
-
-
-</div>

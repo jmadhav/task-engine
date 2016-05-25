@@ -47,7 +47,8 @@ router.post('/view_only_task', isLoggedIn, function(req, res) {
     if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
 
         date = {
-            "created_at": new Date().toLocaleDateString()
+           "created_at": {"$gte": new Date()}
+
         }
     } else {
         var fromDate = new Date(req.body.fromDate).setHours(0,0,0,0);
@@ -87,7 +88,7 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
     if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
 
         date = {
-            "created_at": new Date().toLocaleDateString()
+            "created_at": {"$gte": new Date()}
         }
     } else {
         var fromDate = new Date(req.body.fromDate).setHours(0,0,0,0);

@@ -357,9 +357,10 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
         task.user_id = req.user._id;
         task.user_name = req.user.name;
         task.verifier_id = null;
-        task.created_at = moment.tz(new Date(d).toLocaleDateString(), "Asia/Kolkata");
-        task.updated_at = moment.tz(new Date(d).toLocaleDateString(), "Asia/Kolkata");
-        console.log( 'created_at' + task.created_at)
+        var date = new Date(d);
+        date.setDate(date.getDate() + 1);
+        task.created_at = moment.tz(date.toISOString(), "Asia/Kolkata");
+        task.updated_at = moment.tz(date.toISOString(), "Asia/Kolkata");
         //  task.updated_at=new Date(req.body.date).toLocaleDateString();
         task.save(function(err) {
             if (err)

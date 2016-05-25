@@ -128,3 +128,7 @@ body .pagination a {
 body .pagination a.active {
   background: #eaeaea;
 }
+
+#pending_task {
+  margin-top: 13px;
+}

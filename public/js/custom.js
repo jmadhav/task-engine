@@ -344,6 +344,7 @@
             data: data,
             success: function(data) {
                 $("#users_list").html(data);
+                pagination();
                 addSelectBoxToUsers()
             },
             error: function(err) {
@@ -351,6 +352,30 @@
             }
         });
     });
+
+    function pagination(){
+        if($("#excelDataTable tbody tr").length >= 10) {
+            var rowCount = Math.ceil($("#excelDataTable tbody tr").length / 10);
+
+
+            for (var i = 1; i <= rowCount; i++) {
+                $(".pagination").append("<a rel='"+i+"'>"+i+"</a>");
+            }
+
+            $.each($("#excelDataTable tbody tr"), function(){
+                $(this).addClass("pagination-" + Math.ceil(($(this).index() + 1) / 10));
+            });
+
+            $(".pagination a").click(function(){
+                $(".pagination a").removeClass("active");
+                $(this).addClass("active");
+                $("#excelDataTable tbody tr").hide();
+                $("#excelDataTable tbody tr.pagination-" + $(this).attr("rel")).show();
+            });
+
+            $(".pagination a[rel='1']").trigger("click");
+        }
+    }
 
     function addSelectBoxToUsers() {
         if ($('#user_tables').length > 0) {
@@ -487,6 +512,7 @@
             data: formData,
             success: function(data) {
                 $("#users_list").html(data);
+                pagination();
                 $(".overlay").hide();
             },
             error: function(err) {
@@ -515,6 +541,7 @@ $("#viewOnlyTask").submit(function(e) {
             data: formData,
             success: function(data) {
                 $("#users_list").html(data);
+                pagination();
                 $(".overlay").hide();
             },
             error: function(err) {

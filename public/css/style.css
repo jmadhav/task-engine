@@ -119,3 +119,12 @@ body form button,body form input[type=submit]{
   padding:10px;
   min-width:200px
 }
+
+body .pagination a {
+  padding: 10px;
+  cursor: pointer;
+}
+
+body .pagination a.active {
+  background: #eaeaea;
+}

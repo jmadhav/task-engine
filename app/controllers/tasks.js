@@ -41,14 +41,13 @@ router.get('/audit_task', isLoggedIn, function(req, res) {
 
 
 router.post('/view_only_task', isLoggedIn, function(req, res) {
-  //  console.log("view_only_task === ",req.body);
+    console.log("view_only_task === ",req.body);
     var date = {};
      var view_Data = null;
-
-
     if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
+
         date = {
-            "created_at": {"$gte": new Date()}
+            "created_at": new Date().toLocaleDateString()
         }
     } else {
         var fromDate = new Date(req.body.fromDate).setHours(0,0,0,0);
@@ -67,7 +66,6 @@ router.post('/view_only_task', isLoggedIn, function(req, res) {
             }, date]
         }
 
-console.log("view_Data === ",date);
     Task.find(view_Data).exec(function(err, tasks) {
         res.render('tasks/search_task', {
             tasks: tasks,
@@ -80,7 +78,7 @@ console.log("view_Data === ",date);
 
 
 router.post('/audit_task', isLoggedIn, function(req, res) {
-
+    console.log("audit_task req == ",req.body);
    var isPending=req.body.isPending;
     var search_Data = null;
 
@@ -88,8 +86,8 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
     var date = {}
     if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
 
-         date = {
-            "created_at": {"$gte": new Date()}
+        date = {
+            "created_at": new Date().toLocaleDateString()
         }
     } else {
         var fromDate = new Date(req.body.fromDate).setHours(0,0,0,0);
@@ -191,7 +189,7 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
 
     } else if (req.body.user_role.indexOf('Lead') != -1 || req.body.user_role.indexOf('Manager') != -1) {
 
-        if ((typeof req.body.selected_user_id != 'undefined' &&  req.body.selected_user_id.length<=0) && (typeof req.body.selected_viewer_id != 'undefined' &&  req.body.selected_viewer_id.length<=0)) {
+        if (typeof req.body.selected_user_id == 'undefined' && typeof req.body.selected_viewer_id == 'undefined') {
                  if(isPending=="true"){
 
                      search_Data = {
@@ -220,7 +218,7 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
                  }
 
           
-        } else if ((typeof req.body.selected_user_id != 'undefined' &&  req.body.selected_user_id.length>0) && (typeof req.body.selected_viewer_id != 'undefined' &&  req.body.selected_viewer_id.length <=0)) {
+        } else if (typeof req.body.selected_user_id != 'undefined') {
                  if(isPending=="true"){
                              search_Data = {
                                         "$and": [{
@@ -250,84 +248,75 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
                  }
 
         
-        } else if ((typeof req.body.selected_viewer_id != 'undefined' &&  req.body.selected_viewer_id.length>0) && (typeof req.body.selected_user_id != 'undefined' &&  req.body.selected_user_id.length <= 0) ) {
-           
-        if(isPending=="true"){
+        } else if (typeof req.body.selected_viewer_id != 'undefined') {
+            search_Data = {
+                '$and': [{
+                    "verifier_id": req.body.selected_viewer_id
+                }, date]
 
-                                search_Data = {
-                                                    '$and': [{
-                                                        "verifier_id": req.body.selected_viewer_id
-                                                    } ,{'$or': [{
-                                                                    "verifier_id": null
-                                                                }, {
-                                                                    "verifier_comments": null
-                                                                },{
+            }
+        } else if (typeof req.body.selected_user_id != 'undefined' && typeof req.body.selected_viewer_id != 'undefined') {
+            
+                if(isPending=="true"){
 
-                                                                     "is_correct": null
-                                                                }
-
-                                                            ]}, date]
-
-                                         }
-
-
-                }else {
-                                search_Data = {
-                                    '$and': [{
-                                        "verifier_id": req.body.selected_viewer_id
-                                    }, date]
-
-                         }
-          }
-        } else if ((typeof req.body.selected_viewer_id != 'undefined' &&  req.body.selected_viewer_id.length > 0) && (typeof req.body.selected_user_id != 'undefined' &&  req.body.selected_user_id.length > 0)) {
-          
-                            if(isPending=="true"){
-
-                                               search_Data = {
-                                                    "$and": [{
-                                                        "user_id": req.body.selected_user_id
+                                   search_Data = {
+                                        "$and": [{
+                                            "user_id": req.body.selected_user_id
+                                        }, 
+                                         {'$or': [{
+                                                        "verifier_id": null
                                                     }, {
-                                                            "verifier_id": req.body.selected_viewer_id
-                                                         },
-                                                     {'$or': [  {
-                                                                    "verifier_comments": " "
-                                                                },{
-                                                                    "verifier_comments": null
-                                                                },{
+                                                        "verifier_comments": null
+                                                    },{
 
-                                                                     "is_correct": null
-                                                                }
-
-                                                            ]}, date]
-                                                 }
-
-
-                            }else{
-
-                                                 search_Data = {
-                                                            '$and': [{
-                                                                "user_id": req.body.selected_user_id
-                                                            }, {
-                                                                "verifier_id": req.body.selected_viewer_id
-                                                            }, date]
+                                                         "is_correct": null
                                                     }
 
+                                                ]}, date]
+                                     }
 
-                                    }
 
-                 }
+                }else{
 
-      
+                                     search_Data = {
+                                                '$and': [{
+                                                    "user_id": req.body.selected_user_id
+                                                }, {
+                                                    "verifier_id": req.body.selected_viewer_id
+                                                }, date]
+                                        }
+
+
+                        }
+
+        }
+
+        /*  search_Data={
+                 '$or': [
+                       { "user_id":req.body.selected_user_id},
+                       
+                       { '$or': [ 
+                                 { "verifier_id":req.body.selected_viewer_id},
+                                 { "verifier_id":req.body.user_id}
+                                
+                              ] 
+                         },date
+
+
+                 ]
+
+               }*/
+
     }
 
-   //console.log("search_Data == ",search_Data)
+   // console.log("search_Data == ",search_Data)
     /* creating and modifying search_Data as per IP params */
 
 
 
 
     Task.find(search_Data).exec(function(err, tasks) {
-        res.render('tasks/audit_search_task', {
+        res.render('tasks/search_task', {
             tasks: tasks,
             user: req.user,
             layout: false
@@ -359,10 +348,9 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
         task.user_id = req.user._id;
         task.user_name = req.user.name;
         task.verifier_id = null;
-        var date = new Date();
-        date.setDate(date.getDate() + 1);
-        task.created_at = moment.tz(date.toISOString(), "Asia/Kolkata");
-        task.updated_at = moment.tz(date.toISOString(), "Asia/Kolkata");
+        task.created_at = moment.tz(d, "Asia/Kolkata");
+        task.updated_at = moment.tz(d, "Asia/Kolkata");
+        console.log( 'created_at' + created_at)
         //  task.updated_at=new Date(req.body.date).toLocaleDateString();
         task.save(function(err) {
             if (err)
@@ -393,7 +381,7 @@ function isLoggedIn(req, res, next) {
 
 
 router.post('/update_data', isLoggedIn, function(req, res) {
-  //console.log("supdate_data >>>>>>>>>>>>>>>>>> ",req.body.tabledata);
+    //console.log("supdate_data >>>>>>>>>>>>>>>>>> ",req.body);
     var data = req.body.tabledata;
     //var user=req.body.user;
 

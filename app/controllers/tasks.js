@@ -327,7 +327,7 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
 
 
     Task.find(search_Data).exec(function(err, tasks) {
-        res.render('tasks/search_task', {
+        res.render('tasks/audit_search_task', {
             tasks: tasks,
             user: req.user,
             layout: false
@@ -359,7 +359,7 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
         task.user_id = req.user._id;
         task.user_name = req.user.name;
         task.verifier_id = null;
-        var date = new Date(d);
+        var date = new Date();
         date.setDate(date.getDate() + 1);
         task.created_at = moment.tz(date.toISOString(), "Asia/Kolkata");
         task.updated_at = moment.tz(date.toISOString(), "Asia/Kolkata");

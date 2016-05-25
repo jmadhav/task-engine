@@ -36,7 +36,7 @@ router.post('/new-groups', isLoggedIn, isManager, function(req, res) {
     var group = new Group();
     if (group_params.name !== 'undefined') {
         group.name = group_params.name
-        var date = new Date(d);
+        var date = new Date();
         date.setDate(date.getDate() + 1);
         group.created_at = moment.tz(date.toISOString(), "Asia/Kolkata");
         group.updated_at = moment.tz(date.toISOString(), "Asia/Kolkata"); 
@@ -67,7 +67,7 @@ router.post('/group/:id/edit', isLoggedIn, isManager, function(req, res) {
         if (err) return handleError(err);
 
         group.name = group_params.name;
-        var date = new Date(d);
+        var date = new Date();
         date.setDate(date.getDate() + 1);
         group.updated_at = moment.tz(date.toISOString(), "Asia/Kolkata"); 
         group.save(function(err) {

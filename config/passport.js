@@ -68,7 +68,7 @@ module.exports = function(passport) {
                 newUser.password = password;
                 newUser.is_active = true;
                 newUser.is_deleted = false;
-                var date = new Date(d);
+                var date = new Date();
                 date.setDate(date.getDate() + 1);
                 newUser.created_at = moment.tz(date.toISOString(), "Asia/Kolkata");
                 newUser.updated_at = moment.tz(date.toISOString(), "Asia/Kolkata"); 

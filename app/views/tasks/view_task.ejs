@@ -27,7 +27,7 @@
               <button type="submit" class="btn btn-success">View Task</button>
             </div>
           </div>
-           </div>
+        
          </fieldset>
       </form>
  
@@ -44,20 +44,11 @@
             <th data-field="landing_page">Landing Page</th>
             <th data-field="landing_page_flag">Landing Page Flag</th>
             <th data-field="landing_page_rating">Landing Page Rating</th>
-             <th style="width:200px" data-field="user_comments">User Comments</th>
-             <% if (typeof user !== 'undefined') {
-            
-                  if(user.roles!="Analyst"){
-               %>
-             <th data-field="user_name">Analyst Name</th>
-            <th data-field="is_correct">is_correct</th>
-            <th data-field="verifier_comments">verifier_comments</th>
-
-             <th data-field="verifier_name">verifier_name</th>
-            <%  
-
-           }
-           }%>
+            <th style="width:200px" data-field="user_comments">User Comments</th>
+            <th data-field="user_name">Analyst Name</th>
+            <th data-field="is_correct">Is Correct</th>
+            <th data-field="verifier_comments">Verifier Comments</th>
+            <th data-field="verifier_name">Verifier Name</th>
             <th style="display:none;" data-field="_id">_id</th>
             <th style="display:none;" data-field="verifier_id">verifier_id</th>
         </tr>

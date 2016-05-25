@@ -68,8 +68,10 @@ module.exports = function(passport) {
                 newUser.password = password;
                 newUser.is_active = true;
                 newUser.is_deleted = false;
-                newUser.created_at = moment.tz(new Date().toLocaleDateString(), "Asia/Kolkata");
-                newUser.updated_at = moment.tz(new Date().toLocaleDateString(), "Asia/Kolkata");
+                var date = new Date();
+                date.setDate(date.getDate() + 1);
+                newUser.created_at = moment.tz(date.toISOString(), "Asia/Kolkata");
+                newUser.updated_at = moment.tz(date.toISOString(), "Asia/Kolkata"); 
                 if (typeof user.group_id !== "undefined" && typeof user.group_id != "") {
                   newUser.group_id = user.group_id;    
                 }

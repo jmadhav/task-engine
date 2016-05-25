@@ -9,9 +9,9 @@
 
 
             $.each(this.cells, function() {
-                //console.log('hi'+$(this).html());
+               //console.log('hi',$(this).attr("data-field"));
                 //if(j>0)
-                headings.push($(this).html());
+                headings.push($(this).attr("data-field"));
 
             });
 
@@ -478,6 +478,7 @@
             'user_group'  : $('input[name=user_group]').val(),
             'selected_user_id'        : $('#sel_analyst').val(),
             'viewer_name'      : $('input[name=viewer_name]').val(),
+            'selected_viewer_id': $('#sel_reviewer').val(),
             'isPending':$('#pending_task').is(":checked")
         };
         $.ajax({

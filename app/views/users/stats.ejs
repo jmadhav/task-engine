@@ -3,17 +3,22 @@
 </div>
 
 <h2>Select Group</h2>
-<div class="">
+<form class="col-lg-5">
+	<select id="stat-group-select">
+	<option>Select Group</option>
 	<% for(var i=0; i<groups.length; i++) { %>
-		<a href="/stats?id=<%= groups[i]["_id"] %>"  <% if( locals.group_id && group_id == groups[i]["_id"]) { %> style="background: #eaeaea" <% } %>><%= groups[i].name %></a>
+		<option value="<%= groups[i]["_id"] %>"  <% if( locals.group_id && group_id == groups[i]["_id"]) { %> selected <% } %>><%= groups[i].name %></option>
 	<% } %>
-</div>
+	</select>
+</form>
+<br/>
+<br/>
 <%
 	if (locals.group_id) {
 		%>
 
 		<h2>Select Other Options</h2>
-		<form action="/stats" method="get" class="col-lg-5">
+		<form action="/stats" method="get" class="form-horizontal col-lg-5">
 			<input type="hidden" name="id" value="<%= group_id %>">
 			
 			<div class="form-group">
@@ -43,8 +48,9 @@
 			</div>
 
 			<div class="form-group">
+				<label for="users" class="col-lg-5 control-label">&nbsp;</label>
 				<div class="col-lg-7">
-					<input type="submit" value="Get Stats">
+					<button type="submit" class="btn btn-success">View Stats</button>
 				</div>
 			</div>
 		</form>

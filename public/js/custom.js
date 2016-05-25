@@ -547,6 +547,10 @@ $("#viewOnlyTask").submit(function(e) {
 
 $(document).ready(function(){
 
+    $("#stat-group-select").change(function() {
+        document.location.href = "/stats?id="+$(this).val();
+    });
+
     if($("#task-data").length != 0) {
         var jsonData = JSON.parse($("#task-data").val());
 
@@ -587,8 +591,6 @@ $(document).ready(function(){
                     }
                 });
     }
-
-
 
 
 

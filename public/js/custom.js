@@ -528,6 +528,7 @@
             success: function(data) {
                 $("#users_list").html(data);
                 $("#excelDataTable").parent().show();
+                $("#save_btn").parent().show();
                 pagination();
                 $(".overlay").hide();
             },
@@ -558,6 +559,7 @@ $("#viewOnlyTask").submit(function(e) {
             success: function(data) {
                 $("#users_list").html(data);
                 $("#excelDataTable").parent().show();
+                $("#save_btn").parent().show();
                 pagination();
                 $(".overlay").hide();
             },
@@ -588,6 +590,7 @@ $("#viewOnlyTask").submit(function(e) {
  $("#excelDataTable").parent().css({"width":parseInt(screen.width) - 250, "overflow":"auto"});
     $("#excelDataTable").find("tr[data-field='landing_page']").css("width","200px");
     $("#excelDataTable").parent().hide();
+    $("#save_btn").parent().hide();
 
 })();
 

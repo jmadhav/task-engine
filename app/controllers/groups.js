@@ -65,6 +65,7 @@ router.post('/group/:id/edit', isLoggedIn, isManager, function(req, res) {
         if (err) return handleError(err);
 
         group.name = group_params.name;
+        group.updated_at = moment.tz(new Date().toLocaleDateString(), "Asia/Kolkata");
 
 
         group.save(function(err) {

@@ -159,6 +159,7 @@ router.post('/profile/:id/edit', isLoggedIn, isManager, function(req, res) {
         if (err) return handleError(err);
 
         user.name = user_params.name;
+        user.updated_at = moment.tz(new Date().toLocaleDateString(), "Asia/Kolkata");
         //user.email = user_params.email;
         if (user_params.password != "") {
             user.password = user_params.password

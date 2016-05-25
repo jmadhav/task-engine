@@ -22,7 +22,7 @@
 
             tableRowData[i] = [];
         });
-
+        var reviewed=false;
         $('#excelDataTable tr').not(':first').each(function() {
             var i = 0;
             var rowData = {};
@@ -50,23 +50,38 @@
 
                     // console.log("corr_r == "+(corr_r==true)+" incor_t== "+incor_t);
                     if (corr_r == true) {
+                        reviewed=true
                         tdText = "true";
                     } else if (incor_t == true) {
+                         reviewed=true
                         tdText = "false";
+                    }else {
+                         reviewed=false;
                     }
 
                 } else if (headings[i] == "verifier_name") {
                     var name = $('#user_name').val();
-
                     if (typeof name !== 'undefined') {
-                        tdText = name;
+                       if(reviewed){
+
+                         tdText=name;
+                       }else {
+                         tdText = '';
+                       }
+                       
                     }
 
                 } else if (headings[i] == "verifier_id") {
-                    var name = $('#user_id').val();
+                    var id = $('#user_id').val();
 
-                    if (typeof name !== 'undefined') {
-                        tdText = name;
+                    if (typeof id !== 'undefined') {
+                        if(reviewed){
+
+                         tdText=id;
+                       }else {
+                         tdText = null;
+                       }
+                      
                     }
 
                 } else {

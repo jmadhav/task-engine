@@ -20,7 +20,7 @@
            <td class="col-md-4 table-inputs">
             <input type="radio" name="correct<%= i %>" id="correct<%= i %>" value="Correct" <%= (tasks[i]["is_correct"]==true) ? 'checked' : ""%> /> Correct
             <br/>
-            <input type="radio" name="correct<%= i %>" id="incorrect<%= i %>" value="InCorrect"<%=(tasks[i]["is_correct"]==false) ? 'checked' : ""%> /> InCorrect
+            <input type="radio" name="correct<%= i %>" id="incorrect<%= i %>" value="InCorrect"<%=(tasks[i]["is_correct"]==false) ? 'checked' : ""%> /> Incorrect
          </td>
         <td class="col-md-2"> <input type="textarea" name="text_comment<%= i %>" value="<%=tasks[i]['verifier_comments']%>"/></td>
          <td class="col-md-2"><%= tasks[i]['verifier_name']%> </td>

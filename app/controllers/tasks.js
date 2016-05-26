@@ -47,7 +47,7 @@ router.post('/view_only_task', isLoggedIn, function(req, res) {
     if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
 
         date = {
-           "created_at": {"$gte": new Date()}
+           "created_at": {"$gte": new Date().setHours(0,0,0,0)}
 
         }
     } else {
@@ -100,7 +100,7 @@ console.log("req.body  =====",req.body)
             }
         }
     }
-
+console.log(date);
     if (req.body.user_role == 'Analyst') {
        
         search_Data = {
@@ -152,7 +152,7 @@ console.log("req.body  =====",req.body)
                                         },
 
                                         {
-                                            '$or': [{"verifier_id": null }, {"verifier_comments": ""},{"is_correct": null}
+                                            '$or': [{"verifier_id": null }, {"verifier_comments": null},{"is_correct": null}
 
                                             ]
                                         },
@@ -289,7 +289,7 @@ console.log("req.body  =====",req.body)
                                                             "verifier_id": req.body.selected_viewer_id
                                                          },
                                                      {'$or': [  {
-                                                                    "verifier_comments": " "
+                                                                    "verifier_comments": ""
                                                                 },{
                                                                     "verifier_comments": null
                                                                 },{
@@ -390,7 +390,7 @@ function isLoggedIn(req, res, next) {
 
 
 router.post('/update_data', isLoggedIn, function(req, res) {
-    //console.log("supdate_data >>>>>>>>>>>>>>>>>> ",req.body);
+    console.log("supdate_data >>>>>>>>>>>>>>>>>> ",req.body);
     var data = req.body.tabledata;
     //var user=req.body.user;
 

@@ -6,8 +6,12 @@ $(document).ready(function() {
         if (path == '/view_task') {
           $('#viewTaskFromDate').val($.format.date(new Date, "MM/dd/yyyy"));
           $('#viewTaskToDate').val($.format.date(new Date, "MM/dd/yyyy"));
-          $('#viewTaskSubmit').trigger('click')
+          $('#viewTaskSubmit').trigger('click');
         }
+        if (path == '/upload') {
+          $('#uploadDate').val($.format.date(new Date, "MM/dd/yyyy"));
+        }
+
     }
     setInitialDate();
 });

@@ -22,6 +22,7 @@
                   <tr>
                      <th>Name</th>
                      <th>Email</th>
+                     <th>Manager</th>
                      <th>Lead</th>
                      <th>Moderator</th>
                      <th>Analyst</th>
@@ -35,6 +36,9 @@
                    <tr data-user_id="<%= users[i].id %>" data-group_id="<%= users[i].group_id %>">
                      <td class="col-md-2"><%= users[i].name %></td>
                      <td class="col-md-3"><%= users[i].email %></td>
+
+                     <td class="col-md-2"><input type="radio" name="<%= users[i].id %>_role" class="user_role_updated" data-user_id="<%= users[i].id %>" data-role_name="Manager" <%= _und.contains(users[i].roles, 'Manager') ? 'checked' : ""  %>></td>
+
                      <td class="col-md-2"><input type="radio" name="<%= users[i].id %>_role" class="user_role_updated" data-user_id="<%= users[i].id %>" data-role_name="Lead" <%= _und.contains(users[i].roles, 'Lead') ? 'checked' : ""  %>></td>
                      <td class="col-md-2" ><input type="radio"  name="<%= users[i].id %>_role" class="user_role_updated" data-user_id="<%= users[i].id %>" data-role_name="Moderator" <%= _und.contains(users[i].roles, 'Moderator') ? 'checked' : "" %>></td>
                      <td class="col-md-2" ><input type="radio" name="<%= users[i].id %>_role" class="user_role_updated" data-user_id="<%= users[i].id %>" data-role_name="Analyst" <%= _und.contains(users[i].roles, 'Analyst') ? 'checked' : ""%>></td>

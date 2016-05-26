@@ -59,6 +59,8 @@ module.exports = function(passport) {
                 return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
             } else {
                 var user = req.body.user;
+                console.log(req.body)
+                console.log(user)
                 // if there is no user with that email
                 // create the user
                 var newUser            = new User(); 
@@ -72,7 +74,7 @@ module.exports = function(passport) {
                 date.setDate(date.getDate() + 1);
                 newUser.created_at = moment.tz(date.toISOString(), "Asia/Kolkata");
                 newUser.updated_at = moment.tz(date.toISOString(), "Asia/Kolkata"); 
-                if (typeof user.group_id !== "undefined" && typeof user.group_id != "") {
+                if (typeof user.group_id !== "undefined" && user.group_id != "") {
                   newUser.group_id = user.group_id;    
                 }
                 newUser.name = user.name

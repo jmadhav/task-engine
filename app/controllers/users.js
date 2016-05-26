@@ -361,18 +361,15 @@ router.get('/stats', isLoggedIn, isManager, function(req, res) {
 
                                 var where1 = new Object({ user_id: { $in: user_ids }});
 
-                                if(req.query.fromDate != undefined) {
                                     
-                                    where1 = new Object({
-                                        user_id: { $in: user_ids },
-                                        created_at : {
-                                            $gte: fromDate,
-                                            $lt: toDate
-                                        }
-                                    });
-
-                                }
-
+                                where1 = new Object({
+                                    user_id: { $in: user_ids },
+                                    created_at : {
+                                        $gte: fromDate,
+                                        $lt: toDate
+                                    }
+                                });
+                                
                                 Task.find(where1).exec(function(err, tasks) {
 
                                     var task_data = new Array();

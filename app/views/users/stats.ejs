@@ -60,7 +60,11 @@
 
 <div class="col-lg-12">
 <%
-	if (locals.tasks && locals.tasks.length == 0 || !locals.get_user_id) {
+	if (!locals.get_user_id) {
+		%>
+			
+		<%
+	} else if (locals.tasks && locals.tasks.length == 0) {
 		%>
 			<h3>No review found for this candidate.</h3>
 		<%

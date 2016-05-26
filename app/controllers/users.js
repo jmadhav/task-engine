@@ -54,7 +54,7 @@ router.post('/login', function(req, res, next) {
 router.get('/new-users', isLoggedIn, isManager, function(req, res) {
     res.render('users/new_user', {
         user: req.user,
-        title: 'Task',
+        title: 'User',
         message: req.flash('signupMessage')
     });
 });

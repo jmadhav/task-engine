@@ -35,7 +35,7 @@ router.get('/view_task', isLoggedIn, function(req, res) {
 router.get('/audit_task', isLoggedIn, function(req, res) {
     res.render('tasks/audit_task', {
         user: req.user,
-        title: 'Task Engine'
+        title: 'Audit Task'
     });
 });
 

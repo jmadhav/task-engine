@@ -18,7 +18,7 @@ router.get('/groups', isLoggedIn, isManager, function(req, res) {
             if (err) { /*error!!!*/ }
             res.render('groups/index', {
               user: req.user,
-              title: 'Task',
+              title: 'Groups',
               users: users,
               groups: groups
             });
@@ -32,7 +32,7 @@ router.get('/groups', isLoggedIn, isManager, function(req, res) {
 router.get('/new-groups', isLoggedIn, isManager, function(req, res) {
     res.render('groups/new_group', {
         user: req.user,
-        title: 'Task'
+        title: 'Group'
     });
 });
 
@@ -61,7 +61,7 @@ router.get('/group/:id/edit', isLoggedIn, isManager, function(req, res) {
         res.render('groups/edit_group', {
             group: group,
             user: req.user,
-            title: 'Task'
+            title: 'Group'
         });
     });
 });

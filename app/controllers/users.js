@@ -396,7 +396,7 @@ router.get('/stats', isLoggedIn, isManager, function(req, res) {
 
                                     res.render('users/stats', {
                                         user: req.user,
-                                        title: 'Statstics',
+                                        title: 'Statistics',
                                         groups: groups,
                                         group_id: req.query.id,
                                         tasks: task_data,
@@ -415,7 +415,7 @@ router.get('/stats', isLoggedIn, isManager, function(req, res) {
         Group.find({}).sort({}).exec(function(err, groups) {
             res.render('users/stats', {
                 user: req.user,
-                title: 'Statstics',
+                title: 'Statistics',
                 groups: groups
             });
         });    

@@ -530,6 +530,9 @@
                 $("#excelDataTable").parent().show();
                 $("#save_btn").parent().show();
                 pagination();
+                if (Boolean($("td:contains('No data Found')")[0])) {
+                  $('#save_btn').hide();
+                }
                 $(".overlay").hide();
             },
             error: function(err) {
@@ -585,7 +588,7 @@ $("#viewOnlyTask").submit(function(e) {
             }
         });
     }
- $("#excelDataTable").parent().css({"width":parseInt(screen.width) - 250, "overflow":"auto"});
+    $("#excelDataTable").parent().css({"width":parseInt(screen.width) - 250, "overflow":"auto"});
     $("#excelDataTable").find("tr[data-field='landing_page']").css("width","200px");
     $("#excelDataTable").parent().hide();
     $("#save_btn").parent().hide();

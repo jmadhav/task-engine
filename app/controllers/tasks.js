@@ -82,13 +82,13 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
 
    var isPending=req.body.isPending;
     var search_Data = null;
-
+console.log("req.body  =====",req.body)
     /* creating and modifying date as per IP*/
     var date = {}
     if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
 
          date = {
-            "created_at": {"$gte": new Date()}
+            "created_at": {"$gte": new Date().setHours(0,0,0,0)}
         }
     } else {
         var fromDate = new Date(req.body.fromDate).setHours(0,0,0,0);

@@ -132,3 +132,8 @@ body .pagination a.active {
 #pending_task {
   margin-top: 13px;
 }
+
+table tr td.table-inputs {
+  width: 110px;
+  display: block;
+}

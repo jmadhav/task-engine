@@ -372,7 +372,7 @@
         if($("#excelDataTable tbody tr").length >= 10) {
             var rowCount = Math.ceil($("#excelDataTable tbody tr").length / 10);
 
-
+            $(".pagination").html("");
             for (var i = 1; i <= rowCount; i++) {
                 $(".pagination").append("<a rel='"+i+"'>"+i+"</a>");
             }
@@ -617,8 +617,8 @@ $(document).ready(function(){
         jQuery.jqplot('chart2',
                 [
                     [
-                        ['Correct', correct],
-                        ['Not Correct', notCorrect]
+                        ['Correct (' + correct + ')', correct],
+                        ['Not Correct (' + notCorrect + ')', notCorrect]
                     ]
                 ],
                 {
@@ -647,8 +647,8 @@ $(document).ready(function(){
         jQuery.jqplot('chart3',
                 [
                     [
-                        ['Reviewed', jsonData["checked"]],
-                        ['Not Reviewed', jsonData["unchecked"]]
+                        ['Reviewed (' + jsonData["checked"] + ')', jsonData["checked"]],
+                        ['Not Reviewed (' + jsonData["unchecked"] + ')', jsonData["unchecked"]]
                     ]
                 ],
                 {

@@ -23,7 +23,7 @@
                  <% for(var i=0; i<groups.length; i++) { %>
                    <tr data-group_id="<%= groups[i].id %>">
                      <td class="col-md-2"><%= groups[i].name %></td>
-                     <td class="col-md-8"><%= groups[i].email %></td>
+                     <td class="col-md-8"><%= _und.pluck(_und.compact(_und.map(users, function(user){ return groups[i].id == user.group_id ? user : ""})), 'name').join(', ') %></td>
                      <td class="col-md-1"><a href="/group/<%= groups[i]._id%>/edit" class="btn btn-success">Edit</a></td>
                    </tr>
                   <% } %>

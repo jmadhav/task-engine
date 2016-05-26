@@ -11,16 +11,22 @@ module.exports = function(app, passport) {
 };
 
 router.get('/groups', isLoggedIn, isManager, function(req, res) {
-    Group.find({}).sort({
-        created_at: -1
-    }).exec(function(err, groups) {
-        if (err) return next(err);
-        res.render('groups/index', {
-            user: req.user,
-            title: 'Task',
-            groups: groups
+
+    Group.find({}, function(err, groups) {
+        if (err) { /*error!!!*/ }
+        User.find({}, function(err, users) {
+            if (err) { /*error!!!*/ }
+            res.render('groups/index', {
+              user: req.user,
+              title: 'Task',
+              users: users,
+              groups: groups
+            });
         });
     });
+
+    
+
 });
 
 router.get('/new-groups', isLoggedIn, isManager, function(req, res) {
@@ -39,7 +45,7 @@ router.post('/new-groups', isLoggedIn, isManager, function(req, res) {
         var date = new Date();
         date.setDate(date.getDate() + 1);
         group.created_at = moment.tz(date.toISOString(), "Asia/Kolkata");
-        group.updated_at = moment.tz(date.toISOString(), "Asia/Kolkata"); 
+        group.updated_at = moment.tz(date.toISOString(), "Asia/Kolkata");
         group.save(function(err) {
             if (err)
                 throw err;
@@ -69,7 +75,7 @@ router.post('/group/:id/edit', isLoggedIn, isManager, function(req, res) {
         group.name = group_params.name;
         var date = new Date();
         date.setDate(date.getDate() + 1);
-        group.updated_at = moment.tz(date.toISOString(), "Asia/Kolkata"); 
+        group.updated_at = moment.tz(date.toISOString(), "Asia/Kolkata");
         group.save(function(err) {
             if (err) return handleError(err);
         });

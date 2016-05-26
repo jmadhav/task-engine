@@ -532,6 +532,8 @@
                 pagination();
                 if (Boolean($("td:contains('No data Found')")[0])) {
                   $('#save_btn').hide();
+                }   else {
+                  $('#save_btn').show();
                 }
                 $(".overlay").hide();
             },
@@ -676,13 +678,18 @@ $(document).ready(function(){
         var path = window.location.pathname;
         path = path.replace(/\/$/, "");
         path = decodeURIComponent(path);
+        date = $.format.date(new Date, "MM/dd/yyyy")
         if (path == '/view_task') {
-          $('#viewTaskFromDate').val($.format.date(new Date, "MM/dd/yyyy"));
-          $('#viewTaskToDate').val($.format.date(new Date, "MM/dd/yyyy"));
+          $('#viewTaskFromDate').val(date);
+          $('#viewTaskToDate').val(date);
           $('#viewTaskSubmit').trigger('click');
         }
         if (path == '/upload') {
-          $('#uploadDate').val($.format.date(new Date, "MM/dd/yyyy"));
+          $('#uploadDate').val(date);
+        }
+        if (path == '/audit_task') {
+          $('#auditTaskFromDate').val(date);
+          $('#auditTaskToDate').val(date);
         }
 
     }

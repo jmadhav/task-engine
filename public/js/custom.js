@@ -573,8 +573,6 @@ $("#viewOnlyTask").submit(function(e) {
     });
 
 
-
-
     function setSelectedMenuItem() {
         var path = window.location.pathname;
         path = path.replace(/\/$/, "");

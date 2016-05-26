@@ -360,7 +360,6 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
         task.verifier_id = null;
         task.created_at = moment.tz(d, "Asia/Kolkata");
         task.updated_at = moment.tz(d, "Asia/Kolkata");
-        console.log( 'created_at' + created_at)
         //  task.updated_at=new Date(req.body.date).toLocaleDateString();
         task.save(function(err) {
             if (err)

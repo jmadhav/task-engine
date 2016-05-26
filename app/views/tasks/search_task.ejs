@@ -22,12 +22,9 @@
          <td class="col-md-2"><%=tasks[i]['verifier_comments']%></td>
          <td class="col-md-2"><%= tasks[i]['verifier_name']%> </td>
          <td><input type="hidden" id="user_role" name="user_role" value="<%=tasks[i]['_id']%>"> </td>
-         <td> </td>
-         <td> </td>
-         <td> </td>
    </tr>
         
  <% } } %>
 <% } else { %>
- <tr><td></td><td></td><td></td><td></td><td></td><td></td><td class="col-md-10">  No data Found</td><td></td><td></td><td></td><td></td></tr>
+ <tr><td></td><td></td><td></td><td></td><td></td><td></td><td class="col-md-10">  No data Found</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <% } %>

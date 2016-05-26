@@ -34,7 +34,7 @@ router.post('/login', function(req, res, next) {
   passport.authenticate('local-login', function(err, user, info) {
     if (err) { return next(err); }
     if (!user) { 
-      return res.redirect('/login'); 
+      return res.render('users/login', {message: req.flash('loginMessage'), title: 'Task'});
     }
     req.logIn(user, function(err) {
       if (err) { return next(err); 

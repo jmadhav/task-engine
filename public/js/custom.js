@@ -389,6 +389,8 @@
             });
 
             $(".pagination a[rel='1']").trigger("click");
+        } else {
+            $(".pagination").html("");
         }
     }
 

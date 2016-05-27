@@ -511,7 +511,7 @@ router.get('/logout', function(req, res) {
     res.redirect('/');
 });
 
-router.post('/search-by-name', function(req, res) {
+router.post('/search-by-name', isLoggedIn, isManager, function(req, res) {
     var params = req.body
     var regex = new RegExp(params.query, "i");
     User.find({

@@ -151,4 +151,8 @@ footer {
 
 #loginName {
   cursor: text;
+  text-align: center !important;
+}
+.main-container{
+  padding-bottom: 50px;
 }

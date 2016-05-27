@@ -78,7 +78,7 @@ router.get('/profile/:id/edit', isLoggedIn, isManager, function(req, res) {
         if (err) return next(err);
         res.render('users/edit_user', {
             user: user,
-            title: 'Task'
+            title: 'User'
         });
     });
 });

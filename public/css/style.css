@@ -137,6 +137,7 @@ table tr td.table-inputs {
   width: 110px;
   display: block;
 }
+
 footer {
   background: #666;
   color: #fff;
@@ -146,4 +147,8 @@ footer {
   bottom: 0;
   width: 100%;
   text-align: center;
+}
+
+#loginName {
+  cursor: text;
 }

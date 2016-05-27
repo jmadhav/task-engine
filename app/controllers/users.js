@@ -23,7 +23,7 @@ router.get('/', function(req, res, next) {
 
     }else{
     res.render('users/login', {
-        title: 'Task',
+        title: 'Login',
         message: req.flash('loginMessage')
     });
 
@@ -216,7 +216,7 @@ router.get('/users', isLoggedIn, isManager, function(req, res) {
         var groups = Group.find({});
         res.render('users/index', {
             user: req.user,
-            title: 'Task',
+            title: 'User',
             users: users,
             groups: groups
         });

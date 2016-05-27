@@ -145,5 +145,8 @@ footer {
   position: fixed;
   bottom: 0;
   width: 100%;
-  text-align: center;
+  text-align: center !important;
+}
+.main-container{
+  padding-bottom: 50px;
 }

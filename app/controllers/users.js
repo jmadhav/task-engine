@@ -77,7 +77,8 @@ router.get('/profile/:id/edit', isLoggedIn, isManager, function(req, res) {
     User.findById(id, function(err, user) {
         if (err) return next(err);
         res.render('users/edit_user', {
-            user: user,
+             user_data: user,
+             user: req.user,
             title: 'User'
         });
     });

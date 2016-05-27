@@ -77,7 +77,7 @@ router.get('/profile/:id/edit', isLoggedIn, isManager, function(req, res) {
     User.findById(id, function(err, user) {
         if (err) return next(err);
         res.render('users/edit_user', {
-            user: user,
+            user: req.user,
             title: 'User'
         });
     });
@@ -510,7 +510,7 @@ router.get('/logout', function(req, res) {
     res.redirect('/');
 });
 
-router.post('/search-by-name', function(req, res) {
+router.post('/search-by-name', isLoggedIn, isManager, function(req, res) {
     var params = req.body
     var regex = new RegExp(params.query, "i");
     User.find({

@@ -44,6 +44,21 @@ module.exports = function(app, config) {
   app.use(passport.initialize());
   app.use(passport.session()); // persistent login sessions
   app.use(flash());
+  
+  app.locals.createPagination = function (pages, page, req) {
+    var url = require('url')
+      , qs = require('querystring')
+      , params = qs.parse(url.parse(req.url).query)
+      , str = ''
+
+    params.page = 0
+    for (var p = 1; p <= pages; p++) {
+      params.page = p
+      clas = page == p ? "active" : "no"
+      str += '<li class="'+clas+'"><a class="tasks_pagination" data-page="' + p + '" href="?'+qs.stringify(params)+'">'+ p +'</a></li>'
+    }
+    return str
+  }
 
   var controllers = glob.sync(config.root + '/app/controllers/*.js');
   controllers.forEach(function (controller) {

@@ -24,7 +24,17 @@
          <td><input type="hidden" id="user_role" name="user_role" value="<%=tasks[i]['_id']%>"> </td>
    </tr>
         
- <% } } %>
+ <% } %>
+  <tr>
+    <td colspan="15">
+      <% if (pages > 1) { %>
+        <ul class="view_task_pagination">
+          <%- createPagination(pages, page, req)%> 
+        </ul>
+  <% } %>    
+    </td>
+  </tr>
+<% } %>
 <% } else { %>
  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td class="col-md-10">No data Found</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <% } %>

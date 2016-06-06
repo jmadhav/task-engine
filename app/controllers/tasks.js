@@ -67,15 +67,18 @@ router.post('/view_only_task', isLoggedIn, function(req, res) {
             }, date]
         }
 
-    Task.find(view_Data).exec(function(err, tasks) {
+      page = req.param('page') > 0 ? req.param('page') : 1
+      Task.paginate(view_Data, { page: page, limit: 10 }, function(err, result) {
         res.render('tasks/search_task', {
-            tasks: tasks,
-            user: req.user,
-            layout: false
-        });
-    });
+                tasks: result.docs,
+                page: result.page,
+                pages: result.pages,
+                req: req,
+                layout: false
+            });
+      });
 
-    });
+});
 
 
 router.post('/audit_task', isLoggedIn, function(req, res) {
@@ -322,14 +325,15 @@ console.log(date);
   console.log("search_Data == ",search_Data)
     /* creating and modifying search_Data as per IP params */
 
-
-
-
-    Task.find(search_Data).exec(function(err, tasks) {
+    page = req.param('page') > 0 ? req.param('page') : 1
+    Task.paginate(search_Data, { page: page, limit: 10 }, function(err, result) {
         res.render('tasks/audit_search_task', {
-            tasks: tasks,
-            user: req.user,
-            layout: false
+                tasks: result.docs,
+                page: result.page,
+                pages: result.pages,
+                req: req,
+                user: req.user,
+                layout: false
         });
     });
 

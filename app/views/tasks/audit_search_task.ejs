@@ -33,7 +33,18 @@
          
    </tr>
         
- <% } } %>
+ <% } %>
+<tr>
+    <td colspan="15">
+      <% if (pages > 1) { %>
+        <ul class="audit_task_pagination">
+          <%- createPagination(pages, page, req)%> 
+        </ul>
+  <% } %>    
+    </td>
+  </tr>
+
+ <% } %>
 <% } else { %>
  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td class="col-md-10">No data Found</td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <% } %>

@@ -359,7 +359,7 @@
             data: data,
             success: function(data) {
                 $("#users_list").html(data);
-                pagination();
+                //pagination();
                 addSelectBoxToUsers()
             },
             error: function(err) {
@@ -526,10 +526,10 @@
             type: 'POST',
             data: formData,
             success: function(data) {
-                $("#users_list").html(data);
+                $("#audit_tasks").html(data);
                 $("#excelDataTable").parent().show();
                 $("#save_btn").parent().show();
-                pagination();
+                //pagination();
                 if (Boolean($("td:contains('No data Found')")[0])) {
                   $('#save_btn').hide();
                 }   else {
@@ -562,10 +562,10 @@ $("#viewOnlyTask").submit(function(e) {
             type: 'POST',
             data: formData,
             success: function(data) {
-                $("#users_list").html(data);
+                $("#view_tasks").html(data);
                 $("#excelDataTable").parent().show();
                 $("#save_btn").parent().show();
-                pagination();
+                //pagination();
                 $(".overlay").hide();
             },
             error: function(err) {
@@ -674,6 +674,81 @@ $(document).ready(function(){
                 });
     }
 
+    $('#view_tasks').on('click', 'a.tasks_pagination', function(e){
+       $(".overlay").show();
+       var formData = {
+           
+            'user_id'     : $('input[name=user_id]').val(),
+            'fromDate'    : $('input[name=fromDate]').val(),
+            'toDate'      : $('input[name=toDate]').val(),
+            'page'        : $(this).data('page')
+           
+        };
+        $.ajax({
+            url: '/view_only_task',
+            type: 'POST',
+            data: formData,
+            success: function(data) {
+                $("#view_tasks").html(data);
+                $("#excelDataTable").parent().show();
+                $("#save_btn").parent().show();
+                //pagination();
+                $(".overlay").hide();
+            },
+            error: function(err) {
+              $(".overlay").hide();
+              console.log(err);   
+            }
+        });
+
+        e.preventDefault();
+    });
+
+
+    $('#audit_tasks').on('click', 'a.tasks_pagination', function(e){
+       $(".overlay").show();
+    
+        var formData = {
+            'user_role'      : $('input[name=user_role]').val(),
+            'user_group_id'  : $('input[name=user_group_id]').val(),
+            'user_id'        : $('input[name=user_id]').val(),
+            'user_name'      : $('input[name=user_name]').val(),
+            'selecte_user_role'  : $('input[name=selecte_user_role]').val(),
+            'fromDate'        : $('input[name=fromDate]').val(),
+            'toDate'      : $('input[name=toDate]').val(),
+            'user_group'  : $('input[name=user_group]').val(),
+            'selected_user_id'        : $('#sel_analyst').val(),
+            'viewer_name'      : $('input[name=viewer_name]').val(),
+            'selected_viewer_id': $('#sel_reviewer').val(),
+            'isPending':$('#pending_task').is(":checked"),
+            'page'        : $(this).data('page')
+        };
+        $.ajax({
+            url: '/audit_task',
+            type: 'POST',
+            data: formData,
+            success: function(data) {
+                $("#audit_tasks").html(data);
+                $("#excelDataTable").parent().show();
+                $("#save_btn").parent().show();
+                //pagination();
+                if (Boolean($("td:contains('No data Found')")[0])) {
+                  $('#save_btn').hide();
+                }   else {
+                  $('#save_btn').show();
+                }
+                $(".overlay").hide();
+            },
+            error: function(err) {
+              $(".overlay").hide();
+              console.log(err);   
+            }
+        });
+
+        e.preventDefault();
+    });
+    
+
     function setInitialDate() {
         var path = window.location.pathname;
         path = path.replace(/\/$/, "");
@@ -694,4 +769,5 @@ $(document).ready(function(){
 
     }
     setInitialDate();
+
 });

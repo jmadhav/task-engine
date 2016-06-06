@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
   ObjectId = Schema.ObjectId;
+  mongoosePaginate = require('mongoose-paginate');
 
 var TaskSchema = new Schema({
   user_id: { type: ObjectId, index: true },
@@ -24,5 +25,7 @@ var TaskSchema = new Schema({
   verifier_id: { type: ObjectId, index: true },
    verifier_name:{type: String, default: ''},
 });
+
+TaskSchema.plugin(mongoosePaginate);
 
 var Task = module.exports = mongoose.model('Task', TaskSchema);

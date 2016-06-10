@@ -370,6 +370,44 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
                 throw err;
         });
     });
+    
+    var fromDate = new Date(d).setHours(0,0,0,0);
+    var toDate = new Date(d).setHours(23,59,59,999);
+
+    date = {
+      "created_at": {
+         $gte: fromDate,
+         $lt: toDate
+      }
+    }
+    
+    Task.find({"$and": [{ "user_id": req.user._id }, date]}).exec(function(err, tasks) {
+      if(err){
+        console.log(err);
+      }
+      _und.each(tasks, function(task) {
+        Task.update({ _id: task._id }, { $set: { is_audit_task: false }}, { multi: true }, function (error){
+          if(error){
+            console.error('ERROR!');
+          }
+        });  
+      });
+      
+      var number_of_records = Math.round(((15 * tasks.length)/100));
+      Task.aggregate([{ '$sample': { size:  number_of_records}}]).exec(function(err, samplingTask) {
+        if (err) {
+          console.log(err);    
+        }
+        _und.each(samplingTask, function(task) {
+          Task.update({ _id: task._id }, { $set: { is_audit_task: true }}, { multi: true }, function (error){
+            if(error){
+              console.error('ERROR!');
+            }
+          });  
+        }); 
+      });
+    });      
+    
     findRemoveSync(process.cwd() + '/tmp/', {
         extensions: ['.xlsx']
     });
@@ -377,11 +415,6 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
         status: 'success',
         tasks_count: tasks_count
     });
-    /* res.render('users/profile', {
-         user: req.user,
-         title: 'Task',
-         message: "Your task has been uploaded"
-     });*/
 });
 
 

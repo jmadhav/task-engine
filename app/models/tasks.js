@@ -23,7 +23,8 @@ var TaskSchema = new Schema({
   updated_at: { type: Date},
   is_correct: Boolean,
   verifier_id: { type: ObjectId, index: true },
-   verifier_name:{type: String, default: ''},
+  verifier_name:{type: String, default: ''},
+  is_audit_task:{ type: Boolean, default: false }
 });
 
 TaskSchema.plugin(mongoosePaginate);

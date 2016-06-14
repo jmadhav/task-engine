@@ -4,6 +4,8 @@
       <form id="taskUpload" class="form-horizontal" action="/upload" method="post" enctype="multipart/form-data">
         <fieldset>
           <legend>Upload</legend>
+          <% console.log("user ==== ",user.group_id)%>
+          <input type="hidden" id="user_group_id" name="user_group_id" value="<%=user.group_id%>">
           <div class="form-group">
             <label for="inputEmail" class="col-lg-2 control-label">File:</label>
             <div class="col-lg-10">

@@ -125,6 +125,7 @@
     });
 
     $('#sel_group').on("change", function() {
+        $("#user_group_id").val($(this).val());
         if ($('#user_role').val() == 'Manager') {
             getAnalystModeratorData($(this).val());
             getLeadModeratorData($(this).val());
@@ -482,6 +483,7 @@
     $("#taskUpload").submit(function(e) {
         $(".overlay").show();
         var formData = new FormData($(this)[0]);
+        //  'user_group_id'  : $('input[name=user_group_id]').val(),
 
         $.ajax({
             url: '/upload',

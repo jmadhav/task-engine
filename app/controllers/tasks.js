@@ -41,7 +41,6 @@ router.get('/audit_task', isLoggedIn, function(req, res) {
 
 
 router.post('/view_only_task', isLoggedIn, function(req, res) {
-    console.log("view_only_task === ",req.body);
     var date = {};
      var view_Data = null;
     if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
@@ -130,7 +129,6 @@ router.post('/audit_task1', isLoggedIn, function(req, res) {
 
    var isPending=req.body.isPending;
     var search_Data = null;
-console.log("req.body  =====",req.body)
     /* creating and modifying date as per IP*/
     var date = {}
     if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
@@ -148,7 +146,6 @@ console.log("req.body  =====",req.body)
             }
         }
     }
-console.log(date);
     if (req.body.user_role == 'Analyst') {
        
         search_Data = {
@@ -193,7 +190,6 @@ console.log(date);
         } else {
 
                 if(isPending=="true"){
-                   console.log("Penidn mnagaerre");
                              search_Data = {
                                     '$and': [{
                                             "user_id": req.body.selected_user_id
@@ -367,7 +363,6 @@ console.log(date);
       
     }
 
-  console.log("search_Data == ",search_Data)
     /* creating and modifying search_Data as per IP params */
 
     page = req.param('page') > 0 ? req.param('page') : 1
@@ -384,9 +379,6 @@ console.log(date);
 
 });
 
-
-
-
 router.get('/upload', isLoggedIn, function(req, res) {
     res.render('tasks/upload', {
         user: req.user,
@@ -400,7 +392,6 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
    
     // var d = new Date(req.body.date).toLocaleDateString();
     var d = req.body.date;
-    console.log(new Date(d).toLocaleDateString());
     var task_ids = []
     var excelTaskData = readExcelFile(req.file.path);
     var tasks_count = excelTaskData.length;
@@ -475,7 +466,6 @@ function isLoggedIn(req, res, next) {
 
 
 router.post('/update_data', isLoggedIn, function(req, res) {
-    console.log("supdate_data >>>>>>>>>>>>>>>>>> ",req.body);
     var data = req.body.tabledata;
     //var user=req.body.user;
 
@@ -498,11 +488,7 @@ router.post('/update_data', isLoggedIn, function(req, res) {
         status: 'success'
     });
 
-
-
 });
-
-
 
 function readExcelFile(filePath) {
     var workbook = XLSX.readFile(filePath);

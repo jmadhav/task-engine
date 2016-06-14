@@ -1,24 +1,28 @@
-<div class="stats">
-	<h1><%= title %></h1>
+<div class="row">
+   <div class="col-lg-5" style="margin-left: -100px;">
+      <div class="bs-component">
+        <form class="form-horizontal"> 
+            <div class="form-group">
+				<label for="selectOptions" class="col-lg-5 control-label">Select group:</label>
+				<div class="col-lg-7">
+					<select id="stat-group-select">
+                      <option>Select Group</option>
+                      <% for(var i=0; i<groups.length; i++) { %>
+                        <option value="<%= groups[i]["_id"] %>"  <% if( locals.group_id && group_id == groups[i]["_id"]) { %> selected <% } %>><%= groups[i].name %></option>
+                      <% } %>
+                    </select>
+				</div>
+			</div>
+          </form>
+      </div>
+   </div>
 </div>
-
-<h2>Select Group</h2>
-<form class="col-lg-5">
-	<select id="stat-group-select">
-	<option>Select Group</option>
-	<% for(var i=0; i<groups.length; i++) { %>
-		<option value="<%= groups[i]["_id"] %>"  <% if( locals.group_id && group_id == groups[i]["_id"]) { %> selected <% } %>><%= groups[i].name %></option>
-	<% } %>
-	</select>
-</form>
-<br/>
-<br/>
 <%
 	if (locals.group_id) {
 		%>
-
-		<h2>Select Other Options</h2>
-		<form action="/stats" method="get" class="form-horizontal col-lg-5">
+		<div class="row">
+		  <div class="col-lg-5" style="margin-left: -100px;">
+		<form action="/stats" method="get" class="form-horizontal">
 			<input type="hidden" name="id" value="<%= group_id %>">
 			
 			<div class="form-group">
@@ -54,6 +58,8 @@
 				</div>
 			</div>
 		</form>
+	  </div>
+	</div>
 		<%
 	}
 %>

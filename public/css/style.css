@@ -198,3 +198,7 @@ ul.audit_task_pagination li a {
 ul.audit_task_pagination li.active a {
     color: #d9230f;
 }
+
+#userPerformaceDashboard {
+  display: none;
+}

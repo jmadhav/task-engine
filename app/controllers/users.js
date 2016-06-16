@@ -322,10 +322,14 @@ router.get('/stats', isLoggedIn, function(req, res) {
 
     } else {
       Group.find({}).sort({}).exec(function(err, groups) {
-        res.render('users/stats', {
-          user: req.user,
-          title: 'Dashboard',
-          groups: groups
+        Task.find({ 'is_audit_task': true }).sort({}).exec(function(err, tasks) {
+          
+
+          res.render('users/stats', {
+            user: req.user,
+            title: 'Dashboard',
+            groups: groups
+          });
         });
       });
     }

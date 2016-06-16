@@ -1,12 +1,12 @@
 <div class="row">
-   <div class="col-lg-5" style="margin-left: -100px;">
+   <div class="col-lg-4" style="margin-left: -100px;">
       <div class="bs-component">
         <form class="form-horizontal"> 
             <div class="form-group">
 				<label for="selectOptions" class="col-lg-5 control-label">Select group:</label>
 				<div class="col-lg-7">
 					<select id="stat-group-select">
-                      <option>Select Group</option>
+                      <option selected disabled>Select Group</option>
                       <% for(var i=0; i<groups.length; i++) { %>
                         <option value="<%= groups[i]["_id"] %>"  <% if( locals.group_id && group_id == groups[i]["_id"]) { %> selected <% } %>><%= groups[i].name %></option>
                       <% } %>
@@ -16,80 +16,65 @@
           </form>
       </div>
    </div>
+   <div class="clearfix"></div>
+   <% var group_id = group_id || ""  %>
+   <div class="col-lg-4" style="margin-left: -100px;">
+      <form action="/stats" method="get" class="form-horizontal">
+         <input type="hidden" name="id" value="<%= group_id %>">
+         <div class="form-group">
+            <label for="fromDate" class="col-lg-5 control-label">From Date:</label>
+            <div class="col-lg-7">
+               <input type="text" id="dashboardFromDate" class="form-control datepicker" placeholder="yyyy-mm-dd" name="fromDate" value="<% if (locals.get_from_date) { %><%=get_from_date%><% } %>" autocomplete="off">
+            </div>
+         </div>
+         <div class="form-group">
+            <label for="toDate" class="col-lg-5 control-label">To Date:</label>
+            <div class="col-lg-7">
+               <input type="text" id="dashboardToDate" class="form-control datepicker" placeholder="yyyy-mm-dd" name="toDate" value="<% if (locals.get_to_date) { %><%=get_to_date%><% } %>" autocomplete="off">
+            </div>
+         </div>
+         <div class="form-group">
+            <% if (typeof users !== 'undefined') { %>
+            <label for="users" class="col-lg-5 control-label">User:</label>
+            <div class="col-lg-7" id="userSelectBox">
+               <select class="form-control" id="users" name="user_id">
+                  <option value="">Select User</option>
+                  <% for(var i=0; i<users.length; i++) { %>
+                  <option value="<%= users[i].id %>" <% if( locals.get_user_id && users[i].id == get_user_id) { %> selected <% } %>><%= users[i].name %></option>
+                  <% } %>
+               </select>
+            </div>
+            <% } %>
+         </div>
+         <div class="form-group">
+            <label for="users" class="col-lg-5 control-label">&nbsp;</label>
+            <div class="col-lg-7">
+               <button type="submit" class="btn btn-success">View Stats</button>
+            </div>
+         </div>
+      </form>
+   </div>
+
+   <div class="col-lg-4" style="margin-top: -48px;">
+      <div class="row">
+        <h6 style="margin-left:44px">Tasks approved and rejected by Moderator</h6>
+        <div id="chart1" style="margin-top:20px; margin-left:20px; width:300px; height:300px;"></div>
+      </div>
+   </div>
+
+   <div class="col-lg-4" style="margin-top: -48px;">
+      <div class="row">
+        <h6 style="margin-left:44px" >Tasks reviewed and to be reviewed by Moderator</h6>
+        <div id="chart2" style="margin-top:20px; margin-left:20px; width:300px; height:300px;"></div>
+      </div>
+   </div>
+
 </div>
-<%
-	if (locals.group_id) {
-		%>
-		<div class="row">
-		  <div class="col-lg-5" style="margin-left: -100px;">
-		<form action="/stats" method="get" class="form-horizontal">
-			<input type="hidden" name="id" value="<%= group_id %>">
-			
-			<div class="form-group">
-				<label for="fromDate" class="col-lg-5 control-label">From Date:</label>
-				<div class="col-lg-7">
-					<input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="fromDate" value="<% if (locals.get_from_date) { %><%=get_from_date%><% } %>" autocomplete="off">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label for="toDate" class="col-lg-5 control-label">To Date:</label>
-				<div class="col-lg-7">
-					<input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="toDate" value="<% if (locals.get_to_date) { %><%=get_to_date%><% } %>" autocomplete="off">
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="users" class="col-lg-5 control-label">User:</label>
-				<div class="col-lg-7">
-					<select class="form-control" id="users" name="user_id">
-						<option value="">Select User</option>
-						<% for(var i=0; i<users.length; i++) { %>
-							<option value="<%= users[i].id %>" <% if( locals.get_user_id && users[i].id == get_user_id) { %> selected <% } %>><%= users[i].name %></option>
-						<% } %>
-					</select>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="users" class="col-lg-5 control-label">&nbsp;</label>
-				<div class="col-lg-7">
-					<button type="submit" class="btn btn-success">View Stats</button>
-				</div>
-			</div>
-		</form>
-	  </div>
-	</div>
-		<%
-	}
-%>
-
-<div class="col-lg-12">
-<%
-	if (!locals.get_user_id) {
-		%>
-			
-		<%
-	} else if (locals.tasks && locals.tasks.length == 0) {
-		%>
-			<h3>No review found for this candidate.</h3>
-		<%
-	} else {
-		if (locals.tasks) {
-			%>
-				<h3>Tasks approved and rejected by Moderator</h3>
-				<input type="hidden" value="<%= JSON.stringify(tasks) %>" id="task-data">
-				<div id="chart2" style="margin-top:20px; margin-left:20px; width:460px; height:300px;"></div>
-			<%
-		}
-
-		if (locals.task_count) {
-			%>
-				<h3>Tasks reviewed and to be reviewed by Moderator</h3>
-				<input type="hidden" value="<%= JSON.stringify(task_count) %>" id="task-count">
-				<div id="chart3" style="margin-top:20px; margin-left:20px; width:460px; height:300px;"></div>
-			<%
-		}
-	}
-%>
+<hr/>
+<div class="row">
+   <div class="col-lg-12">
+      <div class="row">
+        <div id="chart3"></div>
+      </div>
+   </div>
 </div>

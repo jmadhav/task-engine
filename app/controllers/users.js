@@ -324,8 +324,7 @@ router.get('/stats', isLoggedIn, function(req, res) {
       Group.find({}).sort({}).exec(function(err, groups) {
         Task.find({ 'is_audit_task': true }).sort({}).exec(function(err, tasks) {
           var tasks_object = getVerifiedAndCorrectTask(tasks)
-          
-          console.log(tasks_reviewed.length)
+          console.log(tasks_object)
           res.render('users/stats', {
             user: req.user,
             title: 'Dashboard',
@@ -448,10 +447,10 @@ function getVerifiedAndCorrectTask(tasks) {
 
   if (tasks.length > 1) {
     var Verified = _und.filter(tasks, function(task){ return (task.is_correct == true || task.is_correct == false); });
-    var totalUnreviewed = (tasks.length - taskReviewed.length);
+    var Unverified = (tasks.length - Verified.length);
     var Correct = _und.filter(tasks, function(task){ return (task.is_correct == true); });
-    var InCorrect = (taskReviewed.length - tasksCorrect.length)
-    return { Verified: Verified, Unverified: Unverified, Correct: Correct, InCorrect: InCorrect }
+    var InCorrect = (Verified.length - Correct.length)
+    return { Verified: Verified.length, Unverified: Unverified, Correct: Correct.length, InCorrect: InCorrect }
   } else {
     return { Verified: 0, Unverified: 0, Correct: 0, InCorrect: 0 }
   }

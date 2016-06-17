@@ -6,7 +6,7 @@ Group = mongoose.model('Group');
 _und = require("underscore");
 moment = require('moment-timezone');
 
-module.exports = function(app, passport) {
+module.exports = function(app) {
     app.use('/', router);
 };
 

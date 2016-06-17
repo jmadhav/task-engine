@@ -21,7 +21,7 @@ var uploading = multer({
     storage: storage
 })
 
-module.exports = function(app, passport) {
+module.exports = function(app) {
     app.use('/', router);
 };
 

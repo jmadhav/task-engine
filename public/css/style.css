@@ -200,5 +200,5 @@ ul.audit_task_pagination li.active a {
 }
 
 #userPerformaceDashboard {
-  display: none;
+  display: block;
 }

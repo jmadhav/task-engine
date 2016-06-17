@@ -323,8 +323,9 @@ router.get('/stats', isLoggedIn, function(req, res) {
     } else {
       Group.find({}).sort({}).exec(function(err, groups) {
         Task.find({ 'is_audit_task': true }).sort({}).exec(function(err, tasks) {
+          var tasks_object = getVerifiedAndCorrectTask(tasks)
           
-
+          console.log(tasks_reviewed.length)
           res.render('users/stats', {
             user: req.user,
             title: 'Dashboard',
@@ -442,6 +443,20 @@ router.post('/search-by-name', isLoggedIn, isManager, function(req, res) {
         });
     });
 });
+
+function getVerifiedAndCorrectTask(tasks) {
+
+  if (tasks.length > 1) {
+    var Verified = _und.filter(tasks, function(task){ return (task.is_correct == true || task.is_correct == false); });
+    var totalUnreviewed = (tasks.length - taskReviewed.length);
+    var Correct = _und.filter(tasks, function(task){ return (task.is_correct == true); });
+    var InCorrect = (taskReviewed.length - tasksCorrect.length)
+    return { Verified: Verified, Unverified: Unverified, Correct: Correct, InCorrect: InCorrect }
+  } else {
+    return { Verified: 0, Unverified: 0, Correct: 0, InCorrect: 0 }
+  }
+  
+}
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())

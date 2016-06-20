@@ -205,3 +205,9 @@ ul.audit_task_pagination li.active a {
 #userSelectBox {
   display: none;
 }
+
+#usersSelectList {
+  width: 182px;
+  margin-left: 15px;
+}
+

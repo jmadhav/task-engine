@@ -113,16 +113,16 @@ router.post('/assign-group', isLoggedIn, isManager, function(req, res) {
     // if (params.user_id !== "undefined") {
     //     User.find({}).exec(function(err, users) {
     //         if (err) return next(err);
-    //         _und.each(users, function(user) {
-    //             if (!(_und.isEmpty(user.manage_user_ids))) {
-    //                 var user_ids = _und.difference(user.manage_user_ids, [params.user_id]);
-    //                 user.manage_user_ids = user_ids
-    //             }
-    //             user.save(function(err) {
-    //                 if (err) return handleError(err);
+            // _und.each(users, function(user) {
+            //     if (!(_und.isEmpty(user.manage_user_ids))) {
+            //         var user_ids = _und.difference(user.manage_user_ids, [params.user_id]);
+            //         user.manage_user_ids = user_ids
+            //     }
+            //     user.save(function(err) {
+            //         if (err) return handleError(err);
 
-    //             });
-    //         });
+            //     });
+            // });
 
     //     });
     //     var update = {
@@ -318,17 +318,44 @@ router.get('/stats', isLoggedIn, function(req, res) {
       var toDate = new Date(req.body.toDate).setHours(23,59,59,999);
     }
 
-    if ((req.body.user_id != undefined) && (req.body.group_id != undefined)) {
+    if ((req.query.user_id != undefined) || (req.query.group_id != undefined)) {
+
+      if (req.query.group_id != undefined) {
+        Task.find({ 'is_audit_task': true, 'user_group_id': req.query.group_id }).sort({}).exec(function(err, tasks) {
+          User.find({'group_id': req.query.group_id }).sort({}).exec(function(err, users) {
+            var tasks_object = getVerifiedAndCorrectTask(tasks)
+            var usersList = getUserList(tasks, users)
+            res.send(JSON.stringify({
+              user: req.user,
+              users: users,
+              usersList: usersList,
+              tasks_object: tasks_object
+            }));
+          });
+        });
+
+
+      }
+
+      if (req.query.user_id != undefined) {
+        Task.find({ 'is_audit_task': true, 'user_id': req.query.user_id }).sort({}).exec(function(err, tasks) {
+          var tasks_object = getVerifiedAndCorrectTask(tasks)
+          res.send(JSON.stringify({
+            user: req.user,
+            tasks_object: tasks_object
+          }));
+        });
+      }
 
     } else {
       Group.find({}).sort({}).exec(function(err, groups) {
         Task.find({ 'is_audit_task': true }).sort({}).exec(function(err, tasks) {
           var tasks_object = getVerifiedAndCorrectTask(tasks)
-          console.log(tasks_object)
           res.render('users/stats', {
             user: req.user,
             title: 'Dashboard',
-            groups: groups
+            groups: groups,
+            tasks_object: JSON.stringify(tasks_object)
           });
         });
       });
@@ -450,11 +477,46 @@ function getVerifiedAndCorrectTask(tasks) {
     var Unverified = (tasks.length - Verified.length);
     var Correct = _und.filter(tasks, function(task){ return (task.is_correct == true); });
     var InCorrect = (Verified.length - Correct.length)
-    return { Verified: Verified.length, Unverified: Unverified, Correct: Correct.length, InCorrect: InCorrect }
+    return { verified: Verified.length, unverified: Unverified, correct: Correct.length, incorrect: InCorrect }
   } else {
-    return { Verified: 0, Unverified: 0, Correct: 0, InCorrect: 0 }
+    return { verified: 0, unverified: 0, correct: 0, inCorrect: 0 }
   }
   
+}
+
+function getUserList(tasks, users) {
+  var names = [];
+  var correct = [];
+  var incorrect = [];
+
+  if (tasks.length > 0) {
+    taskList = _und.groupBy(tasks, function(task){ return task.user_name; });
+    _und.each(users, function(user) { 
+      user_tasks = _und.filter(tasks, function(task){ return task.user_name == user.name ; });
+      if (user_tasks.length > 1) {
+        names.push(user.name);
+        var correct_counter = 0;
+        var incorrect_counter = 0;
+        _und.each(user_tasks, function(user_task) { 
+          if ((user_task.user_name == user.name)) {
+            if (user_task.is_correct == true) {
+              correct_counter += 1;
+            }
+            if (user_task.is_correct == false) {
+              incorrect_counter += 1;
+            }
+          }
+        });
+        correct.push(correct_counter);
+        incorrect.push(incorrect_counter);   
+      }
+    });
+  }
+  return {
+      names: names,
+      correct: correct,
+      incorrect: incorrect
+  }
 }
 
 function isLoggedIn(req, res, next) {

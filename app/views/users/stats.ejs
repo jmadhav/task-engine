@@ -33,18 +33,13 @@
                <input type="text" id="dashboardToDate" class="form-control datepicker" placeholder="yyyy-mm-dd" name="toDate" value="<% if (locals.get_to_date) { %><%=get_to_date%><% } %>" autocomplete="off">
             </div>
          </div>
-         <div class="form-group">
-            <% if (typeof users !== 'undefined') { %>
-            <label for="users" class="col-lg-5 control-label">User:</label>
-            <div class="col-lg-7" id="userSelectBox">
-               <select class="form-control" id="users" name="user_id">
-                  <option value="">Select User</option>
-                  <% for(var i=0; i<users.length; i++) { %>
-                  <option value="<%= users[i].id %>" <% if( locals.get_user_id && users[i].id == get_user_id) { %> selected <% } %>><%= users[i].name %></option>
-                  <% } %>
-               </select>
-            </div>
-            <% } %>
+         <div class="form-group" id="userSelectBox">
+              <label for="users" class="col-lg-5 control-label">User:</label>
+              <div class="col-lg-7">
+                 <select class="form-control" id="usersSelectList" name="user_id">
+                    <option value="">Select User</option>
+                 </select>
+              </div>
          </div>
          <div class="form-group">
             <label for="users" class="col-lg-5 control-label">&nbsp;</label>
@@ -54,21 +49,21 @@
          </div>
       </form>
    </div>
+   <div id="TaskPieChart" data-tasks-object="<%= locals.tasks_object %>">
+     <div class="col-lg-4" style="margin-top: -48px;">
+        <div class="row">
+          <h6 style="margin-left:44px">Tasks approved and rejected by Moderator</h6>
+          <div id="chart1" data-tasksApprovedchart="" style="margin-top:20px; margin-left:20px; width:300px; height:300px;"></div>
+        </div>
+     </div>
 
-   <div class="col-lg-4" style="margin-top: -48px;">
-      <div class="row">
-        <h6 style="margin-left:44px">Tasks approved and rejected by Moderator</h6>
-        <div id="chart1" data-tasksApprovedchart="" style="margin-top:20px; margin-left:20px; width:300px; height:300px;"></div>
-      </div>
+     <div class="col-lg-4" style="margin-top: -48px;">
+        <div class="row">
+          <h6 style="margin-left:44px" >Tasks reviewed and to be reviewed by Moderator</h6>
+          <div id="chart2" data-tasksReviewedchart="" style="margin-top:20px; margin-left:20px; width:300px; height:300px;"></div>
+        </div>
+     </div>
    </div>
-
-   <div class="col-lg-4" style="margin-top: -48px;">
-      <div class="row">
-        <h6 style="margin-left:44px" >Tasks reviewed and to be reviewed by Moderator</h6>
-        <div id="chart2" data-tasksReviewedchart="" style="margin-top:20px; margin-left:20px; width:300px; height:300px;"></div>
-      </div>
-   </div>
-
 </div>
 <hr/>
 <div class="row" id="userPerformaceDashboard">

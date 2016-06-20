@@ -174,12 +174,11 @@
             dataType: "json",
             success: function(data) {
                 // getGroupMembersData(data);
-                var selectBox = document.getElementById('sel_group');
+                var selectBox = document.getElementById('usersSelectList');
                 if(selectBox != null){
-                _.each(data.groups, function(element) {
-                    selectBox.options.add(new Option(element.name, element._id))
-                });
-
+                    _.each(data.users, function(element) {
+                        selectBox.options.add(new Option(element.name, element._id))
+                    });
                 }
 
             }

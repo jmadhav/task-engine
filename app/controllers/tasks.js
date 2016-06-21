@@ -391,7 +391,7 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
    
    
     // var d = new Date(req.body.date).toLocaleDateString();
-    var d = req.body.date;
+    var d = new Date(req.body.date);
     var task_ids = []
     var excelTaskData = readExcelFile(req.file.path);
     var tasks_count = excelTaskData.length;

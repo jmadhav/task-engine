@@ -20,7 +20,6 @@
            <td class="col-md-4"><%= tasks[i].is_correct  ? "correct" : "incorrect" %></td>
          <% } %>
          <td class="col-md-2"><%=tasks[i]['verifier_comments']%></td>
-         <td class="col-md-2"><%= tasks[i]['verifier_name']%> </td>
          <td><input type="hidden" id="user_role" name="user_role" value="<%=tasks[i]['_id']%>"> </td>
    </tr>
         

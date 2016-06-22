@@ -177,7 +177,7 @@ router.post('/profile/:id/edit', isLoggedIn, isManager, function(req, res) {
         }
 
         user.save(function(err) {
-            if (err) return handleError(err);
+            //if (err) return handleError(err);
         });
     });
     res.redirect("/users");

@@ -414,6 +414,7 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
         task.user_group_id=req.body.user_group_id;
         task.user_name = req.user.name;
         task.verifier_id = null;
+        task.is_audit_task = false;
         task.created_at = moment.tz(d, "Asia/Kolkata");
         task.updated_at = moment.tz(d, "Asia/Kolkata");
         //  task.updated_at=new Date(req.body.date).toLocaleDateString();
@@ -433,20 +434,12 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
       }
     }
     
-    Task.find({"$and": [{ "user_id": req.user._id }, date]}).exec(function(err, tasks) {
+    Task.find({"$and": [{ "user_id": req.user._id }, date, {'is_audit_task': false }]}).exec(function(err, tasks) {
       if(err){
         console.log(err);
       }
-      console.log('tasks.length')
-      console.log(tasks.length )
-      return new Promise(function(resolve, reject) {
-        updateAllTasks(tasks);
-        updateSampleTasks(tasks);
-      });
 
-      Promise.all(promises)
-      .then(function() { console.log('all dropped)'); })
-      .catch(console.error);      
+      updateSampleTasks(tasks);      
       
     });      
     

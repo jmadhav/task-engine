@@ -110,16 +110,29 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
         }
 
      page = req.param('page') > 0 ? req.param('page') : 1
-    Task.paginate(search_Data, { page: page, limit: 10 }, function(err, result) {
-        console.log("result ",result);
-        res.render('tasks/audit_search_task', {
-                tasks: result.docs,
-                page: result.page,
-                pages: result.pages,
+    Task.paginate(search_Data, { page: page, limit: 10 }, function(err, results) {
+        
+        if (typeof results != undefined) {
+          res.render('tasks/audit_search_task', {
+                tasks: results.docs,
+                page: results.page,
+                pages: results.pages,
                 req: req,
                 user: req.user,
                 layout: false
-        });
+          });
+        } else {
+          res.render('tasks/audit_search_task', {
+                tasks: [],
+                page: 1,
+                pages: 1,
+                req: req,
+                user: req.user,
+                layout: false
+          });
+
+        }       
+        
     });
 
 
@@ -424,11 +437,11 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
       if(err){
         console.log(err);
       }
-      
-      
+      console.log('tasks.length')
+      console.log(tasks.length )
       return new Promise(function(resolve, reject) {
         updateAllTasks(tasks);
-        updateSampleTasks(tasks)
+        updateSampleTasks(tasks);
       });
 
       Promise.all(promises)

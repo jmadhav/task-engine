@@ -165,18 +165,19 @@
 
         }
     }
-    if ($('#user_role').val() == 'Manager') {
+   
+   if ($('#user_role').val() == 'Manager') {
         $.ajax({
-
             type: "GET",
             url: "/get-groups",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function(data) {
                 // getGroupMembersData(data);
-                var selectBox = document.getElementById('usersSelectList');
+              //  console.log("sel_group ===",data.groups);
+                var selectBox = document.getElementById('sel_group');
                 if(selectBox != null){
-                    _.each(data.users, function(element) {
+                    _.each(data.groups, function(element) {
                         selectBox.options.add(new Option(element.name, element._id))
                     });
                 }
@@ -184,7 +185,7 @@
             }
 
         });
-    }
+   }
 
      function getLeadModeratorData(id) {
         var data1 = {};

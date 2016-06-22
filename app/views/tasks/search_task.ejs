@@ -14,7 +14,7 @@
          <td class="col-md-2"><%= tasks[i]['landing_page_rating']%></td> 
          <td class="col-md-2"><%= tasks[i]['user_comments']%></td>
          <td class="col-md-2"><%= tasks[i]['user_name']%> </td>
-         <% if (!tasks[i].is_correct) { %>
+         <% if ( typeof tasks[i].is_correct =="undefined") { %>
            <td class="col-md-4"><%= "Pending" %></td>
          <% } else { %>
            <td class="col-md-4"><%= tasks[i].is_correct  ? "correct" : "incorrect" %></td>

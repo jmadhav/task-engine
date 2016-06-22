@@ -110,7 +110,7 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
         }
 
      page = req.param('page') > 0 ? req.param('page') : 1
-    Task.paginate(search_Data, { page: page, limit: 10 }, function(err, results) {
+     Task.paginate(search_Data, { page: page, limit: 10 }, function(err, results) {
         
         if (typeof results != undefined) {
           res.render('tasks/audit_search_task', {
@@ -133,7 +133,7 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
 
         }       
         
-    });
+     });
 
 
 });

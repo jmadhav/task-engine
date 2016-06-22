@@ -1,5 +1,6 @@
 $(document).ready(function() {
     var path = window.location.pathname;
+
     path = path.replace(/\/$/, "");
     path = decodeURIComponent(path);
 
@@ -27,7 +28,7 @@ $(document).ready(function() {
     }
 
     $('#stat-group-select').change(function(e){
-
+   $("#dashboard_sbmit_btn").attr("disabled", false);
         $(".overlay").show();
         var group_id = $(this).val();
         $.ajax({

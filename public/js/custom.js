@@ -165,7 +165,7 @@
 
         }
     }
-   
+   $("#dashboard_sbmit_btn").attr("disabled", true);
    if ($('#user_role').val() == 'Manager') {
         $.ajax({
             type: "GET",

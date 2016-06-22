@@ -33,6 +33,10 @@ router.get('/', function(req, res, next) {
 router.post('/login', function(req, res, next) {
   passport.authenticate('local-login', function(err, user, info) {
     if (err) { return next(err); }
+    
+    if (user.is_active == false ) { 
+      return res.render('users/login', {message: 'User is In-active', title: 'Task'});
+    }
     if (!user) { 
       return res.render('users/login', {message: req.flash('loginMessage'), title: 'Task'});
     }
@@ -485,7 +489,7 @@ router.post('/search-by-name', isLoggedIn, isManager, function(req, res) {
 
 function getVerifiedAndCorrectTask(tasks) {
   
-  if ( typeof tasks != undefined) { 
+  if ( typeof tasks !== 'undefined') { 
     
     if (tasks.length > 0) {
       var Verified = _und.filter(tasks, function(task){ return (task.is_correct == true || task.is_correct == false); });
@@ -510,7 +514,7 @@ function getUserList(tasks, users) {
   var correct = [];
   var incorrect = [];
 
-  if ( typeof tasks != undefined) { 
+  if ( typeof tasks !== 'undefined') { 
     if (tasks.length > 0) {
       taskList = _und.groupBy(tasks, function(task){ return task.user_name; });
       _und.each(users, function(user) { 

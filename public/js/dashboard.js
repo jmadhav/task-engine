@@ -82,7 +82,7 @@ $(document).ready(function() {
 
         e.preventDefault();
 
-    });
+    }); 
 
     $(document).on('change', '#usersSelectList', function(e){
         $(".overlay").show();
@@ -145,7 +145,7 @@ $(document).ready(function() {
                 type: 'column'
             },
             title: {
-                text: 'User Performance Chart'
+                text: 'Group Performance Chart'
             },
             xAxis: {
                 categories: names

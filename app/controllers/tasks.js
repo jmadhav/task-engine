@@ -84,8 +84,7 @@ router.post('/view_only_task', isLoggedIn, function(req, res) {
 
 });
 router.post('/audit_task', isLoggedIn, function(req, res) {
-    console.log(" first =======",req.body.user_group_id);
-   var date = {}
+    var date = {}
     if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
 
          date = {
@@ -106,13 +105,13 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
                 "user_group_id": req.body.user_group_id
             },{
                 "is_audit_task": true
-            }, date]
+            },{'user_id': {$nin : [req.user._id]}}, date]
         }
 
      page = req.param('page') > 0 ? req.param('page') : 1
-    Task.paginate(search_Data, { page: page, limit: 10 }, function(err, results) {
+     Task.paginate(search_Data, { page: page, limit: 10 }, function(err, results) {
         
-        if (typeof results != undefined) {
+        if (typeof results !== 'undefined') {
           res.render('tasks/audit_search_task', {
                 tasks: results.docs,
                 page: results.page,
@@ -133,7 +132,7 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
 
         }       
         
-    });
+     });
 
 
 });

@@ -484,16 +484,24 @@ router.post('/search-by-name', isLoggedIn, isManager, function(req, res) {
 });
 
 function getVerifiedAndCorrectTask(tasks) {
+  
+  if ( typeof tasks != undefined) { 
+    
+    if (tasks.length > 0) {
+      var Verified = _und.filter(tasks, function(task){ return (task.is_correct == true || task.is_correct == false); });
+      var Unverified = (tasks.length - Verified.length);
+      var Correct = _und.filter(tasks, function(task){ return (task.is_correct == true); });
+      var InCorrect = (Verified.length - Correct.length)
+      return { verified: Verified.length, unverified: Unverified, correct: Correct.length, incorrect: InCorrect }
+    } else {
+      return { verified: 0, unverified: 0, correct: 0, inCorrect: 0 }
+    }
 
-  if (tasks.length > 1) {
-    var Verified = _und.filter(tasks, function(task){ return (task.is_correct == true || task.is_correct == false); });
-    var Unverified = (tasks.length - Verified.length);
-    var Correct = _und.filter(tasks, function(task){ return (task.is_correct == true); });
-    var InCorrect = (Verified.length - Correct.length)
-    return { verified: Verified.length, unverified: Unverified, correct: Correct.length, incorrect: InCorrect }
   } else {
+
     return { verified: 0, unverified: 0, correct: 0, inCorrect: 0 }
   }
+  
   
 }
 
@@ -502,28 +510,30 @@ function getUserList(tasks, users) {
   var correct = [];
   var incorrect = [];
 
-  if (tasks.length > 0) {
-    taskList = _und.groupBy(tasks, function(task){ return task.user_name; });
-    _und.each(users, function(user) { 
-      user_tasks = _und.filter(tasks, function(task){ return task.user_name == user.name ; });
-      if (user_tasks.length > 1) {
-        names.push(user.name);
-        var correct_counter = 0;
-        var incorrect_counter = 0;
-        _und.each(user_tasks, function(user_task) { 
-          if ((user_task.user_name == user.name)) {
-            if (user_task.is_correct == true) {
-              correct_counter += 1;
+  if ( typeof tasks != undefined) { 
+    if (tasks.length > 0) {
+      taskList = _und.groupBy(tasks, function(task){ return task.user_name; });
+      _und.each(users, function(user) { 
+        user_tasks = _und.filter(tasks, function(task){ return task.user_name == user.name ; });
+        if (user_tasks.length > 1) {
+          names.push(user.name);
+          var correct_counter = 0;
+          var incorrect_counter = 0;
+          _und.each(user_tasks, function(user_task) { 
+            if ((user_task.user_name == user.name)) {
+              if (user_task.is_correct == true) {
+                correct_counter += 1;
+              }
+              if (user_task.is_correct == false) {
+                incorrect_counter += 1;
+              }
             }
-            if (user_task.is_correct == false) {
-              incorrect_counter += 1;
-            }
-          }
-        });
-        correct.push(correct_counter);
-        incorrect.push(incorrect_counter);   
-      }
-    });
+          });
+          correct.push(correct_counter);
+          incorrect.push(incorrect_counter);   
+        }
+      });
+    }
   }
   return {
       names: names,

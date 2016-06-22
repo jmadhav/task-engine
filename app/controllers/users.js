@@ -52,11 +52,24 @@ router.post('/login', function(req, res, next) {
 });
 
 router.get('/new-users', isLoggedIn, isManager, function(req, res) {
-    res.render('users/new_user', {
-        user: req.user,
-        title: 'User',
-        message: req.flash('signupMessage')
+    Group.find({}, function(err, groups) {
+        if (err) { /*error!!!*/ }
+        if (groups.length > 0 ) {
+          res.render('users/new_user', {
+            user: req.user,
+            title: 'User',
+            message: req.flash('signupMessage')
+          });
+        } else {
+          res.render('groups/new_group', {
+            user: req.user,
+            title: 'Group',
+            message: 'Please create groups'
+          });
+        }
     });
+
+    
 });
 
 router.post('/new-users', passport.authenticate('local-signup', {
@@ -157,7 +170,7 @@ router.post('/profile/:id/edit', isLoggedIn, isManager, function(req, res) {
     var user_params = req.body.user;
 
     User.findById(req.params.id, function(err, user) {
-        if (err) return handleError(err);
+        if (err) console.log(err);
 
         user.name = user_params.name;
         var date = new Date();
@@ -177,7 +190,7 @@ router.post('/profile/:id/edit', isLoggedIn, isManager, function(req, res) {
         }
 
         user.save(function(err) {
-            //if (err) return handleError(err);
+            if (err) console.log(err);
         });
     });
     res.redirect("/users");

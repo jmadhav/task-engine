@@ -438,9 +438,7 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
       if(err){
         console.log(err);
       }
-
       updateSampleTasks(tasks);      
-      
     });      
     
     findRemoveSync(process.cwd() + '/tmp/', {

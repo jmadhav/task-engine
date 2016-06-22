@@ -424,27 +424,17 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
       if(err){
         console.log(err);
       }
-      _und.each(tasks, function(task) {
-        Task.update({ _id: task._id }, { $set: { is_audit_task: false }}, { multi: true }, function (error){
-          if(error){
-            console.error('ERROR!');
-          }
-        });  
-      });
       
-      var number_of_records = Math.round(((15 * tasks.length)/100));
-      Task.aggregate([{ '$sample': { size:  number_of_records}}]).exec(function(err, samplingTask) {
-        if (err) {
-          console.log(err);    
-        }
-        _und.each(samplingTask, function(task) {
-          Task.update({ _id: task._id }, { $set: { is_audit_task: true }}, { multi: true }, function (error){
-            if(error){
-              console.error('ERROR!');
-            }
-          });  
-        }); 
+      
+      return new Promise(function(resolve, reject) {
+        updateAllTasks(tasks);
+        updateSampleTasks(tasks)
       });
+
+      Promise.all(promises)
+      .then(function() { console.log('all dropped)'); })
+      .catch(console.error);      
+      
     });      
     
     findRemoveSync(process.cwd() + '/tmp/', {
@@ -524,4 +514,50 @@ function readExcelFile(filePath) {
         }
     });
     return fileData
+}
+
+function updateAllTasks(tasks) {
+    _und.each(tasks, function(task) {
+        Task.update({
+            _id: task._id
+        }, {
+            $set: {
+                is_audit_task: false
+            }
+        }, {
+            multi: true
+        }, function(error) {
+            if (error) {
+                console.error('ERROR!');
+            }
+        });
+    });
+}
+
+function updateSampleTasks(tasks) {
+    var number_of_records = Math.round(((15 * tasks.length) / 100));
+    Task.aggregate([{
+        '$sample': {
+            size: number_of_records
+        }
+    }]).exec(function(err, samplingTask) {
+        if (err) {
+            console.log(err);
+        }
+        _und.each(samplingTask, function(task) {
+            Task.update({
+                _id: task._id
+            }, {
+                $set: {
+                    is_audit_task: true
+                }
+            }, {
+                multi: true
+            }, function(error) {
+                if (error) {
+                    console.error('ERROR!');
+                }
+            });
+        });
+    });
 }

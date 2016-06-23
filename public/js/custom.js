@@ -699,10 +699,15 @@ $("#viewOnlyTask").submit(function(e) {
         e.preventDefault();
     });
 
-    $(document).on('click', '.tasks_pagination', function(e) {
-    
-    
+    var changed = false; 
+    $(document).on('change', 'input:radio', function(e) {
+      changed = true; 
+    });
 
+    $(document).on('click', '.tasks_pagination', function(e) {
+      if (changed) {
+        alert('Please save the changes of field')
+      }
     });
 
 })();

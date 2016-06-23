@@ -204,23 +204,12 @@ $(document).ready(function() {
                       showDataLabels: true
                 }
             },
-           plotOptions: {
-            series: {
-                dataLabels: {
-                    enabled: true,
-                    formatter: function() {
-                        return Math.round(this.percentage*100)/100 + ' %';
-                    },
-                    distance: -30,
-                    color:'white'
-                }
-            }
-        },
+     
             legend: {
                 show: true,
                 location: 'e'
             },
-             series:[data]
+          
         });
     }
 

@@ -11,17 +11,26 @@ $(document).ready(function() {
         $('#dashboardFromDate').val(fromDate);
         $('#dashboardToDate').val(toDate);
         var tasks_object = $('#TaskPieChart').data('tasks-object');
-        var data = [
-          ['Correct', tasks_object.correct],
-          ['InCorrect', tasks_object.incorrect]
-        ];
+        // var data1 = [
+        //   ['Correct', tasks_object.correct],
+        //   ['InCorrect', tasks_object.incorrect]
+        // ];
+
+        var data =   [
+                        ['Correct (' + tasks_object.correct + ')', tasks_object.correct],
+                        ['InCorrect (' + tasks_object.incorrect + ')', tasks_object.incorrect]
+                    ]
 
         drawPieChart('chart1', data);
 
-        var data = [
-            ['Verified', tasks_object.verified],
-            ['Unverified', tasks_object.unverified]
-        ];
+        // var data2 = [
+        //     ['Verified', tasks_object.verified],
+        //     ['Unverified', tasks_object.unverified]
+        // ];
+        var data =[
+                        ['Verified (' + tasks_object.verified + ')', tasks_object.verified],
+                        ['Unverified (' +tasks_object.unverified + ')', tasks_object.unverified]
+                    ]
 
         drawPieChart('chart2', data);
 
@@ -191,13 +200,27 @@ $(document).ready(function() {
                 rendererOptions: {
                     // Put data labels on the pie slices.
                     // By default, labels show the percentage of the slice.
-                    showDataLabels: true
+                    
+                      showDataLabels: true
                 }
             },
+           plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    formatter: function() {
+                        return Math.round(this.percentage*100)/100 + ' %';
+                    },
+                    distance: -30,
+                    color:'white'
+                }
+            }
+        },
             legend: {
                 show: true,
                 location: 'e'
-            }
+            },
+             series:[data]
         });
     }
 

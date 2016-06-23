@@ -165,7 +165,7 @@
 
         }
     }
-   $("#dashboard_sbmit_btn").attr("disabled", true);
+   //$("#dashboard_sbmit_btn").attr("disabled", true);
    if ($('#user_role').val() == 'Manager') {
         $.ajax({
             type: "GET",
@@ -697,6 +697,12 @@ $("#viewOnlyTask").submit(function(e) {
         });
 
         e.preventDefault();
+    });
+
+    $(document).on('click', '.tasks_pagination', function(e) {
+    
+    
+
     });
 
 })();

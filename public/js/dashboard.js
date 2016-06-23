@@ -27,12 +27,77 @@ $(document).ready(function() {
 
     }
 
-    $('#stat-group-select').change(function(e){
-   $("#dashboard_sbmit_btn").attr("disabled", false);
+    // $('#stat-group-select').change(function(e){
+    //     $(".overlay").show();
+    //     var group_id = $(this).val();
+    //     $.ajax({
+    //         url: '/stats?group_id=' + group_id,
+    //         dataType: "json",
+    //         contentType: "application/json; charset=utf-8",
+    //         type: 'GET',
+    //         success: function(data) {
+    //             console.log(data);
+    //             $(".overlay").hide();
+    //             $('#userPerformaceDashboard').show();
+    //             $('#usersSelectList').remove();
+    //             // var sel = $('<select id="usersSelectList">')
+    //             // sel.append($("<option>").attr('value', "").text("Select User"));
+    //             // _.each(data.users, function(element) {
+    //             //    sel.append($("<option>").attr('value', element._id).text(element.name));
+    //             // });
+    //             // $('#userSelectBox').append(sel);
+    //             // $('#userSelectBox').show();
+    //             var data1 = [
+    //               ['Correct', data.tasks_object.correct],
+    //               ['InCorrect', data.tasks_object.incorrect]
+    //             ];
+
+    //             drawPieChart('chart1', data1);
+
+    //             var data2 = [
+    //                 ['Verified', data.tasks_object.verified],
+    //                 ['Unverified', data.tasks_object.unverified]
+    //             ];
+
+    //             drawPieChart('chart2', data2);
+
+    //             var seriesData = [{
+    //                 name: 'Correct',
+    //                 data: data.usersList.correct
+    //             }, {
+    //                 name: 'InCorrect',
+    //                 data: data.usersList.incorrect
+    //             }]
+    //             var names = data.usersList.names
+
+    //             drawBarChart(names, seriesData)
+
+    //         },
+    //         error: function(err) {
+    //           $(".overlay").hide();
+    //           console.log(err);   
+    //         }
+    //     });
+
+    //     e.preventDefault();
+
+    // });
+
+
+    $("#dashboard_sbmit_btn").click(function(e) {
+        e.preventDefault();
         $(".overlay").show();
-        var group_id = $(this).val();
+        var group_id = $('#stat-group-select').val(); 
+        var fromDate = $('#dashboardFromDate').val(); 
+        var toDate   = $('#dashboardToDate').val(); 
+        var url = '/stats?fromDate=' + fromDate + '&toDate=' + toDate
+
+        if (typeof group_id !== 'undefined') {
+          url =  url + '&group_id=' + group_id
+        }
+
         $.ajax({
-            url: '/stats?group_id=' + group_id,
+            url: url,
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             type: 'GET',
@@ -79,8 +144,6 @@ $(document).ready(function() {
               console.log(err);   
             }
         });
-
-        e.preventDefault();
 
     }); 
 

@@ -1,5 +1,16 @@
 (function() {
 
+    $(document).on('change', 'input:radio', function(e) {
+      $('#inputChanged').val('true');
+    });
+
+    $(document).on('click', '.tasks_pagination', function(e) {
+      var changed = $('#inputChanged').val();
+      if (changed == 'true') {
+        alert('Please save the changes of Field')
+        e.preventDefault();
+      }
+    });
 
     $('#save_btn').on("click", function() {
         var headings = [];
@@ -115,6 +126,7 @@
                 success: function(data) {
                     // getGroupMembersData(data);
                     alert("Your task has been submitted successfully");
+                    $('#inputChanged').val('false');
 
                 }
 
@@ -625,7 +637,7 @@ $("#viewOnlyTask").submit(function(e) {
     }
     setInitialDate();
 
-        $('#view_tasks').on('click', 'a.tasks_pagination', function(e) {
+    $('#view_tasks').on('click', 'a.tasks_pagination', function(e) {
         $(".overlay").show();
         var formData = {
 
@@ -657,57 +669,49 @@ $("#viewOnlyTask").submit(function(e) {
 
 
     $('#audit_tasks').on('click', 'a.tasks_pagination', function(e) {
-        $(".overlay").show();
+        var changed = $('#inputChanged').val();
+        if (changed == 'false') {
+            $(".overlay").show();
 
-        var formData = {
-            'user_role': $('input[name=user_role]').val(),
-            'user_group_id': $('input[name=user_group_id]').val(),
-            'user_id': $('input[name=user_id]').val(),
-            'user_name': $('input[name=user_name]').val(),
-            'selecte_user_role': $('input[name=selecte_user_role]').val(),
-            'fromDate': $('input[name=fromDate]').val(),
-            'toDate': $('input[name=toDate]').val(),
-            'user_group': $('input[name=user_group]').val(),
-            'selected_user_id': $('#sel_analyst').val(),
-            'viewer_name': $('input[name=viewer_name]').val(),
-            'selected_viewer_id': $('#sel_reviewer').val(),
-            'isPending': $('#pending_task').is(":checked"),
-            'page': $(this).data('page')
-        };
-        $.ajax({
-            url: '/audit_task',
-            type: 'POST',
-            data: formData,
-            success: function(data) {
-                $("#audit_tasks").html(data);
-                $("#excelDataTable").parent().show();
-                $("#save_btn").parent().show();
-                //pagination();
-                if (Boolean($("td:contains('No data Found')")[0])) {
-                    $('#save_btn').hide();
-                } else {
-                    $('#save_btn').show();
+            var formData = {
+                'user_role': $('input[name=user_role]').val(),
+                'user_group_id': $('input[name=user_group_id]').val(),
+                'user_id': $('input[name=user_id]').val(),
+                'user_name': $('input[name=user_name]').val(),
+                'selecte_user_role': $('input[name=selecte_user_role]').val(),
+                'fromDate': $('input[name=fromDate]').val(),
+                'toDate': $('input[name=toDate]').val(),
+                'user_group': $('input[name=user_group]').val(),
+                'selected_user_id': $('#sel_analyst').val(),
+                'viewer_name': $('input[name=viewer_name]').val(),
+                'selected_viewer_id': $('#sel_reviewer').val(),
+                'isPending': $('#pending_task').is(":checked"),
+                'page': $(this).data('page')
+            };
+            $.ajax({
+                url: '/audit_task',
+                type: 'POST',
+                data: formData,
+                success: function(data) {
+                    $("#audit_tasks").html(data);
+                    $("#excelDataTable").parent().show();
+                    $("#save_btn").parent().show();
+                    //pagination();
+                    if (Boolean($("td:contains('No data Found')")[0])) {
+                        $('#save_btn').hide();
+                    } else {
+                        $('#save_btn').show();
+                    }
+                    $(".overlay").hide();
+                },
+                error: function(err) {
+                    $(".overlay").hide();
+                    console.log(err);
                 }
-                $(".overlay").hide();
-            },
-            error: function(err) {
-                $(".overlay").hide();
-                console.log(err);
-            }
-        });
+            });
+        }
 
         e.preventDefault();
-    });
-
-    var changed = false; 
-    $(document).on('change', 'input:radio', function(e) {
-      changed = true; 
-    });
-
-    $(document).on('click', '.tasks_pagination', function(e) {
-      if (changed) {
-        alert('Please save the changes of field')
-      }
     });
 
 })();

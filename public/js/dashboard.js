@@ -41,13 +41,13 @@ $(document).ready(function() {
                 $(".overlay").hide();
                 $('#userPerformaceDashboard').show();
                 $('#usersSelectList').remove();
-                var sel = $('<select id="usersSelectList">')
-                sel.append($("<option>").attr('value', "").text("Select User"));
-                _.each(data.users, function(element) {
-                   sel.append($("<option>").attr('value', element._id).text(element.name));
-                });
-                $('#userSelectBox').append(sel);
-                $('#userSelectBox').show();
+                // var sel = $('<select id="usersSelectList">')
+                // sel.append($("<option>").attr('value', "").text("Select User"));
+                // _.each(data.users, function(element) {
+                //    sel.append($("<option>").attr('value', element._id).text(element.name));
+                // });
+                // $('#userSelectBox').append(sel);
+                // $('#userSelectBox').show();
                 var data1 = [
                   ['Correct', data.tasks_object.correct],
                   ['InCorrect', data.tasks_object.incorrect]

@@ -30,6 +30,10 @@ router.get('/', function(req, res, next) {
 }
 });
 
+router.get('/login', function(req, res, next) {
+  return res.redirect("/");  
+});
+
 router.post('/login', function(req, res, next) {
   passport.authenticate('local-login', function(err, user, info) {
     if (err) { return next(err); }
@@ -259,7 +263,7 @@ router.get('/get-analyst-moderator-members', isLoggedIn, function(req, res) {
 });
 
 router.get('/stats', isLoggedIn, function(req, res) {
-    if (req.query.fromDate !== 'undefined') {
+    if (req.query.fromDate != undefined) {
       var fromDate = new Date(req.query.fromDate).setHours(0,0,0,0);
       var toDate = new Date(req.query.toDate).setHours(23,59,59,999);
     } else {

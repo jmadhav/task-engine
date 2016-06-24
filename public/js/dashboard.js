@@ -6,7 +6,7 @@ $(document).ready(function() {
 
     if (path == "/stats") {
         var date = new Date();
-        var fromDate = $.format.date(date.setDate(date.getDate() - 7), "MM/dd/yyyy");
+        var fromDate = $.format.date(date.setDate(date.getDate() - 6), "MM/dd/yyyy");
         var toDate = date = $.format.date(new Date, "MM/dd/yyyy");
         $('#dashboardFromDate').val(fromDate);
         $('#dashboardToDate').val(toDate);
@@ -101,7 +101,7 @@ $(document).ready(function() {
         var toDate   = $('#dashboardToDate').val(); 
         var url = '/stats?fromDate=' + fromDate + '&toDate=' + toDate
 
-        if (typeof group_id !== 'undefined') {
+        if (!!group_id) {
           url =  url + '&group_id=' + group_id
         }
 

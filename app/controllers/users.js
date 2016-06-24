@@ -4,6 +4,7 @@ mongoose = require('mongoose');
 User = mongoose.model('User');
 passport = require('passport');
 _und = require("underscore"); 
+dateFormat = require('dateformat');
 
 module.exports = function(app, passport) {
     app.use('/', router);
@@ -268,14 +269,31 @@ router.get('/stats', isLoggedIn, function(req, res) {
       var toDate = new Date(req.query.toDate).setHours(23,59,59,999);
     } else {
       var date = new Date();
-      var fromDate = (new Date(date.setDate(date.getDate() - 7))).setHours(0,0,0,0);
-      var toDate = date.setHours(23,59,59,999);
+      var dateFromString = dateFormat((new Date(date.setDate(date.getDate() - 6))), "fullDate")
+      var dateToString = dateFormat((new Date), "fullDate")
+      var fromDate = new Date(dateFromString).setHours(0,0,0,0);
+      var toDate = new Date(dateToString).setHours(23,59,59,999);
     }
 
-    if ((req.query.user_id != undefined) || (req.query.group_id != undefined)) {
+    date = {
+      "created_at": {
+        $gte: fromDate,
+        $lt: toDate
+      }
+    }
+
+    if ((req.query.group_id != undefined)) {
+      
+      search_Data = {
+        "$and": [ {
+          "user_group_id": req.query.group_id
+        },{
+          "is_audit_task": true
+        }, date]
+      }
 
       if (req.query.group_id != undefined) {
-        Task.find({ 'is_audit_task': true, 'user_group_id': req.query.group_id }).sort({}).exec(function(err, tasks) {
+        Task.find(search_Data).sort({}).exec(function(err, tasks) {
           User.find({'group_id': req.query.group_id }).sort({}).exec(function(err, users) {
             var tasks_object = getVerifiedAndCorrectTask(tasks)
             var usersList = getUserList(tasks, users)
@@ -287,23 +305,16 @@ router.get('/stats', isLoggedIn, function(req, res) {
             }));
           });
         });
-
-
-      }
-
-      if (req.query.user_id != undefined) {
-        Task.find({ 'is_audit_task': true, 'user_id': req.query.user_id }).sort({}).exec(function(err, tasks) {
-          var tasks_object = getVerifiedAndCorrectTask(tasks)
-          res.send(JSON.stringify({
-            user: req.user,
-            tasks_object: tasks_object
-          }));
-        });
       }
 
     } else {
       Group.find({}).sort({}).exec(function(err, groups) {
-        Task.find({ 'is_audit_task': true }).sort({}).exec(function(err, tasks) {
+        search_Data = {
+          "$and": [{
+            "is_audit_task": true
+          }, date]
+        }
+        Task.find(search_Data).sort({}).exec(function(err, tasks) {
           var tasks_object = getVerifiedAndCorrectTask(tasks)
           res.render('users/stats', {
             user: req.user,

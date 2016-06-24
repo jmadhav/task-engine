@@ -183,7 +183,7 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
       if(err){
         console.log(err);
       }
-      updateSampleTasks(tasks);      
+      updateSampleTasks(tasks, req.user._id);      
     });      
     
     findRemoveSync(process.cwd() + '/tmp/', {
@@ -265,31 +265,9 @@ function readExcelFile(filePath) {
     return fileData
 }
 
-function updateAllTasks(tasks) {
-    _und.each(tasks, function(task) {
-        Task.update({
-            _id: task._id
-        }, {
-            $set: {
-                is_audit_task: false
-            }
-        }, {
-            multi: true
-        }, function(error) {
-            if (error) {
-                console.error('ERROR!');
-            }
-        });
-    });
-}
-
-function updateSampleTasks(tasks) {
-    var number_of_records = Math.round(((15 * tasks.length) / 100));
-    Task.aggregate([{
-        '$sample': {
-            size: number_of_records
-        }
-    }]).exec(function(err, samplingTask) {
+function updateSampleTasks(tasks, user_id) {
+    var number_of_records = Math.round(((16 * tasks.length) / 100));
+    Task.aggregate([ { $match: { "user_id": user_id } }, { '$sample': { size: number_of_records } }]).exec(function(err, samplingTask) {
         if (err) {
             console.log(err);
         }

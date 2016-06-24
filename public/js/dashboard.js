@@ -138,17 +138,19 @@ $(document).ready(function() {
 
                 drawPieChart('chart2', data2);
 
-                var seriesData = [{
+                if (data.usersList != undefined) {
+                  var seriesData = [{
                     name: 'Correct',
                     data: data.usersList.correct
-                }, {
+                  }, {
                     name: 'InCorrect',
                     data: data.usersList.incorrect
-                }]
-                var names = data.usersList.names
+                  }]
+                  var names = data.usersList.names
 
-                drawBarChart(names, seriesData)
-
+                  drawBarChart(names, seriesData)    
+                }
+                
             },
             error: function(err) {
               $(".overlay").hide();

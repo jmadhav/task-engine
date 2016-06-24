@@ -316,12 +316,19 @@ router.get('/stats', isLoggedIn, function(req, res) {
         }
         Task.find(search_Data).sort({}).exec(function(err, tasks) {
           var tasks_object = getVerifiedAndCorrectTask(tasks)
-          res.render('users/stats', {
-            user: req.user,
-            title: 'Dashboard',
-            groups: groups,
-            tasks_object: JSON.stringify(tasks_object)
-          });
+          if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            res.send(JSON.stringify({
+              user: req.user,
+              tasks_object: tasks_object
+            }));
+          } else {
+            res.render('users/stats', {
+              user: req.user,
+              title: 'Dashboard',
+              groups: groups,
+              tasks_object: JSON.stringify(tasks_object)
+            });
+          }
         });
       });
     }

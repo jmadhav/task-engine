@@ -714,5 +714,16 @@ $("#viewOnlyTask").submit(function(e) {
         e.preventDefault();
     });
 
+    $('.role_checkbox').click(function() {
+      var role = $(this).data('role');
+      if (role == 'Manager') {
+        $('.chooseGroupUser > select').removeAttr("required");
+      } else {
+        $('.chooseGroupUser > select').attr('required')
+      }
+    });
+
 })();
+
+
 

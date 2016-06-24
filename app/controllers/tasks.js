@@ -42,7 +42,7 @@ router.get('/audit_task', isLoggedIn, function(req, res) {
 
 router.post('/view_only_task', isLoggedIn, function(req, res) {
     var date = {};
-     var view_Data = null;
+    var view_Data = null;
     if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
 
         date = {
@@ -60,33 +60,33 @@ router.post('/view_only_task', isLoggedIn, function(req, res) {
         }
     }
 
-       view_Data = {
-            "$and": [{
-                "user_id": req.body.user_id
-            }, {'$or': [{
-                                    "is_correct": true
-                                }, {
-                                    "is_correct": false
-                                }
-                          ]},date]
-        }
+    view_Data = {
+        "$and": [{
+            "user_id": req.body.user_id
+        }, {'$or': [{
+                     "is_correct": true
+                    }, {
+                     "is_correct": false
+                    }
+                ]},date]
+    }
 
-      page = req.param('page') > 0 ? req.param('page') : 1
-      Task.paginate(view_Data, { page: page, limit: 10 }, function(err, result) {
-        res.render('tasks/search_task', {
-                tasks: result.docs,
-                page: result.page,
-                pages: result.pages,
-                req: req,
-                layout: false
-            });
+    page = req.param('page') > 0 ? req.param('page') : 1
+    Task.paginate(view_Data, { page: page, limit: 10 }, function(err, result) {
+      res.render('tasks/search_task', {
+        tasks: result.docs,
+        page: result.page,
+        pages: result.pages,
+        req: req,
+        layout: false
       });
+   });
 
 });
+
 router.post('/audit_task', isLoggedIn, function(req, res) {
     var date = {}
     if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
-
          date = {
             "created_at": {"$gte": new Date().setHours(0,0,0,0)}
         }
@@ -100,13 +100,13 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
             }
         }
     }
-   search_Data = {
-            "$and": [{
-                "user_group_id": req.body.user_group_id
-            },{
-                "is_audit_task": true
-            },{'user_id': {$nin : [req.user._id]}}, date]
-        }
+    search_Data = {
+        "$and": [{
+            "user_group_id": req.body.user_group_id
+        },{
+            "is_audit_task": true
+        },{'user_id': {$nin : [req.user._id]}}, date]
+    }
 
      page = req.param('page') > 0 ? req.param('page') : 1
      Task.paginate(search_Data, { page: page, limit: 10 }, function(err, results) {
@@ -134,260 +134,6 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
         
      });
 
-
-});
-
-router.post('/audit_task1', isLoggedIn, function(req, res) {
-
-   var isPending=req.body.isPending;
-    var search_Data = null;
-    /* creating and modifying date as per IP*/
-    var date = {}
-    if ((req.body.fromDate.length <= 0) || (req.body.toDate.length <= 0)) {
-
-         date = {
-            "created_at": {"$gte": new Date().setHours(0,0,0,0)}
-        }
-    } else {
-        var fromDate = new Date(req.body.fromDate).setHours(0,0,0,0);
-        var toDate = new Date(req.body.toDate).setHours(23,59,59,999);
-        date = {
-            "created_at": {
-                $gte: fromDate,
-                $lt: toDate
-            }
-        }
-    }
-    if (req.body.user_role == 'Analyst') {
-       
-        search_Data = {
-            "$and": [{
-                "user_id": req.body.user_id
-            }, date]
-        }
-
-    } else if (req.body.user_role.indexOf('Moderator') != -1) {
-
-
-        if (req.body.selecte_user_role.length <= 0) { //No Aanalyst selected from list ..Then search for moderator task only
-             if(isPending=="true"){
-
-                       search_Data = {
-                                        "$and": [{
-                                            "user_id": req.body.user_id
-                                        }, 
-                                         {'$or': [{
-                                                        "verifier_id": null
-                                                    }, {
-                                                        "verifier_comments": null
-                                                    },{
-
-                                                         "is_correct": null
-                                                    }
-
-                                                ]}, date]
-                                     }
-
-             }else {
-                       search_Data = {
-                        "$and": [{
-                            "user_id": req.body.user_id
-                        }, date]
-                      }
-
-             }
-
-
-         
-        } else {
-
-                if(isPending=="true"){
-                             search_Data = {
-                                    '$and': [{
-                                            "user_id": req.body.selected_user_id
-                                        },
-
-                                        {
-                                            '$or': [{"verifier_id": null }, {"verifier_comments": null},{"is_correct": null}
-
-                                            ]
-                                        },
-                                        date
-                                         ]
-
-                                }
-
-
-                 }else {
-
-                            search_Data = {
-                                            '$and': [{
-                                                    "user_id": req.body.selected_user_id
-                                                },
-
-                                                {
-                                                    '$or': [{
-                                                            "verifier_id": req.body.user_id
-                                                        }, {
-                                                            "verifier_id": null
-                                                        }
-
-                                                    ]
-                                                },
-                                                date
-                                                  ]
-
-                                          }
-
-                        }
-
-
-        }
-
-    } else if (req.body.user_role.indexOf('Lead') != -1 || req.body.user_role.indexOf('Manager') != -1) {
-
-        if ((typeof req.body.selected_user_id != 'undefined' &&  req.body.selected_user_id.length<=0) && (typeof req.body.selected_viewer_id != 'undefined' &&  req.body.selected_viewer_id.length<=0)) {
-                 if(isPending=="true"){
-
-                     search_Data = {
-                                        "$and": [{
-                                            "user_id": req.body.user_id
-                                        }, 
-                                         {'$or': [{
-                                                        "verifier_id": null
-                                                    }, {
-                                                        "verifier_comments": null
-                                                    },{
-
-                                                         "is_correct": null
-                                                    }
-
-                                                ]}, date]
-                                     }
-                 }else {
-                          search_Data = {
-                                            '$and': [{
-                                                "user_id": req.body.user_id
-                                            }, date]
-
-                                        }
-
-                 }
-
-          
-        } else if ((typeof req.body.selected_user_id != 'undefined' &&  req.body.selected_user_id.length>0) && (typeof req.body.selected_viewer_id != 'undefined' &&  req.body.selected_viewer_id.length <=0)) {
-                 if(isPending=="true"){
-                             search_Data = {
-                                        "$and": [{
-                                            "user_id": req.body.selected_user_id
-                                        }, 
-                                         {'$or': [{
-                                                        "verifier_id": null
-                                                    }, {
-                                                        "verifier_comments": null
-                                                    },{
-
-                                                         "is_correct": null
-                                                    }
-
-                                                ]}, date]
-                                     }
-
-                 }else{
-
-                                search_Data = {
-                                                    '$and': [{
-                                                        "user_id": req.body.selected_user_id
-                                                    }, date]
-
-                                                }
-
-                 }
-
-        
-        } else if ((typeof req.body.selected_viewer_id != 'undefined' &&  req.body.selected_viewer_id.length>0) && (typeof req.body.selected_user_id != 'undefined' &&  req.body.selected_user_id.length <= 0) ) {
-           
-        if(isPending=="true"){
-
-                                search_Data = {
-                                                    '$and': [{
-                                                        "verifier_id": req.body.selected_viewer_id
-                                                    } ,{'$or': [{
-                                                                    "verifier_id": null
-                                                                }, {
-                                                                    "verifier_comments": null
-                                                                },{
-
-                                                                     "is_correct": null
-                                                                }
-
-                                                            ]}, date]
-
-                                         }
-
-
-                }else {
-                                search_Data = {
-                                    '$and': [{
-                                        "verifier_id": req.body.selected_viewer_id
-                                    }, date]
-
-                         }
-          }
-        } else if ((typeof req.body.selected_viewer_id != 'undefined' &&  req.body.selected_viewer_id.length > 0) && (typeof req.body.selected_user_id != 'undefined' &&  req.body.selected_user_id.length > 0)) {
-          
-                            if(isPending=="true"){
-
-                                               search_Data = {
-                                                    "$and": [{
-                                                        "user_id": req.body.selected_user_id
-                                                    }, {
-                                                            "verifier_id": req.body.selected_viewer_id
-                                                         },
-                                                     {'$or': [  {
-                                                                    "verifier_comments": ""
-                                                                },{
-                                                                    "verifier_comments": null
-                                                                },{
-
-                                                                     "is_correct": null
-                                                                }
-
-                                                            ]}, date]
-                                                 }
-
-
-                            }else{
-
-                                                 search_Data = {
-                                                            '$and': [{
-                                                                "user_id": req.body.selected_user_id
-                                                            }, {
-                                                                "verifier_id": req.body.selected_viewer_id
-                                                            }, date]
-                                                    }
-
-
-                                    }
-
-                 }
-
-      
-    }
-
-    /* creating and modifying search_Data as per IP params */
-
-    page = req.param('page') > 0 ? req.param('page') : 1
-    Task.paginate(search_Data, { page: page, limit: 10 }, function(err, result) {
-        res.render('tasks/audit_search_task', {
-                tasks: result.docs,
-                page: result.page,
-                pages: result.pages,
-                req: req,
-                user: req.user,
-                layout: false
-        });
-    });
 
 });
 

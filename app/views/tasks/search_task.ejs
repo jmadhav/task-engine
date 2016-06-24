@@ -2,7 +2,7 @@
    if( typeof tasks !== "undefined" ){
    for(var i=0; i<tasks.length; i++) {  %>
      <tr>
-         <td class="col-md-2"><%= i + 1 %></td>
+         <td class="col-md-2"><%= (parseInt(page) == 1 ? (i + 1) : (i + 1 ) == 10 ? (page.toString() +  0) : ((parseInt(page) - 1 ).toString() + (i + 1 )).toString()) %></td>
          <td class="col-md-2"><%= tasks[i].query%></td> 
          <td class="col-md-2"><%= tasks[i]['query_flag']%></td> 
          <td class="col-md-2"><%= tasks[i]['ad_creative']%></td> 

@@ -442,7 +442,7 @@
     function addSelectBoxNewUser() {
         if ($('#loginForm').length > 0) {
             var data = getGroup();
-            var sel = $('<select name="user[group_id]">')
+            var sel = $('<select name="user[group_id]" required>')
             sel.append($("<option>").attr('value', "").text(""));
             _.each(data.groups, function(element) {
                 sel.append($("<option>").attr('value', element._id).text(element.name));
@@ -454,7 +454,7 @@
     function addSelectBoxEditUser() {
         if ($('#edituser').length > 0) {
             var data = getGroup();
-            var sel = $('<select name="user[group_id]" class="choose_group_select_edit_user">')
+            var sel = $('<select name="user[group_id]" class="choose_group_select_edit_user" required>')
             sel.append($("<option>").attr('value', "").text(""));
             _.each(data.groups, function(element) {
                 sel.append($("<option>").attr('value', element._id).text(element.name));

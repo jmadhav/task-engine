@@ -127,47 +127,6 @@ router.post('/assign-group', isLoggedIn, isManager, function(req, res) {
     }));
 
 
-    // if (params.user_id !== "undefined") {
-    //     User.find({}).exec(function(err, users) {
-    //         if (err) return next(err);
-            // _und.each(users, function(user) {
-            //     if (!(_und.isEmpty(user.manage_user_ids))) {
-            //         var user_ids = _und.difference(user.manage_user_ids, [params.user_id]);
-            //         user.manage_user_ids = user_ids
-            //     }
-            //     user.save(function(err) {
-            //         if (err) return handleError(err);
-
-            //     });
-            // });
-
-    //     });
-    //     var update = {
-    //         $push: {
-    //             manage_user_ids: params.user_id
-    //         }
-    //     }
-    //     User.findOneAndUpdate({
-    //             _id: params.moderator_id
-    //         }, update, {
-    //             safe: true,
-    //             upsert: true
-    //         },
-    //         function(err, model) {
-    //             if (err) {
-    //                 res.send(JSON.stringify({
-    //                     status: "Error"
-    //                 }));
-    //             }
-
-    //             res.send(JSON.stringify({
-    //                 status: 'success'
-    //             }));
-
-    //         });
-    // }
-
-
 });
 
 router.post('/profile/:id/edit', isLoggedIn, isManager, function(req, res) {
@@ -180,7 +139,7 @@ router.post('/profile/:id/edit', isLoggedIn, isManager, function(req, res) {
         var date = new Date();
         date.setDate(date.getDate() + 1);
         user.updated_at = moment.tz(date.toISOString(), "Asia/Kolkata"); 
-        //user.email = user_params.email;
+        user.email = user_params.email;
         if (user_params.password != "") {
             user.password = user_params.password
         }
@@ -201,30 +160,6 @@ router.post('/profile/:id/edit', isLoggedIn, isManager, function(req, res) {
 });
 
 router.get('/users', isLoggedIn, isManager, function(req, res) {
-    // User.find({}function (err, users) {
-    //   if (err) return next(err);
-    //   res.render('users/index', { user : req.user,  title: 'Google Ads', users: users });
-    // });
-
-    // var query = {
-    //     "_id": id
-    // };
-    // var update = {
-    //     name: {
-    //         first: 'john',
-    //         last: 'smith'
-    //     }
-    // };
-    // var options = {
-    //     new: true
-    // };
-    // People.findOneAndUpdate(query, update, options, function(err, person) {
-    //     if (err) {
-    //         console.log('got an error');
-    //     }
-
-    //     // at this point person is null.
-    // });
     
     User.find({}).sort({
         created_at: -1
@@ -316,7 +251,6 @@ router.get('/get-analyst-moderator-members', isLoggedIn, function(req, res) {
              }
 
                 User.find(role).exec(function(err, users) {
-    //    console.log("get-moderator-lead-members ",users);
         res.send({ users_name: users});
     });
 
@@ -325,14 +259,13 @@ router.get('/get-analyst-moderator-members', isLoggedIn, function(req, res) {
 });
 
 router.get('/stats', isLoggedIn, function(req, res) {
-    
-    if (req.query.fromDate != undefined) {
+    if (req.query.fromDate !== 'undefined') {
+      var fromDate = new Date(req.query.fromDate).setHours(0,0,0,0);
+      var toDate = new Date(req.query.toDate).setHours(23,59,59,999);
+    } else {
       var date = new Date();
       var fromDate = (new Date(date.setDate(date.getDate() - 7))).setHours(0,0,0,0);
-      var toDate = new Date(req.body.toDate).setHours(23,59,59,999);
-    } else {
-      var fromDate = new Date(req.body.fromDate).setHours(0,0,0,0);
-      var toDate = new Date(req.body.toDate).setHours(23,59,59,999);
+      var toDate = date.setHours(23,59,59,999);
     }
 
     if ((req.query.user_id != undefined) || (req.query.group_id != undefined)) {

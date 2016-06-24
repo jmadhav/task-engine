@@ -122,17 +122,19 @@ $(document).ready(function() {
                 // });
                 // $('#userSelectBox').append(sel);
                 // $('#userSelectBox').show();
+
+
                 var data1 = [
-                  ['Correct', data.tasks_object.correct],
-                  ['InCorrect', data.tasks_object.incorrect]
-                ];
+                  ['Correct (' + data.tasks_object.correct + ')', data.tasks_object.correct],
+                  ['InCorrect (' + data.tasks_object.incorrect + ')', data.tasks_object.incorrect]
+                ]
 
                 drawPieChart('chart1', data1);
 
                 var data2 = [
-                    ['Verified', data.tasks_object.verified],
-                    ['Unverified', data.tasks_object.unverified]
-                ];
+                  ['Verified (' + data.tasks_object.verified + ')', data.tasks_object.verified],
+                  ['Unverified (' + data.tasks_object.unverified + ')', data.tasks_object.unverified]
+                ]
 
                 drawPieChart('chart2', data2);
 

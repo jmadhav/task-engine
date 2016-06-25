@@ -178,14 +178,10 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
          $lt: toDate
       }
     }
-    
-    Task.find({"$and": [{ "user_id": req.user._id }, date, {'is_audit_task': false }]}).exec(function(err, tasks) {
-      if(err){
-        console.log(err);
-      }
-      updateSampleTasks(tasks, req.user._id);      
-    });      
-    
+    if (!tasks_count <= 0) {
+      updateSampleTasks(tasks_count, req.user._id);
+    }
+
     findRemoveSync(process.cwd() + '/tmp/', {
         extensions: ['.xlsx']
     });
@@ -265,8 +261,8 @@ function readExcelFile(filePath) {
     return fileData
 }
 
-function updateSampleTasks(tasks, user_id) {
-    var number_of_records = Math.round(((16 * tasks.length) / 100));
+function updateSampleTasks(tasks_count, user_id) {
+    var number_of_records = Math.round(((16 * tasks_count) / 100));
     Task.aggregate([ { $match: { "user_id": user_id } }, { '$sample': { size: number_of_records } }]).exec(function(err, samplingTask) {
         if (err) {
             console.log(err);

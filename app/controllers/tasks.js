@@ -178,7 +178,7 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
          $lt: toDate
       }
     }
-    if (!tasks_count <= 0) {
+    if (tasks_count > 0) {
       updateSampleTasks(tasks_count, req.user._id);
     }
 

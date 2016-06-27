@@ -178,9 +178,14 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
          $lt: toDate
       }
     }
-    if (tasks_count > 0) {
-      updateSampleTasks(tasks_count, req.user._id);
-    }
+    Task.find({"$and": [{ "user_id": req.user._id }, date, {'is_audit_task': false }]}).exec(function(err, tasks) {
+      if(err){
+        console.log(err);
+      }
+      if (tasks_count > 0) {
+        updateSampleTasks(tasks_count, req.user._id);
+      }      
+    }); 
 
     findRemoveSync(process.cwd() + '/tmp/', {
         extensions: ['.xlsx']

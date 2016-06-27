@@ -7,6 +7,7 @@ multer = require('multer');
 findRemoveSync = require('find-remove');
 XLSX = require('xlsx');
 var moment = require('moment-timezone');
+var Promise = require('promise');
 
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -178,15 +179,14 @@ router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) 
          $lt: toDate
       }
     }
-    Task.find({"$and": [{ "user_id": req.user._id }, date, {'is_audit_task': false }]}).exec(function(err, tasks) {
-      if(err){
-        console.log(err);
-      }
+
+    setTimeout(function(){ 
       if (tasks_count > 0) {
         updateSampleTasks(tasks_count, req.user._id);
-      }      
-    }); 
+      }
+    }, 3000);
 
+    
     findRemoveSync(process.cwd() + '/tmp/', {
         extensions: ['.xlsx']
     });
@@ -267,25 +267,36 @@ function readExcelFile(filePath) {
 }
 
 function updateSampleTasks(tasks_count, user_id) {
-    var number_of_records = Math.round(((16 * tasks_count) / 100));
-    Task.aggregate([ { $match: { "user_id": user_id } }, { '$sample': { size: number_of_records } }]).exec(function(err, samplingTask) {
-        if (err) {
-            console.log(err);
-        }
-        _und.each(samplingTask, function(task) {
-            Task.update({
-                _id: task._id
-            }, {
-                $set: {
-                    is_audit_task: true
-                }
-            }, {
-                multi: true
-            }, function(error) {
-                if (error) {
-                    console.error('ERROR!');
-                }
+    return new Promise(function(resolve, reject) {
+        var number_of_records = Math.round(((16 * tasks_count) / 100));
+        Task.aggregate([{
+            $match: {
+                "user_id": user_id
+            }
+        }, {
+            '$sample': {
+                size: number_of_records
+            }
+        }]).exec(function(err, samplingTask) {
+            if (err) {
+                console.log(err);
+            }
+            _und.each(samplingTask, function(task) {
+                Task.update({
+                    _id: task._id
+                }, {
+                    $set: {
+                        is_audit_task: true
+                    }
+                }, {
+                    multi: true
+                }, function(error) {
+                    if (error) {
+                        console.error('ERROR!');
+                    }
+                });
             });
         });
     });
+
 }

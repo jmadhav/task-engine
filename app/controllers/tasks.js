@@ -73,7 +73,7 @@ router.post('/view_only_task', isLoggedIn, function(req, res) {
     }
 
     page = req.param('page') > 0 ? req.param('page') : 1
-    Task.paginate(view_Data, { page: page, limit: 10 }, function(err, result) {
+    Task.sort({created_at: -1}).paginate(view_Data, { page: page, limit: 10, sort: { created_at: -1 } }, function(err, result) {
       res.render('tasks/search_task', {
         tasks: result.docs,
         page: result.page,
@@ -110,7 +110,7 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
     }
 
      page = req.param('page') > 0 ? req.param('page') : 1
-     Task.paginate(search_Data, { page: page, limit: 10 }, function(err, results) {
+     Task.paginate(search_Data, { page: page, limit: 10, sort: { created_at: -1 }}, function(err, results) {
         
         if (typeof results !== 'undefined') {
           res.render('tasks/audit_search_task', {

@@ -492,6 +492,33 @@
 
     }); 
 
+    $("#googletaskUpload").submit(function(e) {
+        $(".overlay").show();
+        var formData = new FormData($(this)[0]);
+        //  'user_group_id'  : $('input[name=user_group_id]').val(),
+
+        $.ajax({
+            url: '/upload_new_task',
+            type: 'POST',
+            data: formData,
+            success: function(data) {
+                $('#task-upload-count').text(data.tasks_count);
+                $('.alert-success').show();
+                $(".overlay").hide();
+            },
+            error: function(err) {
+                $(".overlay").hide();
+                console.log(err);
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+
+        e.preventDefault();
+    });
+
+
     $("#taskUpload").submit(function(e) {
         $(".overlay").show();
         var formData = new FormData($(this)[0]);

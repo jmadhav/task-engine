@@ -145,6 +145,21 @@ router.get('/upload', isLoggedIn, function(req, res) {
     });
 });
 
+router.get('/uploadaddtask', isLoggedIn, function(req, res) {
+    res.render('tasks/upload_add_task', {
+        user: req.user,
+        title: 'Task Engine'
+    });
+});
+
+
+router.post('/upload_new_add', uploading.single('file'), isLoggedIn, function(req, res) {
+    console.log("******************************New add Taskkkkkk");
+    
+   
+
+    });
+
 router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) {
   //  console.log("upload============",req.body.user_group_id);
    

@@ -7,7 +7,6 @@ multer = require('multer');
 findRemoveSync = require('find-remove');
 XLSX = require('xlsx');
 var moment = require('moment-timezone');
-var Promise = require('promise');
 
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -138,27 +137,12 @@ router.post('/audit_task', isLoggedIn, function(req, res) {
 
 });
 
-router.get('/upload', isLoggedIn, function(req, res) {
+router.get('/upload', isLoggedIn, isManager, function(req, res) {
     res.render('tasks/upload', {
         user: req.user,
         title: 'Task Engine'
     });
 });
-
-router.get('/uploadaddtask', isLoggedIn, function(req, res) {
-    res.render('tasks/upload_add_task', {
-        user: req.user,
-        title: 'Task Engine'
-    });
-});
-
-
-router.post('/upload_new_add', uploading.single('file'), isLoggedIn, function(req, res) {
-    console.log("******************************New add Taskkkkkk");
-    
-   
-
-    });
 
 router.post('/upload', uploading.single('file'), isLoggedIn, function(req, res) {
   //  console.log("upload============",req.body.user_group_id);
@@ -314,4 +298,11 @@ function updateSampleTasks(tasks_count, user_id) {
         });
     });
 
+}
+
+function isManager(req, res, next) {
+    if (_und.contains(req.user.roles, 'Manager'))
+        return next();
+
+    res.redirect('/');
 }

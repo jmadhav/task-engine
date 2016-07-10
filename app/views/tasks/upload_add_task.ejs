@@ -2,11 +2,9 @@
   <div class="col-lg-5 col-sm-offset-3" id="upload">
     <div class="well bs-component">
 
-      <form id="googletaskUpload" class="form-horizontal" action="/upload_new_task" method="post" enctype="multipart/form-data">
+      <form id="googletaskUpload" class="form-horizontal" action="/upload_performance_sheet" method="post" enctype="multipart/form-data">
         <fieldset>
           <legend>Upload</legend>
-          <% console.log("user ==== ",user.group_id)%>
-          <input type="hidden" id="user_group_id" name="user_group_id" value="<%=user.group_id%>">
           <div class="form-group">
             <label for="inputEmail" class="col-lg-2 control-label">File:</label>
             <div class="col-lg-10">

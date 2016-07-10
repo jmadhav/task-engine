@@ -498,7 +498,7 @@
         //  'user_group_id'  : $('input[name=user_group_id]').val(),
 
         $.ajax({
-            url: '/upload_new_task',
+            url: '/upload_performance_sheet',
             type: 'POST',
             data: formData,
             success: function(data) {

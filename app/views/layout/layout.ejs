@@ -68,9 +68,17 @@
                     <a href="/upload">Upload Tasks</a>
                   </li>
                 <% } %>
-                <li>
-                    <a href="/uploadaddtask">Upload Adv Tasks</a>
+                <% if ((_und.contains(user.roles, 'Manager'))) { %>
+                  <li>
+                    <a href="/upload_performance_sheet">Upload performance sheet</a>
                   </li>
+                <% } %>
+
+                <% if ((_und.contains(user.roles, 'Manager'))) { %>
+                  <li>
+                    <a href="/performance_dashboard">Performance Dashboard</a>
+                  </li>
+                <% } %>
               </ul>
 
               <ul class="nav navbar-nav navbar-right">
@@ -117,8 +125,11 @@
   <script type="text/javascript" src="../../js/jqplot.pieRenderer.js"></script>
   <script type="text/javascript" src="../../js/highcharts.js"></script>
   <script type="text/javascript" src="../../js/exporting.js"></script>
+  <script type="text/javascript" src="../../js/data.js"></script>
+  <script type="text/javascript" src="../../js/drilldown.js"></script>
   <script type="text/javascript" src="../../js/jquery-dateFormat.min.js"></script>
   <script type="text/javascript" src="../../js/custom.js"></script>
   <script type="text/javascript" src="../../js/dashboard.js"></script>
+  <script type="text/javascript" src="../../js/performance.js"></script>
 
 </html>

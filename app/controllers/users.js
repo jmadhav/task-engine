@@ -5,6 +5,7 @@ User = mongoose.model('User');
 passport = require('passport');
 _und = require("underscore"); 
 dateFormat = require('dateformat');
+Task = mongoose.model('Task');
 
 module.exports = function(app, passport) {
     app.use('/', router);
